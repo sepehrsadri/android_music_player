@@ -1,5 +1,6 @@
 package project.com.maktab.musicplayer;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -38,12 +39,25 @@ public class ViewPagerActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int i) {
-            return SongsRecyclerFragment.newInstance();
+            switch (i) {
+                case 0:
+                    return SongsRecyclerFragment.newInstance();
+                case 1:
+                    return AlbumRecyclerFragment.newInstance();
+                case 2:
+                    return SongsRecyclerFragment.newInstance();
+            }
+            return null;
         }
 
         @Override
         public int getCount() {
             return 3;
+        }
+
+        @Override
+        public int getItemPosition(@NonNull Object object) {
+            return POSITION_NONE;
         }
 
         @Nullable

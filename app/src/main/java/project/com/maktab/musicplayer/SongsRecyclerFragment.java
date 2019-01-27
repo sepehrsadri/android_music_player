@@ -27,9 +27,9 @@ public class SongsRecyclerFragment extends Fragment {
     private RecyclerViewAdapter mAdapter;
 
     public static SongsRecyclerFragment newInstance() {
-        
+
         Bundle args = new Bundle();
-        
+
         SongsRecyclerFragment fragment = new SongsRecyclerFragment();
         fragment.setArguments(args);
         return fragment;
@@ -48,19 +48,19 @@ public class SongsRecyclerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.from(getActivity()).inflate(R.layout.recycler_view,container,false);
+        View view = inflater.from(getActivity()).inflate(R.layout.recycler_view, container, false);
         mSongsRv = view.findViewById(R.id.recycler_view);
-        
+
         mSongsRv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        
+
         mAdapter = new RecyclerViewAdapter(mSongList);
         mSongsRv.setAdapter(mAdapter);
 
 
-
         return view;
     }
-    private class RecyclerViewHolder extends RecyclerView.ViewHolder{
+
+    private class RecyclerViewHolder extends RecyclerView.ViewHolder {
         private ImageView mCoverIv;
         private TextView mSongTv;
         private TextView mArtistTv;
@@ -71,20 +71,20 @@ public class SongsRecyclerFragment extends Fragment {
             mCoverIv = itemView.findViewById(R.id.cover_image);
             mSongTv = itemView.findViewById(R.id.songs_name_tv);
             mArtistTv = itemView.findViewById(R.id.artist_name_tv);
-            
+
         }
-        public void bind(Song song){
+
+        public void bind(Song song) {
             mSong = song;
             mCoverIv.setImageBitmap(song.getBitmap());
             mSongTv.setText(song.getTrack());
             mArtistTv.setText(song.getArtist());
         }
-        
+
     }
 
 
-
-    private class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder>{
+    private class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
         private List<Song> mSongList;
 
         public RecyclerViewAdapter(List<Song> songList) {
@@ -98,7 +98,7 @@ public class SongsRecyclerFragment extends Fragment {
         @NonNull
         @Override
         public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-            View view = LayoutInflater.from(getActivity()).inflate(R.layout.songs_list_item,viewGroup,false);
+            View view = LayoutInflater.from(getActivity()).inflate(R.layout.songs_list_item, viewGroup, false);
             RecyclerViewHolder viewHolder = new RecyclerViewHolder(view);
             return viewHolder;
         }

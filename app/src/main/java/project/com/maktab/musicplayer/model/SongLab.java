@@ -21,6 +21,12 @@ public class SongLab {
     private static SongLab mInstance;
     private List<Song> mSongList;
 
+    public List<Album> getAlbumList() {
+        return mAlbumList;
+    }
+
+    private List<Album> mAlbumList;
+
 
     public List<Song> getSongList() {
         return mSongList;
@@ -28,27 +34,13 @@ public class SongLab {
 
     private SongLab() {
         mSongList = new ArrayList<>();
+        mAlbumList = new ArrayList<>();
     }
 
     public static SongLab getInstance() {
         if (mInstance == null)
             mInstance = new SongLab();
         return mInstance;
-    }
-
-    public String getArt(Activity activity, Long albumId) {
-        Cursor cursor = activity.getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
-                new String[]{MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM_ART},
-                MediaStore.Audio.Albums._ID + "=?",
-                new String[]{String.valueOf(albumId)},
-                null);
-
-        if (cursor.moveToFirst()) {
-            String path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
-            // do whatever you need to do
-            return path;
-        }
-        return null;
     }
 
 
@@ -63,54 +55,75 @@ public class SongLab {
         final Cursor cursor = activity.getContentResolver().query(uri,
                 null, where, null, null);
 
-        if(cursor==null)return;
+        try {
+            if (cursor == null) return;
 
-        while (cursor.moveToNext()) {
-            String artist = cursor.getString(cursor
-                    .getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST));
-            String album = cursor.getString(cursor
-                    .getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM));
-            String track = cursor.getString(cursor
-                    .getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE));
-            String data = cursor.getString(cursor
-                    .getColumnIndexOrThrow(MediaStore.Audio.Media.DATA));
-            Long albumId = cursor.getLong(cursor
-                    .getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID));
+            while (cursor.moveToNext()) {
+                String artist = cursor.getString(cursor
+                        .getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST));
+                String album = cursor.getString(cursor
+                        .getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM));
+                String track = cursor.getString(cursor
+                        .getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE));
+                String data = cursor.getString(cursor
+                        .getColumnIndexOrThrow(MediaStore.Audio.Media.DATA));
+                Long albumId = cursor.getLong(cursor
+                        .getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID));
 
-            int duration = cursor.getInt(cursor
-                    .getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));
+                int duration = cursor.getInt(cursor
+                        .getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));
 
-            Uri sArtworkUri = Uri
-                    .parse("content://media/external/audio/albumart");
-            Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, albumId);
+                Uri sArtworkUri = Uri
+                        .parse("content://media/external/audio/albumart");
+                Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, albumId);
 
-            Bitmap bitmap = null;
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(
-                        activity.getContentResolver(), albumArtUri);
-                if (bitmap != null)
-                    bitmap = Bitmap.createScaledBitmap(bitmap, 80, 80, true);
+                Bitmap bitmap = null;
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(
+                            activity.getContentResolver(), albumArtUri);
+                    if (bitmap != null)
+                        bitmap = Bitmap.createScaledBitmap(bitmap, 80, 80, true);
 
-            } catch (FileNotFoundException exception) {
-                exception.printStackTrace();
-              /*  bitmap = BitmapFactory.decodeResource(context.getResources(),
-                        R.drawable.audio_file);*/
-            } catch (IOException e) {
+                } catch (FileNotFoundException exception) {
+                    exception.printStackTrace();
+                  /*  bitmap = BitmapFactory.decodeResource(context.getResources(),
+                            R.drawable.audio_file);*/
+                } catch (IOException e) {
 
-                e.printStackTrace();
+                    e.printStackTrace();
+                }
+
+                generateAlbumList(artist, album, albumId, bitmap);
+
+
+                generateSongList(artist, track, data, duration, bitmap);
+
             }
-
-            Song song = new Song();
-            song.setArtist(artist);
-            song.setBitmap(bitmap);
-            song.setTrack(track);
-            song.setData(data);
-            song.setDuration(duration);
-            song.setBitmap(bitmap);
-
-            mSongList.add(song);
-
+        } finally {
+            cursor.close();
         }
 
+    }
+
+    private void generateAlbumList(String artist, String album, Long albumId, Bitmap bitmap) {
+        Album albumModel = new Album();
+        albumModel.setArtist(artist);
+        albumModel.setBitmap(bitmap);
+        albumModel.setTitle(album);
+        albumModel.setId(albumId);
+
+        mAlbumList.add(albumModel);
+    }
+
+    private void generateSongList(String artist, String track, String data, int duration, Bitmap bitmap) {
+        Song song = new Song();
+        song.setArtist(artist);
+        song.setBitmap(bitmap);
+        song.setTrack(track);
+        song.setData(data);
+        song.setDuration(duration);
+        song.setBitmap(bitmap);
+
+        mSongList.add(song);
     }
 }
