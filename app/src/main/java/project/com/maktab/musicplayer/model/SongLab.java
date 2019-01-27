@@ -18,11 +18,58 @@ public class SongLab {
     private List<Song> mSongList;
     private List<Album> mAlbumList;
     private List<Artist> mArtistList;
+    final Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+    final String where = MediaStore.Audio.Media.IS_MUSIC + "!=0";
+
 
     public List<Album> getAlbumList() {
         return mAlbumList;
     }
 
+    public List<Song> getSongListByAlbum(Activity activity, Long albumId) {
+        List<Song> result = new ArrayList<>();
+/*        String where = MediaStore.Audio.Media.IS_MUSIC + "!= 0 " + " AND " + "cast(" +
+                MediaStore.Audio.Media.ALBUM_ID + "as text) == " + String.valueOf(albumId);*/
+       String where = MediaStore.Audio.Media.IS_MUSIC + "!=0" + " AND " + MediaStore.Audio.Media.ALBUM_ID + "=" + String.valueOf(albumId);
+
+        final Cursor cursor = activity.getContentResolver().query(uri, null, where, null, null);
+        try {
+            if (cursor.getCount() <= 0)
+                return null;
+
+            while (cursor.moveToNext()) {
+                String artist = cursor.getString(cursor
+                        .getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST));
+                String album = cursor.getString(cursor
+                        .getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM));
+                String track = cursor.getString(cursor
+                        .getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE));
+                String data = cursor.getString(cursor
+                        .getColumnIndexOrThrow(MediaStore.Audio.Media.DATA));
+
+                int duration = cursor.getInt(cursor
+                        .getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));
+
+                Bitmap bitmap = generateBitmap(activity, albumId);
+
+
+                Song song = new Song();
+                song.setArtist(artist);
+                song.setBitmap(bitmap);
+                song.setTitle(track);
+                song.setData(data);
+                song.setDuration(duration);
+                song.setBitmap(bitmap);
+
+                result.add(song);
+            }
+        } finally {
+            cursor.close();
+        }
+
+
+        return result;
+    }
 
 
     public List<Song> getSongList() {
@@ -43,18 +90,12 @@ public class SongLab {
 
 
     public void init(Activity activity) {
-        final Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        final String[] cursor_cols = {MediaStore.Audio.Media._ID,
-                MediaStore.Audio.Media.ARTIST, MediaStore.Audio.Media.ALBUM,
-                MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.DATA,
-                MediaStore.Audio.Media.ALBUM_ID,
-                MediaStore.Audio.Media.DURATION};
-        final String where = MediaStore.Audio.Media.IS_MUSIC + "!=0";
+
         final Cursor cursor = activity.getContentResolver().query(uri,
                 null, where, null, null);
 
         try {
-            if (cursor == null) return;
+            if (cursor.getCount() <= 0) return;
 
             while (cursor.moveToNext()) {
                 String artist = cursor.getString(cursor
@@ -77,26 +118,7 @@ public class SongLab {
                 int duration = cursor.getInt(cursor
                         .getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));
 
-                Uri sArtworkUri = Uri
-                        .parse("content://media/external/audio/albumart");
-                Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, albumId);
-
-                Bitmap bitmap = null;
-                try {
-
-                    bitmap = MediaStore.Images.Media.getBitmap(
-                            activity.getContentResolver(), albumArtUri);
-                    if (bitmap != null)
-                        bitmap = Bitmap.createScaledBitmap(bitmap, 80, 80, true);
-
-                } catch (FileNotFoundException exception) {
-                    exception.printStackTrace();
-                  /*  bitmap = BitmapFactory.decodeResource(context.getResources(),
-                            R.drawable.audio_file);*/
-                } catch (IOException e) {
-
-                    e.printStackTrace();
-                }
+                Bitmap bitmap = generateBitmap(activity, albumId);
 
                 generateArtistList(artist, artistTracks, artistAlbums, artistId, bitmap);
 
@@ -112,12 +134,36 @@ public class SongLab {
 
     }
 
+    private Bitmap generateBitmap(Activity activity, Long albumId) {
+        Uri sArtworkUri = Uri
+                .parse("content://media/external/audio/albumart");
+        Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, albumId);
+
+        Bitmap bitmap = null;
+        try {
+
+            bitmap = MediaStore.Images.Media.getBitmap(
+                    activity.getContentResolver(), albumArtUri);
+            if (bitmap != null)
+                bitmap = Bitmap.createScaledBitmap(bitmap, 80, 80, true);
+
+        } catch (FileNotFoundException exception) {
+            exception.printStackTrace();
+                  /*  bitmap = BitmapFactory.decodeResource(context.getResources(),
+                            R.drawable.audio_file);*/
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        }
+        return bitmap;
+    }
+
     public List<Artist> getArtistList() {
         return mArtistList;
     }
 
     private void generateArtistList(String artist, int artistTracks, int artistAlbums, Long artistId, Bitmap bitmap) {
-        Artist artistModel  = new Artist();
+        Artist artistModel = new Artist();
         artistModel.setId(artistId);
         artistModel.setAlbums(artistAlbums);
         artistModel.setTracks(artistTracks);
@@ -140,7 +186,6 @@ public class SongLab {
     private void generateSongList(String artist, String track, String data, int duration, Bitmap bitmap) {
         Song song = new Song();
         song.setArtist(artist);
-        song.setBitmap(bitmap);
         song.setTitle(track);
         song.setData(data);
         song.setDuration(duration);

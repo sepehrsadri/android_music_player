@@ -24,12 +24,17 @@ import project.com.maktab.musicplayer.model.SongLab;
 public class SongsRecyclerFragment extends Fragment {
     RecyclerView mSongsRv;
     private List<Song> mSongList;
+    private static final String STATUS_ARGS = "status_args";
+    private static final String ID_ARGS = "id_args";
     private RecyclerViewAdapter mAdapter;
+    private String listPicker;
+    private Long id;
 
-    public static SongsRecyclerFragment newInstance() {
+    public static SongsRecyclerFragment newInstance(String status,Long id) {
 
         Bundle args = new Bundle();
-
+        args.putString(STATUS_ARGS, status);
+        args.putLong(ID_ARGS,id);
         SongsRecyclerFragment fragment = new SongsRecyclerFragment();
         fragment.setArguments(args);
         return fragment;
@@ -42,6 +47,8 @@ public class SongsRecyclerFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        listPicker = getArguments().getString(STATUS_ARGS,"");
+        id = getArguments().getLong(ID_ARGS,0);
         mSongList = SongLab.getInstance().getSongList();
     }
 
@@ -52,8 +59,14 @@ public class SongsRecyclerFragment extends Fragment {
         mSongsRv = view.findViewById(R.id.recycler_view);
 
         mSongsRv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        if(listPicker.equalsIgnoreCase("album"))
+            mAdapter = new RecyclerViewAdapter(SongLab.getInstance().getSongListByAlbum(getActivity(),id));
 
+
+        else
         mAdapter = new RecyclerViewAdapter(mSongList);
+
+
         mSongsRv.setAdapter(mAdapter);
 
 

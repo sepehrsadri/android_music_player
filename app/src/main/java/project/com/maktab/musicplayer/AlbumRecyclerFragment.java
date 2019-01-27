@@ -1,6 +1,7 @@
 package project.com.maktab.musicplayer;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -33,9 +34,9 @@ public class AlbumRecyclerFragment extends Fragment {
     }
 
     public static AlbumRecyclerFragment newInstance() {
-        
+
         Bundle args = new Bundle();
-        
+
         AlbumRecyclerFragment fragment = new AlbumRecyclerFragment();
         fragment.setArguments(args);
         return fragment;
@@ -52,13 +53,11 @@ public class AlbumRecyclerFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.recycler_view, container, false);
         mRecyclerView = view.findViewById(R.id.recycler_view);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 
         mAdapter = new RecyclerViewAdapter(mAlbumList);
 
         mRecyclerView.setAdapter(mAdapter);
-
-
 
 
         return view;
@@ -74,7 +73,15 @@ public class AlbumRecyclerFragment extends Fragment {
             super(itemView);
             mCoverIv = itemView.findViewById(R.id.album_item_cover_iv);
             mArtistTv = itemView.findViewById(R.id.album_item_artist_tv);
-            mAlbumTv =  itemView.findViewById(R.id.album_item_album_tv);
+            mAlbumTv = itemView.findViewById(R.id.album_item_album_tv);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = ListSongs.newIntent(getActivity(), "album", mAlbum.getId());
+                    startActivity(intent);
+
+                }
+            });
 
         }
 
@@ -102,7 +109,7 @@ public class AlbumRecyclerFragment extends Fragment {
         @NonNull
         @Override
         public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-            View view = LayoutInflater.from(getActivity()).inflate(R.layout.album_list_item,viewGroup,false);
+            View view = LayoutInflater.from(getActivity()).inflate(R.layout.album_list_item, viewGroup, false);
             RecyclerViewHolder viewHolder = new RecyclerViewHolder(view);
             return viewHolder;
         }

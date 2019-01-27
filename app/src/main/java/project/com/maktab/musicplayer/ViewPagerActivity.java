@@ -41,7 +41,7 @@ public class ViewPagerActivity extends AppCompatActivity {
         public Fragment getItem(int i) {
             switch (i) {
                 case 0:
-                    return SongsRecyclerFragment.newInstance();
+                    return SongsRecyclerFragment.newInstance("all",0l);
                 case 1:
                     return AlbumRecyclerFragment.newInstance();
                 case 2:
