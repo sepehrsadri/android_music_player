@@ -45,9 +45,11 @@ public class ViewPagerActivity extends AppCompatActivity {
                 case 1:
                     return AlbumRecyclerFragment.newInstance();
                 case 2:
-                    return SongsRecyclerFragment.newInstance();
+                    return ArtistRecyclerFragment.newInstance();
+                    default:
+                        return null;
             }
-            return null;
+
         }
 
         @Override

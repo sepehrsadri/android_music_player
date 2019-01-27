@@ -2,10 +2,9 @@ package project.com.maktab.musicplayer.model;
 
 import android.app.Activity;
 import android.content.ContentUris;
-import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.media.browse.MediaBrowser;
 import android.net.Uri;
 import android.provider.MediaStore;
 
@@ -13,19 +12,17 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
-
-import project.com.maktab.musicplayer.R;
 
 public class SongLab {
     private static SongLab mInstance;
     private List<Song> mSongList;
+    private List<Album> mAlbumList;
+    private List<Artist> mArtistList;
 
     public List<Album> getAlbumList() {
         return mAlbumList;
     }
 
-    private List<Album> mAlbumList;
 
 
     public List<Song> getSongList() {
@@ -35,6 +32,7 @@ public class SongLab {
     private SongLab() {
         mSongList = new ArrayList<>();
         mAlbumList = new ArrayList<>();
+        mArtistList = new ArrayList<>();
     }
 
     public static SongLab getInstance() {
@@ -69,6 +67,12 @@ public class SongLab {
                         .getColumnIndexOrThrow(MediaStore.Audio.Media.DATA));
                 Long albumId = cursor.getLong(cursor
                         .getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID));
+                int artistTracks = 0;
+                int artistAlbums = 0;
+
+           /*     int artistTracks = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Artists.Albums.NUMBER_OF_SONGS_FOR_ARTIST));
+                int artistAlbums = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Artists.NUMBER_OF_ALBUMS));*/
+                Long artistId = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Artists._ID));
 
                 int duration = cursor.getInt(cursor
                         .getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));
@@ -79,6 +83,7 @@ public class SongLab {
 
                 Bitmap bitmap = null;
                 try {
+
                     bitmap = MediaStore.Images.Media.getBitmap(
                             activity.getContentResolver(), albumArtUri);
                     if (bitmap != null)
@@ -93,6 +98,8 @@ public class SongLab {
                     e.printStackTrace();
                 }
 
+                generateArtistList(artist, artistTracks, artistAlbums, artistId, bitmap);
+
                 generateAlbumList(artist, album, albumId, bitmap);
 
 
@@ -103,6 +110,21 @@ public class SongLab {
             cursor.close();
         }
 
+    }
+
+    public List<Artist> getArtistList() {
+        return mArtistList;
+    }
+
+    private void generateArtistList(String artist, int artistTracks, int artistAlbums, Long artistId, Bitmap bitmap) {
+        Artist artistModel  = new Artist();
+        artistModel.setId(artistId);
+        artistModel.setAlbums(artistAlbums);
+        artistModel.setTracks(artistTracks);
+        artistModel.setBitmap(bitmap);
+        artistModel.setName(artist);
+
+        mArtistList.add(artistModel);
     }
 
     private void generateAlbumList(String artist, String album, Long albumId, Bitmap bitmap) {
@@ -119,7 +141,7 @@ public class SongLab {
         Song song = new Song();
         song.setArtist(artist);
         song.setBitmap(bitmap);
-        song.setTrack(track);
+        song.setTitle(track);
         song.setData(data);
         song.setDuration(duration);
         song.setBitmap(bitmap);

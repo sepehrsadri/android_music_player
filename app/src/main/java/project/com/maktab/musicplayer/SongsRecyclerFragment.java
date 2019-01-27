@@ -77,7 +77,7 @@ public class SongsRecyclerFragment extends Fragment {
         public void bind(Song song) {
             mSong = song;
             mCoverIv.setImageBitmap(song.getBitmap());
-            mSongTv.setText(song.getTrack());
+            mSongTv.setText(song.getTitle());
             mArtistTv.setText(song.getArtist());
         }
 

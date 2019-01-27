@@ -3,11 +3,9 @@ package project.com.maktab.musicplayer.model;
 import android.graphics.Bitmap;
 import android.net.Uri;
 
-import java.net.URI;
-
 public class Song {
     private String artist;
-    private String track;
+    private String title;
     private String data;
     private int duration;
     private Uri art;
@@ -29,12 +27,12 @@ public class Song {
         this.artist = artist;
     }
 
-    public String getTrack() {
-        return track;
+    public String getTitle() {
+        return title;
     }
 
-    public void setTrack(String track) {
-        this.track = track;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getData() {
