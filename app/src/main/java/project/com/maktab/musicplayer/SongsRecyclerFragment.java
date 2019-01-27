@@ -61,7 +61,8 @@ public class SongsRecyclerFragment extends Fragment {
         mSongsRv.setLayoutManager(new LinearLayoutManager(getActivity()));
         if(listPicker.equalsIgnoreCase("album"))
             mAdapter = new RecyclerViewAdapter(SongLab.getInstance().getSongListByAlbum(getActivity(),id));
-
+        else if(listPicker.equalsIgnoreCase("artist"))
+            mAdapter = new RecyclerViewAdapter(SongLab.getInstance().getSongListByArtist(getActivity(),id));
 
         else
         mAdapter = new RecyclerViewAdapter(mSongList);

@@ -1,6 +1,7 @@
 package project.com.maktab.musicplayer;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -76,9 +77,18 @@ public class ArtistRecyclerFragment extends Fragment {
             mArtistSongsTv = itemView.findViewById(R.id.artist_item_songs);
             mArtistAlbumsTv = itemView.findViewById(R.id.artist_item_albums);
 
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = ListSongs.newIntent(getActivity(),"artist",mArtist.getId());
+                    startActivity(intent);
+                }
+            });
+
         }
 
         public void bind(Artist artist) {
+            mArtist = artist;
             mImageView.setImageBitmap(artist.getBitmap());
             mArtistTv.setText(artist.getName());
             mArtistSongsTv.setText(artist.getTracks() + "");

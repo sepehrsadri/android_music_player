@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import project.com.maktab.musicplayer.ListSongs;
+
 public class SongLab {
     private static SongLab mInstance;
     private List<Song> mSongList;
@@ -26,6 +28,50 @@ public class SongLab {
         return mAlbumList;
     }
 
+    public List<Song> getSongListByArtist(Activity activity,Long artistiD){
+
+        List<Song> result  = new ArrayList<>();
+        String where = MediaStore.Audio.Media.IS_MUSIC + "!=0" + " AND " + MediaStore.Audio.Media.ARTIST_ID + "=" + String.valueOf(artistiD);
+        final Cursor cursor = activity.getContentResolver().query(uri, null, where, null, null);
+        try {
+            if (cursor.getCount() <= 0)
+                return null;
+
+            while (cursor.moveToNext()) {
+                String artistName = cursor.getString(cursor
+                        .getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST));
+
+                String track = cursor.getString(cursor
+                        .getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE));
+                String data = cursor.getString(cursor
+                        .getColumnIndexOrThrow(MediaStore.Audio.Media.DATA));
+                Long albumId = cursor.getLong(cursor
+                        .getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID));
+                int duration = cursor.getInt(cursor
+                        .getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));
+
+                Bitmap bitmap = generateBitmap(activity,albumId);
+
+
+                Song song = new Song();
+                song.setArtist(artistName);
+                song.setTitle(track);
+                song.setData(data);
+                song.setDuration(duration);
+                song.setBitmap(bitmap);
+
+                result.add(song);
+            }
+        } finally {
+            cursor.close();
+        }
+
+
+
+
+
+        return result;
+    }
     public List<Song> getSongListByAlbum(Activity activity, Long albumId) {
         List<Song> result = new ArrayList<>();
 /*        String where = MediaStore.Audio.Media.IS_MUSIC + "!= 0 " + " AND " + "cast(" +
@@ -113,14 +159,14 @@ public class SongLab {
 
            /*     int artistTracks = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Artists.Albums.NUMBER_OF_SONGS_FOR_ARTIST));
                 int artistAlbums = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Artists.NUMBER_OF_ALBUMS));*/
-                Long artistId = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Artists._ID));
+                Long artistId = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST_ID));
 
                 int duration = cursor.getInt(cursor
                         .getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));
 
                 Bitmap bitmap = generateBitmap(activity, albumId);
 
-                generateArtistList(artist, artistTracks, artistAlbums, artistId, bitmap);
+                generateArtistList(artist, artistTracks, artistAlbums, artistId, bitmap,albumId);
 
                 generateAlbumList(artist, album, albumId, bitmap);
 
@@ -162,13 +208,14 @@ public class SongLab {
         return mArtistList;
     }
 
-    private void generateArtistList(String artist, int artistTracks, int artistAlbums, Long artistId, Bitmap bitmap) {
+    private void generateArtistList(String artist, int artistTracks, int artistAlbums, Long artistId, Bitmap bitmap,Long albumId) {
         Artist artistModel = new Artist();
         artistModel.setId(artistId);
         artistModel.setAlbums(artistAlbums);
         artistModel.setTracks(artistTracks);
         artistModel.setBitmap(bitmap);
         artistModel.setName(artist);
+        artistModel.setAlbumId(albumId);
 
         mArtistList.add(artistModel);
     }

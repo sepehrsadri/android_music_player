@@ -8,6 +8,15 @@ public class Artist {
     private Bitmap bitmap;
     private int tracks;
     private int albums;
+    private Long albumId;
+
+    public Long getAlbumId() {
+        return albumId;
+    }
+
+    public void setAlbumId(Long albumId) {
+        this.albumId = albumId;
+    }
 
     public int getTracks() {
         return tracks;
