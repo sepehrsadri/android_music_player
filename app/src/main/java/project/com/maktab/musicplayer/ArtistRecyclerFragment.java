@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import project.com.maktab.musicplayer.model.Artist;
 import project.com.maktab.musicplayer.model.SongLab;
 
@@ -65,7 +66,7 @@ public class ArtistRecyclerFragment extends Fragment {
 
     private class RecyclerViewHolder extends RecyclerView.ViewHolder {
         private Artist mArtist;
-        private ImageView mImageView;
+        private CircleImageView mImageView;
         private TextView mArtistTv;
         private TextView mArtistSongsTv;
         private TextView mArtistAlbumsTv;
@@ -74,8 +75,8 @@ public class ArtistRecyclerFragment extends Fragment {
             super(itemView);
             mImageView = itemView.findViewById(R.id.artist_item_cover);
             mArtistTv = itemView.findViewById(R.id.artist_item_name);
-            mArtistSongsTv = itemView.findViewById(R.id.artist_item_songs);
-            mArtistAlbumsTv = itemView.findViewById(R.id.artist_item_albums);
+            /*mArtistSongsTv = itemView.findViewById(R.id.artist_item_songs);
+            mArtistAlbumsTv = itemView.findViewById(R.id.artist_item_albums);*/
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -91,9 +92,9 @@ public class ArtistRecyclerFragment extends Fragment {
             mArtist = artist;
             mImageView.setImageBitmap(artist.getBitmap());
             mArtistTv.setText(artist.getName());
-            mArtistSongsTv.setText(artist.getTracks() + "");
+         /*   mArtistSongsTv.setText(artist.getTracks() + "");
             mArtistAlbumsTv.setText(artist.getAlbums() + "");
-
+*/
         }
     }
 
