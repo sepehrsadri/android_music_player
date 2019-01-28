@@ -59,9 +59,11 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-        if(PlayerActivity.mRepeateAll)
+        if (PlayerActivity.mRepeateAll) {
             clearMediaPlayer();
-        mCallBacks.repeateList();
+            mCallBacks.repeateList();
+
+        }
     }
 
     public interface CallBacks {
@@ -118,8 +120,8 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
         mRepeateAllCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked)
-                    PlayerActivity.mRepeateAll =true;
+                if (isChecked)
+                    PlayerActivity.mRepeateAll = true;
                 else PlayerActivity.mRepeateAll = false;
 
             }
@@ -140,7 +142,7 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
             @Override
             public void onClick(View v) {
                 mRepeateSong = !mRepeateSong;
-                if (mRepeateSong)
+                if (!mRepeateSong)
                     mRepeateSongIbtn.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_no_repeat));
                 else
                     mRepeateSongIbtn.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_repeat_song));
