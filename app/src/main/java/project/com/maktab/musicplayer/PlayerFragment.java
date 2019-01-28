@@ -222,10 +222,13 @@ public class PlayerFragment extends Fragment implements Runnable {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        clearMediaPlayer();
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if(!isVisibleToUser){
+            clearMediaPlayer();
+        }
     }
+
 
     @Override
     public void run() {
