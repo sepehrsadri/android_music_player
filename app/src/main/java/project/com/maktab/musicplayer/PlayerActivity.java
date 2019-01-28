@@ -2,13 +2,27 @@ package project.com.maktab.musicplayer;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import java.util.List;
+
+import project.com.maktab.musicplayer.model.Song;
+import project.com.maktab.musicplayer.model.SongLab;
+
 public class PlayerActivity extends AppCompatActivity {
     private static final String ID_EXTRA = "id_extra_song";
+    private ViewPager mViewPager;
+    private TabLayout mTabLayout;
+    private ViewPagerAdapter mAdapter;
+    private List<Song> mSongList;
 
 
     public static Intent newIntent(Context context, Long songId) {
@@ -17,17 +31,75 @@ public class PlayerActivity extends AppCompatActivity {
         return intent;
     }
 
+    public int getSongIndex(Long id) {
+        int index = -1;
+
+        for (int i = 0; i < mSongList.size(); i++) {
+
+            if (mSongList.get(i).getId().equals(id)) {
+                index = i;
+                break;
+
+            }
+        }
+        return index;
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_songs);
+        setContentView(R.layout.activity_view_pager);
+        mViewPager = findViewById(R.id.main_view_pager);
+        mTabLayout = findViewById(R.id.main_tab_layout);
+        mSongList = SongLab.getInstance().getSongList();
+
         Long id = getIntent().getLongExtra(ID_EXTRA, 0);
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        mAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(mAdapter);
+        mViewPager.setCurrentItem(getSongIndex(id));
+
+
+        mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        mTabLayout.setupWithViewPager(mViewPager);
+
+        /*FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, PlayerFragment.newInstance(id))
-                .commit();
+                .commit();*/
 
 
     }
+
+    private class ViewPagerAdapter extends FragmentStatePagerAdapter {
+
+        public ViewPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+
+        @Override
+        public Fragment getItem(int i) {
+            return PlayerFragment.newInstance(mSongList.get(i).getId());
+        }
+
+        @Override
+        public int getCount() {
+            return mSongList.size();
+        }
+
+        @Nullable
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mSongList.get(position).getTitle();
+        }
+
+        @Override
+        public int getItemPosition(@NonNull Object object) {
+            return POSITION_NONE;
+        }
+    }
+
+
 }

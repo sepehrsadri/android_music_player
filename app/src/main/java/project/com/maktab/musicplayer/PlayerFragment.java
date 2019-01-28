@@ -80,6 +80,7 @@ public class PlayerFragment extends Fragment implements Runnable {
         mSeekBarStatusTv = view.findViewById(R.id.seek_bar_status_tv);
         mSongCoverIv.setImageBitmap(mSong.getBitmap());
         mTvSongName.setText(mSong.getTitle());
+        mTvSongArtist.setText(mSong.getArtist());
 
         mActionButton.setOnClickListener(new View.OnClickListener() {
             @Override

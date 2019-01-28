@@ -31,13 +31,13 @@ public class SongLab {
         return mAlbumList;
     }
 
-    public Song getSong(Activity activity,Long id){
+    public Song getSong(Activity activity, Long id) {
         String where = MediaStore.Audio.Media.IS_MUSIC + "!=0" + " AND " + MediaStore.Audio.Media._ID + "=" + String.valueOf(id);
         final Cursor cursor = activity.getContentResolver().query(uri, null, where, null, null);
 
         Song song;
         try {
-            if(cursor.getCount()<=0)return null;
+            if (cursor.getCount() <= 0) return null;
 
             cursor.moveToFirst();
             String artistName = cursor.getString(cursor
@@ -165,7 +165,7 @@ public class SongLab {
      /*   List<Song> finalList = new ArrayList<>(new HashSet<>(mSongList));
 
         return finalList;*/
-     return mSongList;
+        return mSongList;
     }
 
     private SongLab() {
@@ -178,6 +178,21 @@ public class SongLab {
         if (mInstance == null)
             mInstance = new SongLab();
         return mInstance;
+    }
+
+    public int getSongIndex(Long id) {
+        /*for(Song song:mSongList){
+            if(song.getId().equals(id))
+                return mSongList.indexOf(song);
+
+        }*/
+        for (int i = 0; i < mSongList.size(); i++) {
+            if (mSongList.get(i).getId().equals(id))
+                return i;
+            break;
+        }
+        return -1;
+
     }
 
 
@@ -218,7 +233,7 @@ public class SongLab {
                 generateAlbumList(artist, album, albumId, bitmap);
 
 
-                generateSongList(id,artist, track, data, duration, bitmap);
+                generateSongList(id, artist, track, data, duration, bitmap);
 
             }
         } finally {
@@ -280,7 +295,7 @@ public class SongLab {
 
     }
 
-    private void generateSongList(Long id,String artist, String track, String data, int duration, Bitmap bitmap) {
+    private void generateSongList(Long id, String artist, String track, String data, int duration, Bitmap bitmap) {
         Song song = new Song();
         song.setArtist(artist);
         song.setId(id);

@@ -28,6 +28,7 @@ public class ViewPagerActivity extends AppCompatActivity {
         SongLab.getInstance().init(this);
 
         mTabLayout.setupWithViewPager(mViewPager);
+        mTabLayout.setTabMode(TabLayout.MODE_FIXED);
 
     }
 
