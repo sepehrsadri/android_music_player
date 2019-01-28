@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ContentUris;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.media.browse.MediaBrowser;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -243,6 +244,8 @@ public class SongLab {
     }
 
     private Bitmap generateBitmap(Activity activity, Long albumId) {
+        Point point = new Point();
+        activity.getWindowManager().getDefaultDisplay().getSize(point);
         Uri sArtworkUri = Uri
                 .parse("content://media/external/audio/albumart");
         Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, albumId);
@@ -252,8 +255,8 @@ public class SongLab {
 
             bitmap = MediaStore.Images.Media.getBitmap(
                     activity.getContentResolver(), albumArtUri);
-            if (bitmap != null)
-                bitmap = Bitmap.createScaledBitmap(bitmap, 180, 180, true);
+            /*if (bitmap != null)
+                bitmap = Bitmap.createScaledBitmap(bitmap, point.x, point.y, true);*/
 
         } catch (FileNotFoundException exception) {
             exception.printStackTrace();
