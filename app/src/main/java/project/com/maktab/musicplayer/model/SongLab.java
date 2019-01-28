@@ -11,7 +11,10 @@ import android.provider.MediaStore;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import project.com.maktab.musicplayer.ListSongs;
 
@@ -28,9 +31,9 @@ public class SongLab {
         return mAlbumList;
     }
 
-    public List<Song> getSongListByArtist(Activity activity,Long artistiD){
+    public List<Song> getSongListByArtist(Activity activity, Long artistiD) {
 
-        List<Song> result  = new ArrayList<>();
+        List<Song> result = new ArrayList<>();
         String where = MediaStore.Audio.Media.IS_MUSIC + "!=0" + " AND " + MediaStore.Audio.Media.ARTIST_ID + "=" + String.valueOf(artistiD);
         final Cursor cursor = activity.getContentResolver().query(uri, null, where, null, null);
         try {
@@ -50,7 +53,7 @@ public class SongLab {
                 int duration = cursor.getInt(cursor
                         .getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));
 
-                Bitmap bitmap = generateBitmap(activity,albumId);
+                Bitmap bitmap = generateBitmap(activity, albumId);
 
 
                 Song song = new Song();
@@ -67,16 +70,14 @@ public class SongLab {
         }
 
 
-
-
-
         return result;
     }
+
     public List<Song> getSongListByAlbum(Activity activity, Long albumId) {
         List<Song> result = new ArrayList<>();
 /*        String where = MediaStore.Audio.Media.IS_MUSIC + "!= 0 " + " AND " + "cast(" +
                 MediaStore.Audio.Media.ALBUM_ID + "as text) == " + String.valueOf(albumId);*/
-       String where = MediaStore.Audio.Media.IS_MUSIC + "!=0" + " AND " + MediaStore.Audio.Media.ALBUM_ID + "=" + String.valueOf(albumId);
+        String where = MediaStore.Audio.Media.IS_MUSIC + "!=0" + " AND " + MediaStore.Audio.Media.ALBUM_ID + "=" + String.valueOf(albumId);
 
         final Cursor cursor = activity.getContentResolver().query(uri, null, where, null, null);
         try {
@@ -119,7 +120,10 @@ public class SongLab {
 
 
     public List<Song> getSongList() {
-        return mSongList;
+     /*   List<Song> finalList = new ArrayList<>(new HashSet<>(mSongList));
+
+        return finalList;*/
+     return mSongList;
     }
 
     private SongLab() {
@@ -166,7 +170,7 @@ public class SongLab {
 
                 Bitmap bitmap = generateBitmap(activity, albumId);
 
-                generateArtistList(artist, artistTracks, artistAlbums, artistId, bitmap,albumId);
+                generateArtistList(artist, artistTracks, artistAlbums, artistId, bitmap, albumId);
 
                 generateAlbumList(artist, album, albumId, bitmap);
 
@@ -208,7 +212,7 @@ public class SongLab {
         return mArtistList;
     }
 
-    private void generateArtistList(String artist, int artistTracks, int artistAlbums, Long artistId, Bitmap bitmap,Long albumId) {
+    private void generateArtistList(String artist, int artistTracks, int artistAlbums, Long artistId, Bitmap bitmap, Long albumId) {
         Artist artistModel = new Artist();
         artistModel.setId(artistId);
         artistModel.setAlbums(artistAlbums);
@@ -218,6 +222,7 @@ public class SongLab {
         artistModel.setAlbumId(albumId);
 
         mArtistList.add(artistModel);
+
     }
 
     private void generateAlbumList(String artist, String album, Long albumId, Bitmap bitmap) {
@@ -228,6 +233,8 @@ public class SongLab {
         albumModel.setId(albumId);
 
         mAlbumList.add(albumModel);
+
+
     }
 
     private void generateSongList(String artist, String track, String data, int duration, Bitmap bitmap) {
