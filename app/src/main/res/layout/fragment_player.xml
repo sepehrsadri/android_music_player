@@ -25,7 +25,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:text="TextView"
-        android:textSize="40sp"
+        android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/player_song_cover" />
@@ -38,19 +38,44 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:text="TextView"
-        android:textSize="40sp"
+        android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/player_song_name" />
 
+
     <SeekBar
         android:id="@+id/player_seek_bar"
-        android:layout_width="0dp"
+        android:layout_width="395dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toTopOf="@+id/seek_bar_status_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        android:src="@drawable/ic_play"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/seek_bar_status_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="13dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/floatingActionButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
