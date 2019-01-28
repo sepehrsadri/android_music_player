@@ -17,7 +17,7 @@ import java.util.List;
 import project.com.maktab.musicplayer.model.Song;
 import project.com.maktab.musicplayer.model.SongLab;
 
-public class PlayerActivity extends AppCompatActivity {
+public class PlayerActivity extends AppCompatActivity implements PlayerFragment.CallBacks {
     private static final String ID_EXTRA = "id_extra_song";
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
@@ -70,6 +70,18 @@ public class PlayerActivity extends AppCompatActivity {
                 .commit();*/
 
 
+    }
+
+    @Override
+    public void nextSong() {
+        int current = mViewPager.getCurrentItem();
+        mViewPager.setCurrentItem(current+1);
+    }
+
+    @Override
+    public void previousSong() {
+    int current = mViewPager.getCurrentItem();
+    mViewPager.setCurrentItem(current-1);
     }
 
     private class ViewPagerAdapter extends FragmentStatePagerAdapter {

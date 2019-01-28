@@ -1,6 +1,7 @@
 package project.com.maktab.musicplayer;
 
 
+import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.AppCompatImageButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,9 +35,11 @@ public class PlayerFragment extends Fragment implements Runnable {
     private ImageView mSongCoverIv;
     private SeekBar mSeekBar;
     private Handler mHandler;
-    private boolean mWasPlaying;
+    private boolean mWasPlaying , mRepeateSong;
     private MediaPlayer mMediaPlayer = new MediaPlayer();
     private FloatingActionButton mActionButton;
+    private AppCompatImageButton mNextSongIbtn, mPreviousSongIbtn, mShuffleSongIbtn, mRepeateSongIbtn;
+    private CallBacks mCallBacks;
 
 
     public static PlayerFragment newInstance(Long songId) {
@@ -46,7 +50,16 @@ public class PlayerFragment extends Fragment implements Runnable {
         fragment.setArguments(args);
         return fragment;
     }
+    public interface CallBacks{
+        public void nextSong();
+        public void previousSong();
+    }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mCallBacks = (PlayerActivity) context;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,6 +91,12 @@ public class PlayerFragment extends Fragment implements Runnable {
         mSeekBar = view.findViewById(R.id.player_seek_bar);
         mActionButton = view.findViewById(R.id.floatingActionButton);
         mSeekBarStatusTv = view.findViewById(R.id.seek_bar_status_tv);
+        mNextSongIbtn = view.findViewById(R.id.play_next_iBtn);
+        mPreviousSongIbtn = view.findViewById(R.id.previous_song_iBtn);
+        mShuffleSongIbtn = view.findViewById(R.id.shuffle_play);
+        mRepeateSongIbtn = view.findViewById(R.id.song_repeate_iBtn);
+
+
         mSongCoverIv.setImageBitmap(mSong.getBitmap());
         mTvSongName.setText(mSong.getTitle());
         mTvSongArtist.setText(mSong.getArtist());
@@ -128,47 +147,21 @@ public class PlayerFragment extends Fragment implements Runnable {
                 }
             }
         });
- /*       try {
-            mMediaPlayer.setDataSource(mSong.getData());
 
-            mMediaPlayer.prepare();
-            mMediaPlayer.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        mTvSongArtist.setText(mSong.getArtist());
-
-        mSeekBar.setMax(mMediaPlayer.getDuration());
-        getActivity().runOnUiThread(new Runnable() {
+        mNextSongIbtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void run() {
-                if(mMediaPlayer!=null){
-                    int currentPosition = mMediaPlayer.getCurrentPosition()/1000;
-                    mSeekBar.setProgress(currentPosition);
-                }
-                mHandler.postDelayed(this,1000);
+            public void onClick(View v) {
+                clearMediaPlayer();
+                mCallBacks.nextSong();
             }
         });
-
-        mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        mPreviousSongIbtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if(mMediaPlayer != null && fromUser){
-                    mMediaPlayer.seekTo(progress * 1000);
-                }
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
+            public void onClick(View v) {
+                clearMediaPlayer();
+                mCallBacks.previousSong();
             }
         });
-*/
 
         return view;
     }
@@ -224,7 +217,7 @@ public class PlayerFragment extends Fragment implements Runnable {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if(!isVisibleToUser){
+        if (!isVisibleToUser) {
             clearMediaPlayer();
         }
     }
