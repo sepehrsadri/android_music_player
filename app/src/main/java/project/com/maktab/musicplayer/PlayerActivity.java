@@ -52,9 +52,9 @@ public class PlayerActivity extends AppCompatActivity implements PlayerFragment.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_pager);
-        mViewPager = findViewById(R.id.main_view_pager);
-        mTabLayout = findViewById(R.id.main_tab_layout);
+        setContentView(R.layout.player_activity);
+        mViewPager = findViewById(R.id.player_view_pager);
+        mTabLayout = findViewById(R.id.player_tab_layout);
         mSongList = SongLab.getInstance().getSongList();
 
         Long id = getIntent().getLongExtra(ID_EXTRA, 0);

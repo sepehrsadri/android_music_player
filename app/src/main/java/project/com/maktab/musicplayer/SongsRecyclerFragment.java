@@ -68,6 +68,7 @@ public class SongsRecyclerFragment extends Fragment {
         else
             mAdapter = new RecyclerViewAdapter(mSongList);
 
+        mSongsRv.setHasFixedSize(true);
 
         mSongsRv.setAdapter(mAdapter);
 

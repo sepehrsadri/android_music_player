@@ -20,7 +20,7 @@ public class ViewPagerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_pager);
+        setContentView(R.layout.main_coordinator);
         mViewPager = findViewById(R.id.main_view_pager);
         mTabLayout = findViewById(R.id.main_tab_layout);
         mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
