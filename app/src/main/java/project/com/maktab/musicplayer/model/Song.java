@@ -10,6 +10,15 @@ public class Song {
     private int duration;
     private Uri art;
     private Bitmap mBitmap;
+    private Long id;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public void setBitmap(Bitmap bitmap) {
         mBitmap = bitmap;

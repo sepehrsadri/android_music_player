@@ -31,6 +31,45 @@ public class SongLab {
         return mAlbumList;
     }
 
+    public Song getSong(Activity activity,Long id){
+        String where = MediaStore.Audio.Media.IS_MUSIC + "!=0" + " AND " + MediaStore.Audio.Media._ID + "=" + String.valueOf(id);
+        final Cursor cursor = activity.getContentResolver().query(uri, null, where, null, null);
+
+        Song song;
+        try {
+            if(cursor.getCount()<=0)return null;
+
+            cursor.moveToFirst();
+            String artistName = cursor.getString(cursor
+                    .getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST));
+
+            String track = cursor.getString(cursor
+                    .getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE));
+            String data = cursor.getString(cursor
+                    .getColumnIndexOrThrow(MediaStore.Audio.Media.DATA));
+            Long albumId = cursor.getLong(cursor
+                    .getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID));
+            int duration = cursor.getInt(cursor
+                    .getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));
+
+            Bitmap bitmap = generateBitmap(activity, albumId);
+
+
+            song = new Song();
+            song.setArtist(artistName);
+            song.setId(id);
+            song.setTitle(track);
+            song.setData(data);
+            song.setDuration(duration);
+            song.setBitmap(bitmap);
+        } finally {
+            cursor.close();
+        }
+
+
+        return song;
+    }
+
     public List<Song> getSongListByArtist(Activity activity, Long artistiD) {
 
         List<Song> result = new ArrayList<>();
@@ -43,7 +82,7 @@ public class SongLab {
             while (cursor.moveToNext()) {
                 String artistName = cursor.getString(cursor
                         .getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST));
-
+                Long id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));
                 String track = cursor.getString(cursor
                         .getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE));
                 String data = cursor.getString(cursor
@@ -58,6 +97,7 @@ public class SongLab {
 
                 Song song = new Song();
                 song.setArtist(artistName);
+                song.setId(id);
                 song.setTitle(track);
                 song.setData(data);
                 song.setDuration(duration);
@@ -85,6 +125,7 @@ public class SongLab {
                 return null;
 
             while (cursor.moveToNext()) {
+                Long id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));
                 String artist = cursor.getString(cursor
                         .getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST));
                 String album = cursor.getString(cursor
@@ -102,6 +143,7 @@ public class SongLab {
 
                 Song song = new Song();
                 song.setArtist(artist);
+                song.setId(id);
                 song.setBitmap(bitmap);
                 song.setTitle(track);
                 song.setData(data);
@@ -148,6 +190,7 @@ public class SongLab {
             if (cursor.getCount() <= 0) return;
 
             while (cursor.moveToNext()) {
+                Long id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));
                 String artist = cursor.getString(cursor
                         .getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST));
                 String album = cursor.getString(cursor
@@ -175,7 +218,7 @@ public class SongLab {
                 generateAlbumList(artist, album, albumId, bitmap);
 
 
-                generateSongList(artist, track, data, duration, bitmap);
+                generateSongList(id,artist, track, data, duration, bitmap);
 
             }
         } finally {
@@ -237,9 +280,10 @@ public class SongLab {
 
     }
 
-    private void generateSongList(String artist, String track, String data, int duration, Bitmap bitmap) {
+    private void generateSongList(Long id,String artist, String track, String data, int duration, Bitmap bitmap) {
         Song song = new Song();
         song.setArtist(artist);
+        song.setId(id);
         song.setTitle(track);
         song.setData(data);
         song.setDuration(duration);
