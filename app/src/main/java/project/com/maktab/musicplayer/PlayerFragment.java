@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import java.io.IOException;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import project.com.maktab.musicplayer.model.Song;
 import project.com.maktab.musicplayer.model.SongLab;
 
@@ -35,7 +36,7 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
 
     private Song mSong;
     private TextView mTvSongName, mTvSongArtist, mSeekBarStatusTv;
-    private ImageView mSongCoverIv;
+    private CircleImageView mSongCoverIv;
     private SeekBar mSeekBar;
     private Handler mHandler;
     private boolean mWasPlaying;

@@ -3,53 +3,80 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_margin="8dp"
     android:layout_height="match_parent"
     tools:context=".PlayerFragment">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/player_song_cover"
-        android:layout_width="0dp"
-        android:layout_height="125dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="64dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:textColor="@android:color/white"
         android:id="@+id/player_song_name"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit ="marquee_forever"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:scrollHorizontally="true"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:text="TextView"
-        android:textSize="30sp"
+        android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/player_song_cover" />
 
     <TextView
+        android:textColor="@android:color/white"
         android:id="@+id/player_song_artist"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit ="marquee_forever"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:scrollHorizontally="true"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:text="TextView"
-        android:textSize="30sp"
+        android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/player_song_name" />
 
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/repeate_all_check_box"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="4dp"
+        android:layout_weight="1"
+        android:drawableRight="@drawable/ic_repeat_all"
+        app:layout_constraintBottom_toTopOf="@+id/player_seek_bar"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 
     <SeekBar
         android:id="@+id/player_seek_bar"
-        android:layout_width="395dp"
+        android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/seek_bar_status_tv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -115,12 +142,7 @@
             android:src="@drawable/ic_no_repeat"
             tools:layout_editor_absoluteX="331dp"
             tools:layout_editor_absoluteY="667dp" />
-        <android.support.v7.widget.AppCompatCheckBox
-            android:layout_weight="1"
-            android:id="@+id/repeate_all_check_box"
-            android:drawableRight="@drawable/ic_repeat_all"
-            android:layout_width="0dp"
-            android:layout_height="50dp" />
+
 
     </LinearLayout>
 
