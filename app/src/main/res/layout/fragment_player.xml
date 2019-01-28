@@ -115,6 +115,12 @@
             android:src="@drawable/ic_no_repeat"
             tools:layout_editor_absoluteX="331dp"
             tools:layout_editor_absoluteY="667dp" />
+        <android.support.v7.widget.AppCompatCheckBox
+            android:layout_weight="1"
+            android:id="@+id/repeate_all_check_box"
+            android:drawableRight="@drawable/ic_repeat_all"
+            android:layout_width="0dp"
+            android:layout_height="50dp" />
 
     </LinearLayout>
 

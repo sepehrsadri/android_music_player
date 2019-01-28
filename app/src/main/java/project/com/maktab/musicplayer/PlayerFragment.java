@@ -11,10 +11,12 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatImageButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -28,7 +30,7 @@ import project.com.maktab.musicplayer.model.SongLab;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PlayerFragment extends Fragment implements Runnable {
+public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.OnCompletionListener {
     private static final String SONG_ID_ARG = "song_id_arg";
 
     private Song mSong;
@@ -36,12 +38,14 @@ public class PlayerFragment extends Fragment implements Runnable {
     private ImageView mSongCoverIv;
     private SeekBar mSeekBar;
     private Handler mHandler;
-    private boolean mWasPlaying, mRepeateSong;
+    private boolean mWasPlaying;
+    private boolean mRepeateSong = false;
     private MediaPlayer mMediaPlayer = new MediaPlayer();
     private FloatingActionButton mActionButton;
-    private static boolean mShuffle=false;
+    private static boolean mShuffle = false;
     private AppCompatImageButton mNextSongIbtn, mPreviousSongIbtn, mShuffleSongIbtn, mRepeateSongIbtn;
     private CallBacks mCallBacks;
+    private AppCompatCheckBox mRepeateAllCheckBox;
 
 
     public static PlayerFragment newInstance(Long songId) {
@@ -53,11 +57,19 @@ public class PlayerFragment extends Fragment implements Runnable {
         return fragment;
     }
 
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+        if(PlayerActivity.mRepeateAll)
+            clearMediaPlayer();
+        mCallBacks.repeateList();
+    }
+
     public interface CallBacks {
         public void nextSong();
 
         public void previousSong();
 
+        public void repeateList();
     }
 
     @Override
@@ -72,6 +84,7 @@ public class PlayerFragment extends Fragment implements Runnable {
         Long id = getArguments().getLong(SONG_ID_ARG, 0);
         mSong = SongLab.getInstance().getSong(getActivity(), id);
         mHandler = new Handler();
+
         mMediaPlayer = new MediaPlayer();
         try {
             mMediaPlayer.setDataSource(mSong.getData());
@@ -100,16 +113,47 @@ public class PlayerFragment extends Fragment implements Runnable {
         mPreviousSongIbtn = view.findViewById(R.id.previous_song_iBtn);
         mShuffleSongIbtn = view.findViewById(R.id.shuffle_play);
         mRepeateSongIbtn = view.findViewById(R.id.song_repeate_iBtn);
+        mRepeateAllCheckBox = view.findViewById(R.id.repeate_all_check_box);
+
+        mRepeateAllCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked)
+                    PlayerActivity.mRepeateAll =true;
+                else PlayerActivity.mRepeateAll = false;
+
+            }
+        });
+
+        if (PlayerActivity.mRepeateAll)
+            mRepeateAllCheckBox.setChecked(true);
+        else
+            mRepeateAllCheckBox.setChecked(false);
+
         setShuffleDrawble(PlayerActivity.mShuffle);
 
         mSongCoverIv.setImageBitmap(mSong.getBitmap());
         mTvSongName.setText(mSong.getTitle());
         mTvSongArtist.setText(mSong.getArtist());
 
+        mRepeateSongIbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mRepeateSong = !mRepeateSong;
+                if (mRepeateSong)
+                    mRepeateSongIbtn.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_no_repeat));
+                else
+                    mRepeateSongIbtn.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_repeat_song));
+
+
+            }
+        });
+
+        mMediaPlayer.setOnCompletionListener(this);
         mActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                playSong();
+                playSong(mRepeateSong);
             }
         });
 
@@ -182,13 +226,13 @@ public class PlayerFragment extends Fragment implements Runnable {
     }
 
     private void setShuffleDrawble(boolean shuffle) {
-        if(shuffle)
-        mShuffleSongIbtn.setImageDrawable(ContextCompat.getDrawable(getActivity(),R.drawable.ic_no_shuffle));
+        if (shuffle)
+            mShuffleSongIbtn.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_no_shuffle));
         else
-            mShuffleSongIbtn.setImageDrawable(ContextCompat.getDrawable(getActivity(),R.drawable.ic_shuffle));
+            mShuffleSongIbtn.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_shuffle));
     }
 
-    public void playSong() {
+    public void playSong(boolean loop) {
 
         try {
 
@@ -211,7 +255,7 @@ public class PlayerFragment extends Fragment implements Runnable {
 
                 mMediaPlayer.prepare();
                 mMediaPlayer.setVolume(0.5f, 0.5f);
-                mMediaPlayer.setLooping(false);
+                mMediaPlayer.setLooping(loop);
                 mSeekBar.setMax(mMediaPlayer.getDuration());
 
                 mMediaPlayer.start();

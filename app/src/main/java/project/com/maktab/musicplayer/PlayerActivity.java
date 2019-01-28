@@ -24,7 +24,8 @@ public class PlayerActivity extends AppCompatActivity implements PlayerFragment.
     private TabLayout mTabLayout;
     private ViewPagerAdapter mAdapter;
     private List<Song> mSongList;
-    public static boolean mShuffle ;
+    public static boolean mShuffle;
+    public static boolean mRepeateAll;
 
 
     public static Intent newIntent(Context context, Long songId) {
@@ -65,7 +66,6 @@ public class PlayerActivity extends AppCompatActivity implements PlayerFragment.
 
         mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         mTabLayout.setupWithViewPager(mViewPager);
-
         /*FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, PlayerFragment.newInstance(id))
@@ -91,6 +91,11 @@ public class PlayerActivity extends AppCompatActivity implements PlayerFragment.
             mViewPager.setCurrentItem(current - 1);
         } else
             mViewPager.setCurrentItem(randomGenerator());
+    }
+
+    @Override
+    public void repeateList() {
+        mViewPager.setCurrentItem(0);
     }
 
 
