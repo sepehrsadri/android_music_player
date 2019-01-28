@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import project.com.maktab.musicplayer.model.Song;
 import project.com.maktab.musicplayer.model.SongLab;
 
@@ -77,7 +78,7 @@ public class SongsRecyclerFragment extends Fragment {
     }
 
     private class RecyclerViewHolder extends RecyclerView.ViewHolder {
-        private ImageView mCoverIv;
+        private CircleImageView mCoverIv;
         private TextView mSongTv;
         private TextView mArtistTv;
         private Song mSong;
