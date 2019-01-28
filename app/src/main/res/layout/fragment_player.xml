@@ -2,9 +2,10 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/player_fragmnet_layout"
     android:layout_width="match_parent"
-    android:layout_margin="8dp"
     android:layout_height="match_parent"
+    android:layout_margin="8dp"
     tools:context=".PlayerFragment">
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -19,40 +20,40 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:textColor="@android:color/white"
         android:id="@+id/player_song_name"
-        android:singleLine="true"
-        android:ellipsize="marquee"
-        android:marqueeRepeatLimit ="marquee_forever"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:scrollHorizontally="true"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
         android:text="TextView"
+        android:textColor="@android:color/black"
         android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/player_song_cover" />
 
     <TextView
-        android:textColor="@android:color/white"
         android:id="@+id/player_song_artist"
-        android:singleLine="true"
-        android:ellipsize="marquee"
-        android:marqueeRepeatLimit ="marquee_forever"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:scrollHorizontally="true"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
         android:text="TextView"
+        android:textColor="@android:color/black"
         android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -77,6 +78,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:secondaryProgressTint="@android:color/black"
         app:layout_constraintBottom_toTopOf="@+id/seek_bar_status_tv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -92,60 +94,61 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
+
         <ImageButton
-            android:layout_weight="1"
             android:id="@+id/shuffle_play"
             style="@style/Base.Widget.AppCompat.Button.Borderless"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:src="@drawable/ic_shuffle"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="675dp" />
 
         <android.support.v7.widget.AppCompatImageButton
-            android:layout_weight="1"
             android:id="@+id/previous_song_iBtn"
             style="@style/Base.Widget.AppCompat.Button.Borderless"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:src="@drawable/ic_previous"
             tools:layout_editor_absoluteX="84dp"
             tools:layout_editor_absoluteY="675dp" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/floatingActionButton"
-            android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@android:color/black"
             android:clickable="true"
             android:src="@drawable/ic_play"
             tools:layout_editor_absoluteX="186dp"
             tools:layout_editor_absoluteY="667dp" />
 
         <android.support.v7.widget.AppCompatImageButton
-            android:layout_weight="1"
             android:id="@+id/play_next_iBtn"
             style="@style/Base.Widget.AppCompat.Button.Borderless"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:src="@drawable/ic_next"
             tools:layout_editor_absoluteX="267dp"
             tools:layout_editor_absoluteY="667dp" />
 
 
         <ImageButton
-            android:layout_weight="1"
             android:id="@+id/song_repeate_iBtn"
             style="@style/Base.Widget.AppCompat.Button.Borderless"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:src="@drawable/ic_no_repeat"
             tools:layout_editor_absoluteX="331dp"
             tools:layout_editor_absoluteY="667dp" />
 
 
     </LinearLayout>
-
 
 
     <TextView

@@ -3,11 +3,17 @@ package project.com.maktab.musicplayer;
 
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.renderscript.RenderScript;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -43,6 +49,7 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
     private boolean mRepeateSong = false;
     private MediaPlayer mMediaPlayer = new MediaPlayer();
     private FloatingActionButton mActionButton;
+    private ConstraintLayout mConstraintLayout;
     private static boolean mShuffle = false;
     private AppCompatImageButton mNextSongIbtn, mPreviousSongIbtn, mShuffleSongIbtn, mRepeateSongIbtn;
     private CallBacks mCallBacks;
@@ -117,6 +124,13 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
         mShuffleSongIbtn = view.findViewById(R.id.shuffle_play);
         mRepeateSongIbtn = view.findViewById(R.id.song_repeate_iBtn);
         mRepeateAllCheckBox = view.findViewById(R.id.repeate_all_check_box);
+        mConstraintLayout = view.findViewById(R.id.player_fragmnet_layout);
+
+        RenderScript renderScript = RenderScript.create(getActivity());
+        Utilities utilities = new Utilities(renderScript);
+        Bitmap blurBitmap =utilities.blur(mSong.getBitmap(),1f,1);
+        BitmapDrawable ob = new BitmapDrawable(getResources(), blurBitmap);
+            mConstraintLayout.setBackground(ob);
 
         mRepeateAllCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -135,7 +149,7 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
 
         setShuffleDrawble(PlayerActivity.mShuffle);
 
-        mSongCoverIv.setImageBitmap(mSong.getBitmap());
+
         mTvSongName.setText(mSong.getTitle());
         mTvSongArtist.setText(mSong.getArtist());
 
@@ -224,7 +238,7 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
 
             }
         });
-
+        mSongCoverIv.setImageBitmap(mSong.getBitmap());
         return view;
     }
 
