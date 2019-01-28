@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -113,6 +114,7 @@ public class SongsRecyclerFragment extends Fragment {
 
         public RecyclerViewAdapter(List<Song> songList) {
             mSongList = songList;
+
         }
 
         public void setSongList(List<Song> songList) {
@@ -132,6 +134,7 @@ public class SongsRecyclerFragment extends Fragment {
             Song song = mSongList.get(i);
             recyclerViewHolder.bind(song);
         }
+
 
         @Override
         public int getItemCount() {
