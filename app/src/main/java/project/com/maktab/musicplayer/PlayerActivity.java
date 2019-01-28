@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import java.util.List;
+import java.util.Random;
 
 import project.com.maktab.musicplayer.model.Song;
 import project.com.maktab.musicplayer.model.SongLab;
@@ -23,6 +24,7 @@ public class PlayerActivity extends AppCompatActivity implements PlayerFragment.
     private TabLayout mTabLayout;
     private ViewPagerAdapter mAdapter;
     private List<Song> mSongList;
+    public static boolean mShuffle ;
 
 
     public static Intent newIntent(Context context, Long songId) {
@@ -72,17 +74,25 @@ public class PlayerActivity extends AppCompatActivity implements PlayerFragment.
 
     }
 
+
     @Override
     public void nextSong() {
-        int current = mViewPager.getCurrentItem();
-        mViewPager.setCurrentItem(current+1);
+        if (!mShuffle) {
+            int current = mViewPager.getCurrentItem();
+            mViewPager.setCurrentItem(current + 1);
+        } else
+            mViewPager.setCurrentItem(randomGenerator());
     }
 
     @Override
     public void previousSong() {
-    int current = mViewPager.getCurrentItem();
-    mViewPager.setCurrentItem(current-1);
+        if (!mShuffle) {
+            int current = mViewPager.getCurrentItem();
+            mViewPager.setCurrentItem(current - 1);
+        } else
+            mViewPager.setCurrentItem(randomGenerator());
     }
+
 
     private class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
@@ -111,6 +121,15 @@ public class PlayerActivity extends AppCompatActivity implements PlayerFragment.
         public int getItemPosition(@NonNull Object object) {
             return POSITION_NONE;
         }
+    }
+
+    private int randomGenerator() {
+        Random random = new Random();
+        int low = 0;
+        int high = mSongList.size();
+        int result = random.nextInt(high - low) + low;
+        return result;
+
     }
 
 

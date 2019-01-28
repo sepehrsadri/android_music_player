@@ -3,6 +3,7 @@ package project.com.maktab.musicplayer;
 
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -35,9 +36,10 @@ public class PlayerFragment extends Fragment implements Runnable {
     private ImageView mSongCoverIv;
     private SeekBar mSeekBar;
     private Handler mHandler;
-    private boolean mWasPlaying , mRepeateSong;
+    private boolean mWasPlaying, mRepeateSong;
     private MediaPlayer mMediaPlayer = new MediaPlayer();
     private FloatingActionButton mActionButton;
+    private static boolean mShuffle=false;
     private AppCompatImageButton mNextSongIbtn, mPreviousSongIbtn, mShuffleSongIbtn, mRepeateSongIbtn;
     private CallBacks mCallBacks;
 
@@ -50,9 +52,12 @@ public class PlayerFragment extends Fragment implements Runnable {
         fragment.setArguments(args);
         return fragment;
     }
-    public interface CallBacks{
+
+    public interface CallBacks {
         public void nextSong();
+
         public void previousSong();
+
     }
 
     @Override
@@ -95,7 +100,7 @@ public class PlayerFragment extends Fragment implements Runnable {
         mPreviousSongIbtn = view.findViewById(R.id.previous_song_iBtn);
         mShuffleSongIbtn = view.findViewById(R.id.shuffle_play);
         mRepeateSongIbtn = view.findViewById(R.id.song_repeate_iBtn);
-
+        setShuffleDrawble(PlayerActivity.mShuffle);
 
         mSongCoverIv.setImageBitmap(mSong.getBitmap());
         mTvSongName.setText(mSong.getTitle());
@@ -153,6 +158,7 @@ public class PlayerFragment extends Fragment implements Runnable {
             public void onClick(View v) {
                 clearMediaPlayer();
                 mCallBacks.nextSong();
+
             }
         });
         mPreviousSongIbtn.setOnClickListener(new View.OnClickListener() {
@@ -162,8 +168,24 @@ public class PlayerFragment extends Fragment implements Runnable {
                 mCallBacks.previousSong();
             }
         });
+        mShuffleSongIbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mShuffle = !mShuffle;
+                PlayerActivity.mShuffle = mShuffle;
+                setShuffleDrawble(mShuffle);
+
+            }
+        });
 
         return view;
+    }
+
+    private void setShuffleDrawble(boolean shuffle) {
+        if(shuffle)
+        mShuffleSongIbtn.setImageDrawable(ContextCompat.getDrawable(getActivity(),R.drawable.ic_no_shuffle));
+        else
+            mShuffleSongIbtn.setImageDrawable(ContextCompat.getDrawable(getActivity(),R.drawable.ic_shuffle));
     }
 
     public void playSong() {
@@ -185,8 +207,7 @@ public class PlayerFragment extends Fragment implements Runnable {
                     mMediaPlayer = new MediaPlayer();
                 }
 
-                mActionButton.setImageDrawable(ContextCompat.getDrawable(getActivity(), android.R.drawable.ic_media_pause));
-
+                setPauseImage();
 
                 mMediaPlayer.prepare();
                 mMediaPlayer.setVolume(0.5f, 0.5f);
@@ -205,11 +226,16 @@ public class PlayerFragment extends Fragment implements Runnable {
         }
     }
 
+    private void setPauseImage() {
+        mActionButton.setImageDrawable(ContextCompat.getDrawable(getActivity(), android.R.drawable.ic_media_pause));
+    }
+
     private void clearMediaPlayer() {
         if (mMediaPlayer != null) {
             mMediaPlayer.stop();
             mMediaPlayer.release();
             mMediaPlayer = null;
+
 
         }
     }
