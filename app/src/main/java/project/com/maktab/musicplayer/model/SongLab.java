@@ -269,6 +269,50 @@ public class SongLab {
         return bitmap;
     }
 
+    public List<Song> getSearchedSongList(Activity activity, String searchText) {
+        List<Song> songList = new ArrayList<>();
+
+        String where = MediaStore.Audio.Media.TITLE + " LIKE ? = ";
+        String[] params = new String[]{searchText};
+        Cursor cursor = activity.getContentResolver().query(uri,
+                null, where, params, null);
+
+        try {
+            if (cursor.getCount() <= 0) return null;
+
+            while (cursor.moveToNext()) {
+                Long id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));
+                String artist = cursor.getString(cursor
+                        .getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST));
+
+                String track = cursor.getString(cursor
+                        .getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE));
+                String data = cursor.getString(cursor
+                        .getColumnIndexOrThrow(MediaStore.Audio.Media.DATA));
+                Long albumId = cursor.getLong(cursor
+                        .getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID));
+
+
+                Bitmap bitmap = generateBitmap(activity, albumId);
+
+
+                Song song = new Song();
+                song.setId(id);
+                song.setArtist(artist);
+                song.setData(data);
+                song.setBitmap(bitmap);
+
+                mSongList.add(song);
+
+
+            }
+        } finally {
+            cursor.close();
+        }
+
+        return mSongList;
+    }
+
     public List<Artist> getArtistList() {
         return mArtistList;
     }
