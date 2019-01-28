@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 
 import project.com.maktab.musicplayer.model.SongLab;
 
@@ -16,6 +17,7 @@ public class ViewPagerActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
     private ViewPagerAdapter mViewPagerAdapter;
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +25,10 @@ public class ViewPagerActivity extends AppCompatActivity {
         setContentView(R.layout.main_coordinator);
         mViewPager = findViewById(R.id.main_view_pager);
         mTabLayout = findViewById(R.id.main_tab_layout);
+        mToolbar = findViewById(R.id.main_toolbar);
+
+        setSupportActionBar(mToolbar);
+
         mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mViewPagerAdapter);
         SongLab.getInstance().init(this);

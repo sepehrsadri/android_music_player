@@ -15,11 +15,44 @@
         android:layout_height="wrap_content">
 
         <android.support.v7.widget.Toolbar
+
+            android:background="@android:color/black"
             android:id="@+id/main_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="wrap_content"
             app:layout_scrollFlags="enterAlways|snap|scroll"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+       <!--     <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">-->
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="50dp"
+                    app:layout_collapseParallaxMultiplier="0.5"
+                    android:src="@drawable/icon_malhaar5"
+                    android:layout_height="50dp" />
+       <!--     <android.support.v7.widget.AppCompatTextView
+                android:gravity="center"
+
+                android:layout_width="wrap_content"
+                android:text="Music Player"
+                android:layout_height="wrap_content" />-->
+
+
+            <!--    <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:text="hello world"
+                    android:layout_height="wrap_content" />-->
+
+
+
+
+            <!--</LinearLayout>-->
+
+
+
+
 
         </android.support.v7.widget.Toolbar>
 
