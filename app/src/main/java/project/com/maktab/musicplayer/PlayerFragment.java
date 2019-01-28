@@ -7,6 +7,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 import project.com.maktab.musicplayer.model.Song;
 import project.com.maktab.musicplayer.model.SongLab;
@@ -16,8 +19,12 @@ import project.com.maktab.musicplayer.model.SongLab;
  * A simple {@link Fragment} subclass.
  */
 public class PlayerFragment extends Fragment {
-    private Song mSong;
     private static final String SONG_ID_ARG = "song_id_arg";
+
+    private Song mSong;
+    private TextView mTvSongName, mTvSongArtist;
+    private ImageView mSongCoverIv;
+    private SeekBar mSeekBar;
 
     public static PlayerFragment newInstance(Long songId) {
 
@@ -45,7 +52,18 @@ public class PlayerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_player, container, false);
+        View view = inflater.inflate(R.layout.fragment_player, container, false);
+        mTvSongArtist = view.findViewById(R.id.player_song_artist);
+        mTvSongName = view.findViewById(R.id.player_song_name);
+        mSongCoverIv = view.findViewById(R.id.player_song_cover);
+        mSeekBar = view.findViewById(R.id.player_seek_bar);
+
+        mSongCoverIv.setImageBitmap(mSong.getBitmap());
+        mTvSongName.setText(mSong.getTitle());
+        mTvSongArtist.setText(mSong.getArtist());
+
+
+        return view;
     }
 
 }

@@ -1,6 +1,7 @@
 package project.com.maktab.musicplayer;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -30,11 +31,11 @@ public class SongsRecyclerFragment extends Fragment {
     private String listPicker;
     private Long id;
 
-    public static SongsRecyclerFragment newInstance(String status,Long id) {
+    public static SongsRecyclerFragment newInstance(String status, Long id) {
 
         Bundle args = new Bundle();
         args.putString(STATUS_ARGS, status);
-        args.putLong(ID_ARGS,id);
+        args.putLong(ID_ARGS, id);
         SongsRecyclerFragment fragment = new SongsRecyclerFragment();
         fragment.setArguments(args);
         return fragment;
@@ -47,8 +48,8 @@ public class SongsRecyclerFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        listPicker = getArguments().getString(STATUS_ARGS,"");
-        id = getArguments().getLong(ID_ARGS,0);
+        listPicker = getArguments().getString(STATUS_ARGS, "");
+        id = getArguments().getLong(ID_ARGS, 0);
         mSongList = SongLab.getInstance().getSongList();
     }
 
@@ -59,13 +60,13 @@ public class SongsRecyclerFragment extends Fragment {
         mSongsRv = view.findViewById(R.id.recycler_view);
 
         mSongsRv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        if(listPicker.equalsIgnoreCase("album"))
-            mAdapter = new RecyclerViewAdapter(SongLab.getInstance().getSongListByAlbum(getActivity(),id));
-        else if(listPicker.equalsIgnoreCase("artist"))
-            mAdapter = new RecyclerViewAdapter(SongLab.getInstance().getSongListByArtist(getActivity(),id));
+        if (listPicker.equalsIgnoreCase("album"))
+            mAdapter = new RecyclerViewAdapter(SongLab.getInstance().getSongListByAlbum(getActivity(), id));
+        else if (listPicker.equalsIgnoreCase("artist"))
+            mAdapter = new RecyclerViewAdapter(SongLab.getInstance().getSongListByArtist(getActivity(), id));
 
         else
-        mAdapter = new RecyclerViewAdapter(mSongList);
+            mAdapter = new RecyclerViewAdapter(mSongList);
 
 
         mSongsRv.setAdapter(mAdapter);
@@ -85,6 +86,13 @@ public class SongsRecyclerFragment extends Fragment {
             mCoverIv = itemView.findViewById(R.id.cover_image);
             mSongTv = itemView.findViewById(R.id.songs_name_tv);
             mArtistTv = itemView.findViewById(R.id.artist_name_tv);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = PlayerActivity.newIntent(getActivity(), mSong.getId());
+                    startActivity(intent);
+                }
+            });
 
         }
 

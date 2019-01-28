@@ -238,7 +238,7 @@ public class SongLab {
             bitmap = MediaStore.Images.Media.getBitmap(
                     activity.getContentResolver(), albumArtUri);
             if (bitmap != null)
-                bitmap = Bitmap.createScaledBitmap(bitmap, 80, 80, true);
+                bitmap = Bitmap.createScaledBitmap(bitmap, 180, 180, true);
 
         } catch (FileNotFoundException exception) {
             exception.printStackTrace();
