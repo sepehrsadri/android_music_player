@@ -54,18 +54,66 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingActionButton"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/music_option_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
-        android:clickable="true"
-        android:src="@drawable/ic_play"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent">
+        <ImageButton
+            android:id="@+id/shuffle_play"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_shuffle"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="675dp" />
+
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/previous_song_iBtn"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_previous"
+            tools:layout_editor_absoluteX="84dp"
+            tools:layout_editor_absoluteY="675dp" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/floatingActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:src="@drawable/ic_play"
+            tools:layout_editor_absoluteX="186dp"
+            tools:layout_editor_absoluteY="667dp" />
+
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/play_next_iBtn"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_next"
+            tools:layout_editor_absoluteX="267dp"
+            tools:layout_editor_absoluteY="667dp" />
+
+
+        <ImageButton
+            android:id="@+id/song_repeate_iBtn"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_no_repeat"
+            tools:layout_editor_absoluteX="331dp"
+            tools:layout_editor_absoluteY="667dp" />
+
+    </LinearLayout>
+
+
 
     <TextView
         android:id="@+id/seek_bar_status_tv"
@@ -74,8 +122,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="13dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/floatingActionButton"
+        android:text="00:00"
+        app:layout_constraintBottom_toTopOf="@+id/music_option_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
