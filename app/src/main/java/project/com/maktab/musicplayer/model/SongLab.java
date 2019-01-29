@@ -26,7 +26,16 @@ public class SongLab {
         return mAlbumList;
     }
 
-    public Song getSong(Activity activity, Long id) {
+    public Song getSong(Long id){
+        for(Song song:mSongList){
+            if(song.getId().equals(id))
+                return song;
+        }
+
+        return null;
+    }
+
+/*    public Song getSong(Activity activity, Long id) {
         String where = MediaStore.Audio.Media.IS_MUSIC + "!=0" + " AND " + MediaStore.Audio.Media._ID + "=" + String.valueOf(id);
         final Cursor cursor = activity.getContentResolver().query(uri, null, where, null, null);
 
@@ -63,9 +72,19 @@ public class SongLab {
 
 
         return song;
-    }
+    }*/
 
-    public List<Song> getSongListByArtist(Activity activity, Long artistiD) {
+
+
+    public List<Song> getSongListByArtist(Long artistId){
+        List<Song> result = new ArrayList<>();
+        for(Song song : mSongList){
+            if(song.getArtistId().equals(artistId))
+                result.add(song);
+        }
+        return result;
+    }
+   /* public List<Song> getSongListByArtist(Activity activity, Long artistiD) {
 
         List<Song> result = new ArrayList<>();
         String where = MediaStore.Audio.Media.IS_MUSIC + "!=0" + " AND " + MediaStore.Audio.Media.ARTIST_ID + "=" + String.valueOf(artistiD);
@@ -106,12 +125,20 @@ public class SongLab {
 
 
         return result;
-    }
+    }*/
 
-    public List<Song> getSongListByAlbum(Activity activity, Long albumId) {
+    public List<Song> getSongListByAlbum(Long albumId){
         List<Song> result = new ArrayList<>();
-/*        String where = MediaStore.Audio.Media.IS_MUSIC + "!= 0 " + " AND " + "cast(" +
-                MediaStore.Audio.Media.ALBUM_ID + "as text) == " + String.valueOf(albumId);*/
+        for(Song song : mSongList){
+            if(song.getAlbumId().equals(albumId))
+                result.add(song);
+        }
+        return result;
+    }
+  /*  public List<Song> getSongListByAlbum(Activity activity, Long albumId) {
+        List<Song> result = new ArrayList<>();
+*//*        String where = MediaStore.Audio.Media.IS_MUSIC + "!= 0 " + " AND " + "cast(" +
+                MediaStore.Audio.Media.ALBUM_ID + "as text) == " + String.valueOf(albumId);*//*
         String where = MediaStore.Audio.Media.IS_MUSIC + "!=0" + " AND " + MediaStore.Audio.Media.ALBUM_ID + "=" + String.valueOf(albumId);
 
         final Cursor cursor = activity.getContentResolver().query(uri, null, where, null, null);
@@ -153,7 +180,7 @@ public class SongLab {
 
 
         return result;
-    }
+    }*/
 
 
     public List<Song> getSongList() {
@@ -229,7 +256,7 @@ public class SongLab {
                 generateAlbumList(artist, album, albumId, bitmap);
 
 
-                generateSongList(id, artist, track, data, duration, bitmap);
+                generateSongList(id, artist, track, data, duration, bitmap,artistId,albumId);
 
             }
         } finally {
@@ -355,7 +382,7 @@ public class SongLab {
 
     }
 
-    private void generateSongList(Long id, String artist, String track, String data, int duration, Bitmap bitmap) {
+    private void generateSongList(Long id, String artist, String track, String data, int duration, Bitmap bitmap,Long artistId,Long albumId) {
         Song song = new Song();
         song.setArtist(artist);
         song.setId(id);
@@ -363,7 +390,8 @@ public class SongLab {
         song.setData(data);
         song.setDuration(duration);
         song.setBitmap(bitmap);
-
+        song.setAlbumId(albumId);
+        song.setArtistId(artistId);
         mSongList.add(song);
     }
 }

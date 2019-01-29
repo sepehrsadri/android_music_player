@@ -7,10 +7,28 @@ public class Song {
     private String artist;
     private String title;
     private String data;
+    private Long artistId;
+    private Long albumId;
     private int duration;
     private Uri art;
     private Bitmap mBitmap;
     private Long id;
+
+    public Long getArtistId() {
+        return artistId;
+    }
+
+    public void setArtistId(Long artistId) {
+        this.artistId = artistId;
+    }
+
+    public Long getAlbumId() {
+        return albumId;
+    }
+
+    public void setAlbumId(Long albumId) {
+        this.albumId = albumId;
+    }
 
     public Long getId() {
         return id;
