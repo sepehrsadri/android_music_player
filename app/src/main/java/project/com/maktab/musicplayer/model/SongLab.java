@@ -5,19 +5,13 @@ import android.content.ContentUris;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Point;
-import android.media.browse.MediaBrowser;
 import android.net.Uri;
 import android.provider.MediaStore;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import project.com.maktab.musicplayer.ListSongs;
 
 public class SongLab {
     private static SongLab mInstance;
