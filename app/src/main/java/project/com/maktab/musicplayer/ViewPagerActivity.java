@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import project.com.maktab.musicplayer.model.SongLab;
 
@@ -40,13 +41,25 @@ public class ViewPagerActivity extends AppCompatActivity {
         mTabLayout.setupWithViewPager(mViewPager);
         mTabLayout.setTabMode(TabLayout.MODE_FIXED);
 
-        mSearchView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                showSearchDialog();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                showSearchDialog();
+                return true;
             }
         });
+    }
 
+    private void showSearchDialog() {
+        SearchDialogFragment dialogFragment = SearchDialogFragment.newInstance();
+        dialogFragment.show(getSupportFragmentManager(), "show fragment");
     }
 
     private class ViewPagerAdapter extends FragmentStatePagerAdapter {
@@ -59,13 +72,13 @@ public class ViewPagerActivity extends AppCompatActivity {
         public Fragment getItem(int i) {
             switch (i) {
                 case 0:
-                    return SongsRecyclerFragment.newInstance("all",0l);
+                    return SongsRecyclerFragment.newInstance("all", 0l);
                 case 1:
                     return AlbumRecyclerFragment.newInstance();
                 case 2:
                     return ArtistRecyclerFragment.newInstance();
-                    default:
-                        return null;
+                default:
+                    return null;
             }
 
         }

@@ -272,8 +272,9 @@ public class SongLab {
     public List<Song> getSearchedSongList(Activity activity, String searchText) {
         List<Song> songList = new ArrayList<>();
 
-        String where = MediaStore.Audio.Media.TITLE + " LIKE ? = ";
-        String[] params = new String[]{searchText};
+        String where = MediaStore.Audio.Media.TITLE + " LIKE ? ";
+        String param = "%" + searchText +"%";
+        String[] params = new String[]{param};
         Cursor cursor = activity.getContentResolver().query(uri,
                 null, where, params, null);
 
@@ -298,11 +299,12 @@ public class SongLab {
 
                 Song song = new Song();
                 song.setId(id);
+                song.setTitle(track);
                 song.setArtist(artist);
                 song.setData(data);
                 song.setBitmap(bitmap);
 
-                mSongList.add(song);
+                songList.add(song);
 
 
             }
@@ -310,7 +312,7 @@ public class SongLab {
             cursor.close();
         }
 
-        return mSongList;
+        return songList;
     }
 
     public List<Artist> getArtistList() {

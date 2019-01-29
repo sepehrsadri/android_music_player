@@ -1,6 +1,7 @@
 package project.com.maktab.musicplayer;
 
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.NonNull;
@@ -8,6 +9,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import project.com.maktab.musicplayer.model.Song;
+import project.com.maktab.musicplayer.model.SongLab;
 
 
 /**
@@ -25,10 +28,31 @@ import project.com.maktab.musicplayer.model.Song;
 public class SearchDialogFragment extends DialogFragment {
     private RecyclerView mRecyclerView;
     private SearchView mSearchView;
+    private SearchRvAdapter mAdapter;
+    private Toolbar mToolbar;
 
+    public static SearchDialogFragment newInstance() {
+
+        Bundle args = new Bundle();
+
+        SearchDialogFragment fragment = new SearchDialogFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     public SearchDialogFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Dialog dialog = getDialog();
+        if (dialog != null) {
+            int width = ViewGroup.LayoutParams.MATCH_PARENT;
+            int height = ViewGroup.LayoutParams.MATCH_PARENT;
+            dialog.getWindow().setLayout(width, height);
+        }
     }
 
 
@@ -39,21 +63,34 @@ public class SearchDialogFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_search_dialog, container, false);
         mRecyclerView = view.findViewById(R.id.search_fragment_recycler_view);
         mSearchView = view.findViewById(R.id.search_fragment_search_view);
+        mToolbar = view.findViewById(R.id.search_fragment_bar);
+
+        ((ViewPagerActivity) getActivity()).setSupportActionBar(mToolbar);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        mAdapter = new SearchRvAdapter(null);
+        mRecyclerView.setAdapter(mAdapter);
+
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            List<Song> list;
+
             @Override
             public boolean onQueryTextSubmit(String s) {
-                return false;
+                list = SongLab.getInstance().getSearchedSongList(getActivity(), s);
+                mAdapter.setSongList(list);
+                mAdapter.notifyDataSetChanged();
+                return true;
             }
 
             @Override
             public boolean onQueryTextChange(String s) {
-                return false;
+                list = SongLab.getInstance().getSearchedSongList(getActivity(), s);
+                mAdapter.setSongList(list);
+                mAdapter.notifyDataSetChanged();
+                return true;
             }
         });
-
 
 
         return view;
@@ -104,13 +141,17 @@ public class SearchDialogFragment extends DialogFragment {
         @Override
         public void onBindViewHolder(@NonNull SearchRvHolder searchRvHolder, int i) {
             Song song = mSongList.get(i);
-            searchRvHolder.bind(song);
+            if (song != null)
+                searchRvHolder.bind(song);
 
         }
 
         @Override
         public int getItemCount() {
-            return mSongList.size();
+            if (mSongList == null)
+                return 0;
+            else
+                return mSongList.size();
         }
     }
 
