@@ -13,6 +13,9 @@ import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 import android.widget.TextView;
 
 import project.com.maktab.musicplayer.InitAsyncTask;
@@ -29,6 +32,11 @@ public class StartActivity extends AppCompatActivity {
         mStartPlayerTextView = findViewById(R.id.start_player_text_view);
         startPlayer();
 
+        AlphaAnimation alphaAnimation = new AlphaAnimation(1,0);
+        alphaAnimation.setDuration(1000);
+        alphaAnimation.setRepeatCount(10);
+        alphaAnimation.setRepeatMode(Animation.REVERSE);
+        mStartPlayerTextView.setAnimation(alphaAnimation);
 
     }
     @Override
@@ -45,6 +53,7 @@ public class StartActivity extends AppCompatActivity {
                     // contacts-related task you need to do.
                 } else {
                     askReadExternalPermission();
+
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
 
@@ -86,10 +95,12 @@ public class StartActivity extends AppCompatActivity {
                 Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
 
+
             // Permission is not granted
             // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(StartActivity.this,
                     Manifest.permission.READ_EXTERNAL_STORAGE)) {
+
                 // Show an explanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
                 // sees the explanation, try again to request the permission.
@@ -104,6 +115,7 @@ public class StartActivity extends AppCompatActivity {
                 // result of the request.
             }
         } else {
+            new InitAsyncTask(StartActivity.this).execute();
             // Permission has already been granted
         }
     }

@@ -25,7 +25,7 @@
         android:fontFamily="sans-serif-condensed-light"
         android:textSize="30sp"
         android:gravity="center"
-        android:text="Android Music Player"
+        android:text="Music Player"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
