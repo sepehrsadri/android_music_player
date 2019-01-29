@@ -30,6 +30,8 @@ public class Utilities {
         if (radius > MAX_RADIUS) {
             radius = MAX_RADIUS;
         }
+        if (bitmap == null)
+            return null;
 
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
@@ -58,7 +60,7 @@ public class Utilities {
         blurScript.forEach(allocation);
 
         // Repeat the blur for extra effect
-        for (int i=0; i<repeat; i++) {
+        for (int i = 0; i < repeat; i++) {
             blurScript.forEach(allocation);
         }
 

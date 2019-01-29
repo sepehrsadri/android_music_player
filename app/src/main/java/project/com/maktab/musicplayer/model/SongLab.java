@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 
 import java.io.FileNotFoundException;
@@ -26,9 +27,9 @@ public class SongLab {
         return mAlbumList;
     }
 
-    public Song getSong(Long id){
-        for(Song song:mSongList){
-            if(song.getId().equals(id))
+    public Song getSong(Long id) {
+        for (Song song : mSongList) {
+            if (song.getId().equals(id))
                 return song;
         }
 
@@ -75,11 +76,10 @@ public class SongLab {
     }*/
 
 
-
-    public List<Song> getSongListByArtist(Long artistId){
+    public List<Song> getSongListByArtist(Long artistId) {
         List<Song> result = new ArrayList<>();
-        for(Song song : mSongList){
-            if(song.getArtistId().equals(artistId))
+        for (Song song : mSongList) {
+            if (song.getArtistId().equals(artistId))
                 result.add(song);
         }
         return result;
@@ -127,10 +127,10 @@ public class SongLab {
         return result;
     }*/
 
-    public List<Song> getSongListByAlbum(Long albumId){
+    public List<Song> getSongListByAlbum(Long albumId) {
         List<Song> result = new ArrayList<>();
-        for(Song song : mSongList){
-            if(song.getAlbumId().equals(albumId))
+        for (Song song : mSongList) {
+            if (song.getAlbumId().equals(albumId))
                 result.add(song);
         }
         return result;
@@ -256,7 +256,7 @@ public class SongLab {
                 generateAlbumList(artist, album, albumId, bitmap);
 
 
-                generateSongList(id, artist, track, data, duration, bitmap,artistId,albumId);
+                generateSongList(id, artist, track, data, duration, bitmap, artistId, albumId);
 
             }
         } finally {
@@ -366,8 +366,24 @@ public class SongLab {
         artistModel.setName(artist);
         artistModel.setAlbumId(albumId);
 
-        mArtistList.add(artistModel);
+        if (!containsNameArtist(artist))
+            mArtistList.add(artistModel);
 
+
+    }
+
+
+    public boolean containsNameAlbum(final String name) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return mAlbumList.stream().filter(o -> o.getTitle().equals(name)).findFirst().isPresent();
+        }
+        return false;
+    }
+    public boolean containsNameArtist(final String name) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return mArtistList.stream().filter(o -> o.getName().equals(name)).findFirst().isPresent();
+        }
+        return false;
     }
 
     private void generateAlbumList(String artist, String album, Long albumId, Bitmap bitmap) {
@@ -377,12 +393,13 @@ public class SongLab {
         albumModel.setTitle(album);
         albumModel.setId(albumId);
 
+        if(!containsNameAlbum(album))
         mAlbumList.add(albumModel);
 
 
     }
 
-    private void generateSongList(Long id, String artist, String track, String data, int duration, Bitmap bitmap,Long artistId,Long albumId) {
+    private void generateSongList(Long id, String artist, String track, String data, int duration, Bitmap bitmap, Long artistId, Long albumId) {
         Song song = new Song();
         song.setArtist(artist);
         song.setId(id);
