@@ -2,6 +2,7 @@ package project.com.maktab.musicplayer;
 
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.NonNull;
@@ -77,7 +78,8 @@ public class SearchDialogFragment extends DialogFragment {
 
             @Override
             public boolean onQueryTextSubmit(String s) {
-                list = SongLab.getInstance().getSearchedSongList(getActivity(), s);
+//                list = SongLab.getInstance().getSearchedSongList(getActivity(), s);
+                list = SongLab.getInstance().getSearchList(s);
                 mAdapter.setSongList(list);
                 mAdapter.notifyDataSetChanged();
                 return true;
@@ -85,7 +87,8 @@ public class SearchDialogFragment extends DialogFragment {
 
             @Override
             public boolean onQueryTextChange(String s) {
-                list = SongLab.getInstance().getSearchedSongList(getActivity(), s);
+//                list = SongLab.getInstance().getSearchedSongList(getActivity(), s);
+                list = SongLab.getInstance().getSearchList(s);
                 mAdapter.setSongList(list);
                 mAdapter.notifyDataSetChanged();
                 return true;
@@ -107,6 +110,15 @@ public class SearchDialogFragment extends DialogFragment {
             mCircleImageView = itemView.findViewById(R.id.cover_image);
             mSongTv = itemView.findViewById(R.id.songs_name_tv);
             mArtistTv = itemView.findViewById(R.id.artist_name_tv);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = PlayerActivity.newIntent(getActivity(), mSong.getId());
+                    dismiss();
+                    startActivity(intent);
+                }
+            });
 
         }
 

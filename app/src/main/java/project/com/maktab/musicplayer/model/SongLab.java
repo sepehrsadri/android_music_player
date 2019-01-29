@@ -269,11 +269,26 @@ public class SongLab {
         return bitmap;
     }
 
+    public List<Song> getSearchList(String text) {
+        List<Song> list = new ArrayList<>();
+
+        text = text.toLowerCase();
+        for (Song item : mSongList) {
+            if (item.getTitle().toLowerCase().contains(text)) {
+                list.add(item);
+            }
+        }
+
+
+        return list;
+    }
+
+
     public List<Song> getSearchedSongList(Activity activity, String searchText) {
         List<Song> songList = new ArrayList<>();
 
         String where = MediaStore.Audio.Media.TITLE + " LIKE ? ";
-        String param = "%" + searchText +"%";
+        String param = "%" + searchText + "%";
         String[] params = new String[]{param};
         Cursor cursor = activity.getContentResolver().query(uri,
                 null, where, params, null);
