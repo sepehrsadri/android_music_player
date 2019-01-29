@@ -199,6 +199,7 @@ public class SongLab {
         try {
             if (cursor.getCount() <= 0) return;
 
+
             while (cursor.moveToNext()) {
                 Long id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));
                 String artist = cursor.getString(cursor

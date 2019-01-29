@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -44,9 +45,9 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
     private Handler mHandler;
     private boolean mWasPlaying;
     private boolean mRepeateSong = false;
+    private ImageView mBackGroundIv;
     private MediaPlayer mMediaPlayer = new MediaPlayer();
     private FloatingActionButton mActionButton;
-    private ConstraintLayout mConstraintLayout;
     private static boolean mShuffle = false;
     private AppCompatImageButton mNextSongIbtn, mPreviousSongIbtn, mShuffleSongIbtn, mRepeateSongIbtn;
     private CallBacks mCallBacks;
@@ -121,13 +122,13 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
         mShuffleSongIbtn = view.findViewById(R.id.shuffle_play);
         mRepeateSongIbtn = view.findViewById(R.id.song_repeate_iBtn);
         mRepeateAllCheckBox = view.findViewById(R.id.repeate_all_check_box);
-        mConstraintLayout = view.findViewById(R.id.player_fragmnet_layout);
+        mBackGroundIv = view.findViewById(R.id.cover_background_image);
 
         RenderScript renderScript = RenderScript.create(getActivity());
         Utilities utilities = new Utilities(renderScript);
-        Bitmap blurBitmap =utilities.blur(mSong.getBitmap(),1f,1);
+        Bitmap blurBitmap =utilities.blur(mSong.getBitmap(),4f,1);
         BitmapDrawable ob = new BitmapDrawable(getResources(), blurBitmap);
-            mConstraintLayout.setBackground(ob);
+            mBackGroundIv.setImageBitmap(blurBitmap);
 
         mRepeateAllCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

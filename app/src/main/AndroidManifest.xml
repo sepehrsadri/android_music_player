@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dist="http://schemas.android.com/apk/distribution"
+    xmlns:tools="http://schemas.android.com/tools"
     package="project.com.maktab.musicplayer">
-
-    <dist:module dist:instant="true" />
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
@@ -14,14 +13,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".controller.PlayerActivity"></activity>
-        <activity android:name=".controller.ListSongs" />
-        <activity android:name=".controller.ViewPagerActivity">
+        <activity android:name=".controller.StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".controller.PlayerActivity" />
+        <activity android:name=".controller.ListSongs" />
+        <activity android:name=".controller.ViewPagerActivity">
+
         </activity>
     </application>
 
