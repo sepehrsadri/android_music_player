@@ -191,13 +191,13 @@ public class SongLab {
     }
 
 
-    public void init(Activity activity) {
+    public boolean init(Activity activity) {
 
         final Cursor cursor = activity.getContentResolver().query(uri,
                 null, where, null, null);
 
         try {
-            if (cursor.getCount() <= 0) return;
+            if (cursor.getCount() <= 0) return true;
 
 
             while (cursor.moveToNext()) {
@@ -235,6 +235,7 @@ public class SongLab {
         } finally {
             cursor.close();
         }
+        return true;
 
     }
 

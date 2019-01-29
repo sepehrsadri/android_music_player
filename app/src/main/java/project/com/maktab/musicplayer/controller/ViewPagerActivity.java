@@ -1,23 +1,20 @@
 package project.com.maktab.musicplayer.controller;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 
 import project.com.maktab.musicplayer.R;
-import project.com.maktab.musicplayer.model.SongLab;
 
 public class ViewPagerActivity extends AppCompatActivity {
     private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 12;
@@ -26,6 +23,13 @@ public class ViewPagerActivity extends AppCompatActivity {
     private ViewPagerAdapter mViewPagerAdapter;
     private Toolbar mToolbar;
     private SearchView mSearchView;
+
+    public static Intent newIntent(Context context) {
+        Intent intent = new Intent(context, ViewPagerActivity.class);
+        return intent;
+
+    }
+
 /*
 
     @Override
@@ -89,7 +93,7 @@ public class ViewPagerActivity extends AppCompatActivity {
 
         mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mViewPagerAdapter);
-        SongLab.getInstance().init(this);
+//        SongLab.getInstance().init(this);
 
         mTabLayout.setupWithViewPager(mViewPager);
         mTabLayout.setTabMode(TabLayout.MODE_FIXED);
