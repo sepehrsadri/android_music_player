@@ -33,7 +33,13 @@ public class PlaylistFragment extends android.support.v4.app.Fragment {
     public PlaylistFragment() {
         // Required empty public constructor
     }
-
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            mFavoriteNumTv.setText(SongLab.getInstance().getFavSongList().size() + "Tracks");
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
