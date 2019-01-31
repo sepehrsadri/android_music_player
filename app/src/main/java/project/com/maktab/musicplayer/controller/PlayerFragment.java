@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.renderscript.RenderScript;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -28,7 +27,6 @@ import java.io.IOException;
 import de.hdodenhof.circleimageview.CircleImageView;
 import project.com.maktab.musicplayer.R;
 import project.com.maktab.musicplayer.Utilities;
-import project.com.maktab.musicplayer.model.Song;
 import project.com.maktab.musicplayer.model.SongEntity;
 import project.com.maktab.musicplayer.model.SongLab;
 
@@ -47,6 +45,7 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
     private boolean mWasPlaying;
     private boolean mRepeateSong = false;
     private ImageView mBackGroundIv;
+    private AppCompatCheckBox mLikeCheckBox;
     private MediaPlayer mMediaPlayer = new MediaPlayer();
     private FloatingActionButton mActionButton;
     private static boolean mShuffle = false;
@@ -124,13 +123,23 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
         mRepeateSongIbtn = view.findViewById(R.id.song_repeate_iBtn);
         mRepeateAllCheckBox = view.findViewById(R.id.repeate_all_check_box);
         mBackGroundIv = view.findViewById(R.id.cover_background_image);
+        mLikeCheckBox = view.findViewById(R.id.like_song_check_box);
 
         RenderScript renderScript = RenderScript.create(getActivity());
         Utilities utilities = new Utilities(renderScript);
-        Bitmap blurBitmap =utilities.blur(SongLab.generateBitmap(getActivity(),mSong.getAlbumId()),4f,1);
+        Bitmap blurBitmap = utilities.blur(SongLab.generateBitmap(getActivity(), mSong.getAlbumId()), 4f, 1);
         BitmapDrawable ob = new BitmapDrawable(getResources(), blurBitmap);
-            mBackGroundIv.setImageBitmap(blurBitmap);
+        mBackGroundIv.setImageBitmap(blurBitmap);
 
+        mLikeCheckBox.setChecked(mSong.getFavourite());
+
+        mLikeCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mSong.setFavourite(isChecked);
+                SongLab.getInstance().updateSong(mSong);
+            }
+        });
         mRepeateAllCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -237,7 +246,7 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
 
             }
         });
-        mSongCoverIv.setImageBitmap(SongLab.generateBitmap(getActivity(),mSong.getAlbumId()));
+        mSongCoverIv.setImageBitmap(SongLab.generateBitmap(getActivity(), mSong.getAlbumId()));
         return view;
     }
 

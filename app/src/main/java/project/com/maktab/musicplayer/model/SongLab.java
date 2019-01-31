@@ -74,6 +74,9 @@ public class SongLab {
 
         return mSongList;
     }
+    public void updateSong(SongEntity song){
+        mSongDao.update(song);
+    }
 
     private SongLab() {
         mSongList = new ArrayList<>();
