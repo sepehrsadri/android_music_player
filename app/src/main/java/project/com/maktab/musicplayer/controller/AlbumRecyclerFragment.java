@@ -18,6 +18,7 @@ import java.util.List;
 
 import project.com.maktab.musicplayer.R;
 import project.com.maktab.musicplayer.model.Album;
+import project.com.maktab.musicplayer.model.Song;
 import project.com.maktab.musicplayer.model.SongLab;
 
 /**
@@ -86,7 +87,7 @@ public class AlbumRecyclerFragment extends Fragment {
 
         public void bind(Album album) {
             mAlbum = album;
-            mCoverIv.setImageBitmap(album.getBitmap());
+            mCoverIv.setImageBitmap(SongLab.generateBitmap(getActivity(),album.getId()));
             mArtistTv.setText(album.getArtist());
             mAlbumTv.setText(album.getTitle());
         }

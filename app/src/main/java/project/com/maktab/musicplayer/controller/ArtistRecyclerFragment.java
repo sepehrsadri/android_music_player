@@ -90,7 +90,7 @@ public class ArtistRecyclerFragment extends Fragment {
 
         public void bind(Artist artist) {
             mArtist = artist;
-            mImageView.setImageBitmap(artist.getBitmap());
+            mImageView.setImageBitmap(SongLab.generateBitmap(getActivity(),artist.getAlbumId()));
             mArtistTv.setText(artist.getName());
          /*   mArtistSongsTv.setText(artist.getTracks() + "");
             mArtistAlbumsTv.setText(artist.getAlbums() + "");

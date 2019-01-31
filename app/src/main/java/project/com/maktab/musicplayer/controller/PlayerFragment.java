@@ -127,7 +127,7 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
 
         RenderScript renderScript = RenderScript.create(getActivity());
         Utilities utilities = new Utilities(renderScript);
-        Bitmap blurBitmap =utilities.blur(mSong.getBitmap(),4f,1);
+        Bitmap blurBitmap =utilities.blur(SongLab.generateBitmap(getActivity(),mSong.getAlbumId()),4f,1);
         BitmapDrawable ob = new BitmapDrawable(getResources(), blurBitmap);
             mBackGroundIv.setImageBitmap(blurBitmap);
 
@@ -237,7 +237,7 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
 
             }
         });
-        mSongCoverIv.setImageBitmap(mSong.getBitmap());
+        mSongCoverIv.setImageBitmap(SongLab.generateBitmap(getActivity(),mSong.getAlbumId()));
         return view;
     }
 

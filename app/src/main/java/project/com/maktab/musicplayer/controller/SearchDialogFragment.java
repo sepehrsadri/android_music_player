@@ -126,7 +126,7 @@ public class SearchDialogFragment extends DialogFragment {
 
         public void bind(SongEntity song) {
             mSong = song;
-            mCircleImageView.setImageBitmap(song.getBitmap());
+            mCircleImageView.setImageBitmap(SongLab.generateBitmap(getActivity(),song.getAlbumId()));
             mSongTv.setText(song.getTitle());
             mArtistTv.setText(song.getArtist());
         }

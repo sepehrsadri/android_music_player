@@ -101,7 +101,7 @@ public class SongsRecyclerFragment extends Fragment {
 
         public void bind(SongEntity song) {
             mSong = song;
-            mCoverIv.setImageBitmap(song.getBitmap());
+            mCoverIv.setImageBitmap(SongLab.generateBitmap(getActivity(),song.getAlbumId()));
             mSongTv.setText(song.getTitle());
             mArtistTv.setText(song.getArtist());
         }

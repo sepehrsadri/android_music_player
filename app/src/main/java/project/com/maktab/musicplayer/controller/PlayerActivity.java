@@ -41,7 +41,7 @@ public class PlayerActivity extends AppCompatActivity implements PlayerFragment.
 
         for (int i = 0; i < mSongList.size(); i++) {
 
-            if (mSongList.get(i).getId().equals(id)) {
+            if (mSongList.get(i).getSongId().equals(id)) {
                 index = i;
                 break;
 
