@@ -21,6 +21,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import project.com.maktab.musicplayer.R;
 import project.com.maktab.musicplayer.model.Song;
+import project.com.maktab.musicplayer.model.SongEntity;
 import project.com.maktab.musicplayer.model.SongLab;
 
 
@@ -75,7 +76,7 @@ public class SearchDialogFragment extends DialogFragment {
         mRecyclerView.setAdapter(mAdapter);
 
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            List<Song> list;
+            List<SongEntity> list;
 
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -104,7 +105,7 @@ public class SearchDialogFragment extends DialogFragment {
         private CircleImageView mCircleImageView;
         private TextView mSongTv;
         private TextView mArtistTv;
-        private Song mSong;
+        private SongEntity mSong;
 
         public SearchRvHolder(@NonNull View itemView) {
             super(itemView);
@@ -123,7 +124,7 @@ public class SearchDialogFragment extends DialogFragment {
 
         }
 
-        public void bind(Song song) {
+        public void bind(SongEntity song) {
             mSong = song;
             mCircleImageView.setImageBitmap(song.getBitmap());
             mSongTv.setText(song.getTitle());
@@ -133,13 +134,13 @@ public class SearchDialogFragment extends DialogFragment {
     }
 
     private class SearchRvAdapter extends RecyclerView.Adapter<SearchRvHolder> {
-        private List<Song> mSongList;
+        private List<SongEntity> mSongList;
 
-        public void setSongList(List<Song> songList) {
+        public void setSongList(List<SongEntity> songList) {
             mSongList = songList;
         }
 
-        public SearchRvAdapter(List<Song> songList) {
+        public SearchRvAdapter(List<SongEntity> songList) {
             mSongList = songList;
         }
 
@@ -153,7 +154,7 @@ public class SearchDialogFragment extends DialogFragment {
 
         @Override
         public void onBindViewHolder(@NonNull SearchRvHolder searchRvHolder, int i) {
-            Song song = mSongList.get(i);
+            SongEntity song = mSongList.get(i);
             if (song != null)
                 searchRvHolder.bind(song);
 

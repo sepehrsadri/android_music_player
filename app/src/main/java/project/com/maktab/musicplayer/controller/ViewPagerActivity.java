@@ -68,12 +68,12 @@ public class ViewPagerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences prefs = getSharedPreferences(SONG_LOAD_PREFS, MODE_PRIVATE);
+   /*     SharedPreferences prefs = getSharedPreferences(SONG_LOAD_PREFS, MODE_PRIVATE);
         boolean loadStatus = prefs.getBoolean(IS_IN_DAO, false);
         if (loadStatus)
-            SongLab.getInstance().initSongListFromDao(this);
+            SongLab.getInstance().initSongListFromDao();
         else
-            SongLab.getInstance().initSongList(this);
+            SongLab.getInstance().initSongList(this);*/
 
         // Here, thisActivity is the current activity
   /*      if (ContextCompat.checkSelfPermission(ViewPagerActivity.this,

@@ -18,6 +18,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import project.com.maktab.musicplayer.R;
 import project.com.maktab.musicplayer.model.Song;
+import project.com.maktab.musicplayer.model.SongEntity;
 import project.com.maktab.musicplayer.model.SongLab;
 
 /**
@@ -25,7 +26,7 @@ import project.com.maktab.musicplayer.model.SongLab;
  */
 public class SongsRecyclerFragment extends Fragment {
     RecyclerView mSongsRv;
-    private List<Song> mSongList;
+    private List<SongEntity> mSongList;
     private static final String STATUS_ARGS = "status_args";
     private static final String ID_ARGS = "id_args";
     private RecyclerViewAdapter mAdapter;
@@ -81,7 +82,7 @@ public class SongsRecyclerFragment extends Fragment {
         private CircleImageView mCoverIv;
         private TextView mSongTv;
         private TextView mArtistTv;
-        private Song mSong;
+        private SongEntity mSong;
 
         public RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -98,7 +99,7 @@ public class SongsRecyclerFragment extends Fragment {
 
         }
 
-        public void bind(Song song) {
+        public void bind(SongEntity song) {
             mSong = song;
             mCoverIv.setImageBitmap(song.getBitmap());
             mSongTv.setText(song.getTitle());
@@ -109,14 +110,14 @@ public class SongsRecyclerFragment extends Fragment {
 
 
     private class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
-        private List<Song> mSongList;
+        private List<SongEntity> mSongList;
 
-        public RecyclerViewAdapter(List<Song> songList) {
+        public RecyclerViewAdapter(List<SongEntity> songList) {
             mSongList = songList;
 
         }
 
-        public void setSongList(List<Song> songList) {
+        public void setSongList(List<SongEntity> songList) {
             mSongList = songList;
         }
 
@@ -130,7 +131,7 @@ public class SongsRecyclerFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerViewHolder recyclerViewHolder, int i) {
-            Song song = mSongList.get(i);
+            SongEntity song = mSongList.get(i);
             recyclerViewHolder.bind(song);
         }
 

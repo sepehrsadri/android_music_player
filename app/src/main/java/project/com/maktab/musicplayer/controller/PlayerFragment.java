@@ -29,6 +29,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import project.com.maktab.musicplayer.R;
 import project.com.maktab.musicplayer.Utilities;
 import project.com.maktab.musicplayer.model.Song;
+import project.com.maktab.musicplayer.model.SongEntity;
 import project.com.maktab.musicplayer.model.SongLab;
 
 
@@ -38,7 +39,7 @@ import project.com.maktab.musicplayer.model.SongLab;
 public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.OnCompletionListener {
     private static final String SONG_ID_ARG = "song_id_arg";
 
-    private Song mSong;
+    private SongEntity mSong;
     private TextView mTvSongName, mTvSongArtist, mSeekBarStatusTv;
     private CircleImageView mSongCoverIv;
     private SeekBar mSeekBar;

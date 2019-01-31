@@ -1,6 +1,6 @@
-/*
 package project.com.maktab.musicplayer;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,11 +12,12 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class InitAsyncTask extends android.os.AsyncTask<Void, Void, Void> {
     private ProgressDialog dialog;
-    private ViewPagerActivity mStartActivity;
+    private Activity mStartActivity;
     public static final String SONG_LOAD_PREFS = "songLoadPrefs";
     public static final String IS_IN_DAO = "isInDao";
 
-    public InitAsyncTask(ViewPagerActivity activity) {
+    public InitAsyncTask(Activity activity) {
+
         mStartActivity = activity;
         dialog = new ProgressDialog(activity);
     }
@@ -33,7 +34,7 @@ public class InitAsyncTask extends android.os.AsyncTask<Void, Void, Void> {
         SharedPreferences prefs = mStartActivity.getSharedPreferences(SONG_LOAD_PREFS, MODE_PRIVATE);
         boolean loadStatus = prefs.getBoolean(IS_IN_DAO, false);
         if (loadStatus)
-            status = SongLab.getInstance().initSongListFromDao(mStartActivity);
+            status = SongLab.getInstance().initSongListFromDao();
         else
             status = SongLab.getInstance().initSongList(mStartActivity);
 
@@ -55,4 +56,3 @@ public class InitAsyncTask extends android.os.AsyncTask<Void, Void, Void> {
         }
     }
 }
-*/

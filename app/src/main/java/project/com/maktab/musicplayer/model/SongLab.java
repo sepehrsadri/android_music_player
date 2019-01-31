@@ -92,11 +92,8 @@ public class SongLab {
     }
 
 
-    public boolean initSongListFromDao(Activity activity) {
-        List<SongEntity> songEntities = mSongDao.loadAll();
-
-
-
+    public boolean initSongListFromDao() {
+        mSongList = mSongDao.loadAll();
         return true;
     }
 

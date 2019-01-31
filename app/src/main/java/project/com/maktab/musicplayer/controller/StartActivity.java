@@ -1,4 +1,3 @@
-/*
 package project.com.maktab.musicplayer.controller;
 
 import android.Manifest;
@@ -121,4 +120,3 @@ public class StartActivity extends AppCompatActivity {
         }
     }
 }
-*/

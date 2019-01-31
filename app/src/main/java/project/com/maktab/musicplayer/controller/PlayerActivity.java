@@ -17,6 +17,7 @@ import java.util.Random;
 
 import project.com.maktab.musicplayer.R;
 import project.com.maktab.musicplayer.model.Song;
+import project.com.maktab.musicplayer.model.SongEntity;
 import project.com.maktab.musicplayer.model.SongLab;
 
 public class PlayerActivity extends AppCompatActivity implements PlayerFragment.CallBacks {
@@ -24,7 +25,7 @@ public class PlayerActivity extends AppCompatActivity implements PlayerFragment.
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
     private ViewPagerAdapter mAdapter;
-    private List<Song> mSongList;
+    private List<SongEntity> mSongList;
     public static boolean mShuffle;
     public static boolean mRepeateAll;
 
