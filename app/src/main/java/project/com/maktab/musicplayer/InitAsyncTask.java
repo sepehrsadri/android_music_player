@@ -2,8 +2,6 @@ package project.com.maktab.musicplayer;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.view.View;
 
 import project.com.maktab.musicplayer.controller.StartActivity;
 import project.com.maktab.musicplayer.controller.ViewPagerActivity;
@@ -26,7 +24,7 @@ public class InitAsyncTask extends android.os.AsyncTask<Void, Void, Void> {
 
         protected Void doInBackground(Void... args) {
             // do background work here
-            Boolean status = SongLab.getInstance().init(mStartActivity);
+            Boolean status = SongLab.getInstance().initSongList(mStartActivity);
             if(status==true){
                 Intent intent =  ViewPagerActivity.newIntent(mStartActivity);
                 mStartActivity.startActivity(intent);

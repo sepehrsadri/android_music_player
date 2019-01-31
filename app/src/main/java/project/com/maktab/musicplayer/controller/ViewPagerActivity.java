@@ -93,7 +93,7 @@ public class ViewPagerActivity extends AppCompatActivity {
 
         mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mViewPagerAdapter);
-//        SongLab.getInstance().init(this);
+//        SongLab.getInstance().initSongList(this);
 
         mTabLayout.setupWithViewPager(mViewPager);
         mTabLayout.setTabMode(TabLayout.MODE_FIXED);

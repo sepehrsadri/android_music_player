@@ -12,11 +12,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import project.com.maktab.musicplayer.database.App;
+
 public class SongLab {
     private static SongLab mInstance;
     private List<Song> mSongList;
     private List<Album> mAlbumList;
     private List<Artist> mArtistList;
+
+    private SongGreenDaoDao mSongDao;
+
+
     final Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
     final String where = MediaStore.Audio.Media.IS_MUSIC + "!=0";
 
@@ -65,6 +71,11 @@ public class SongLab {
         mSongList = new ArrayList<>();
         mAlbumList = new ArrayList<>();
         mArtistList = new ArrayList<>();
+
+        DaoSession daoSession = App.getAppInstance().getDaoSession();
+        mSongDao = daoSession.getSongGreenDaoDao();
+
+
     }
 
     public static SongLab getInstance() {
@@ -74,8 +85,13 @@ public class SongLab {
     }
 
 
+   /* public boolean initSongList(){
+        mSongList = mSongDao.
 
-    public boolean init(Activity activity) {
+    }*/
+
+
+    public boolean initSongList(Activity activity) {
 
         SongCursorWrapper cursorWrapper = new SongCursorWrapper(activity.getContentResolver().query(uri,
                 null, where, null, null));
@@ -87,9 +103,14 @@ public class SongLab {
 
             while (!cursorWrapper.isAfterLast()) {
 
+                Song song = cursorWrapper.getSong(activity);
+                if (!containsSongName(song.getTitle())) {
+                    mSongList.add(song);
+                    SongEntity songEntity = new SongEntity();
+                    songEntity.setPath(song.getData());
+                    mSongDao.insert(songEntity);
 
-                if(!containsSongName(cursorWrapper.getSong(activity).getTitle()))
-                mSongList.add(cursorWrapper.getSong(activity));
+                }
 
                 cursorWrapper.moveToNext();
 

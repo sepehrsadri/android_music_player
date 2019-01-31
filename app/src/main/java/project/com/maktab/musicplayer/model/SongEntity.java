@@ -6,7 +6,7 @@ import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
 
 @Entity
-public class SongGreenDao {
+public class SongEntity {
 
     @Id(autoincrement = true)
     private Long id;
@@ -16,14 +16,14 @@ public class SongGreenDao {
     private boolean favourite;
 
     @Generated(hash = 1514706729)
-    public SongGreenDao(Long id, String path, boolean favourite) {
+    public SongEntity(Long id, String path, boolean favourite) {
         this.id = id;
         this.path = path;
         this.favourite = favourite;
     }
 
     @Generated(hash = 130882466)
-    public SongGreenDao() {
+    public SongEntity() {
     }
 
     public Long getId() {
