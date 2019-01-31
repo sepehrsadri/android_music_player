@@ -258,6 +258,7 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
     }
 
     public void playSong(boolean loop) {
+        mWasPlaying =false;
 
         try {
 
@@ -274,6 +275,11 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
 
                 if (mMediaPlayer == null) {
                     mMediaPlayer = new MediaPlayer();
+                    try {
+                        mMediaPlayer.setDataSource(mSong.getData());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 setPauseImage();
