@@ -3,6 +3,7 @@
     <string name="songs">Songs</string>
     <string name="album">Albums</string>
     <string name="artists">Artists</string>
+    <string name="playlist">playlists</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

@@ -17,7 +17,6 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import project.com.maktab.musicplayer.R;
-import project.com.maktab.musicplayer.model.Song;
 import project.com.maktab.musicplayer.model.SongEntity;
 import project.com.maktab.musicplayer.model.SongLab;
 
@@ -63,9 +62,11 @@ public class SongsRecyclerFragment extends Fragment {
 
         mSongsRv.setLayoutManager(new LinearLayoutManager(getActivity()));
         if (listPicker.equalsIgnoreCase("album"))
-            mAdapter = new RecyclerViewAdapter(SongLab.getInstance().getSongListByAlbum( id));
+            mAdapter = new RecyclerViewAdapter(SongLab.getInstance().getSongListByAlbum(id));
         else if (listPicker.equalsIgnoreCase("artist"))
             mAdapter = new RecyclerViewAdapter(SongLab.getInstance().getSongListByArtist(id));
+        else if (listPicker.equalsIgnoreCase("fav"))
+            mAdapter = new RecyclerViewAdapter((SongLab.getInstance().getFavSongList()));
 
         else
             mAdapter = new RecyclerViewAdapter(mSongList);
@@ -101,7 +102,7 @@ public class SongsRecyclerFragment extends Fragment {
 
         public void bind(SongEntity song) {
             mSong = song;
-            mCoverIv.setImageBitmap(SongLab.generateBitmap(getActivity(),song.getAlbumId()));
+            mCoverIv.setImageBitmap(SongLab.generateBitmap(getActivity(), song.getAlbumId()));
             mSongTv.setText(song.getTitle());
             mArtistTv.setText(song.getArtist());
         }

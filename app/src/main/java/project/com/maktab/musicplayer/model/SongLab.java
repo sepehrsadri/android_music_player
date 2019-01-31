@@ -32,7 +32,7 @@ public class SongLab {
 
 
     public List<Album> getAlbumList() {
-        generateAlbumList();
+
         return mAlbumList;
     }
 
@@ -45,6 +45,15 @@ public class SongLab {
 
 
         return null;
+    }
+
+    public List<SongEntity> getFavSongList(){
+        List<SongEntity> result =
+                mSongDao.queryBuilder()
+                .where(SongEntityDao.Properties.Favourite.eq(true))
+                .list();
+
+        return result;
     }
 
     public List<SongEntity> getSongListByArtist(Long artistId) {
@@ -97,6 +106,8 @@ public class SongLab {
 
     public boolean initSongListFromDao() {
         mSongList = mSongDao.loadAll();
+        generateAlbumList();
+        generateArtistList();
         return true;
     }
 
@@ -152,8 +163,8 @@ public class SongLab {
 
             bitmap = MediaStore.Images.Media.getBitmap(
                     activity.getContentResolver(), albumArtUri);
-            if (bitmap != null)
-                bitmap = Bitmap.createScaledBitmap(bitmap, 80, 80, true);
+            /*if (bitmap != null)
+                bitmap = Bitmap.createScaledBitmap(bitmap, 80, 80, true);*/
 
         } catch (FileNotFoundException exception) {
             exception.printStackTrace();
@@ -181,7 +192,6 @@ public class SongLab {
 
 
     public List<Artist> getArtistList() {
-        generateArtistList();
         return mArtistList;
     }
 
