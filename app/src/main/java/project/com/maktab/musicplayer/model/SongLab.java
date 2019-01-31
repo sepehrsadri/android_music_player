@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import project.com.maktab.musicplayer.controller.ViewPagerActivity;
 import project.com.maktab.musicplayer.database.App;
 
@@ -75,8 +74,7 @@ public class SongLab {
         mAlbumList = new ArrayList<>();
         mArtistList = new ArrayList<>();
         mDaoSession = App.getAppInstance().getDaoSession();
-//        DaoSession daoSession = App.getAppInstance().getDaoSession();
-        mSongDao =mDaoSession.getSongEntityDao();
+        mSongDao = mDaoSession.getSongEntityDao();
 
 
     }
@@ -88,48 +86,12 @@ public class SongLab {
     }
 
 
-
-   public boolean initSongListFromDao(Activity activity){
-       List<SongEntity> songEntities = mSongDao.loadAll();
-       String where = MediaStore.Audio.Media.DATA + " = ? ";
-       for(int i=0;i<50;i++){
-
-           String[] args = new String[]{
-                   songEntities.get(i).getPath()
-           };
+    public boolean initSongListFromDao(Activity activity) {
+        List<SongEntity> songEntities = mSongDao.loadAll();
 
 
-
-
-
-       SongCursorWrapper cursorWrapper = new SongCursorWrapper(activity.getContentResolver().query(uri,
-               null, where, args, null));
-       try {
-           if (cursorWrapper.getCount() <= 0) return true;
-
-           cursorWrapper.moveToFirst();
-
-           while (!cursorWrapper.isAfterLast()) {
-
-               Song song = cursorWrapper.getSong(activity);
-               if (!containsSongName(song.getTitle())) {
-                   mSongList.add(song);
-                   SongEntity songEntity = new SongEntity();
-                   songEntity.setPath(song.getData());
-                   mSongDao.insert(songEntity);
-
-               }
-
-               cursorWrapper.moveToNext();
-
-           }
-       } finally {
-           cursorWrapper.close();
-       }
-       }
-       return true;
-
-   }
+        return true;
+    }
 
 
     public boolean initSongList(Activity activity) {
@@ -148,19 +110,24 @@ public class SongLab {
                 if (!containsSongName(song.getTitle())) {
                     mSongList.add(song);
                     SongEntity songEntity = new SongEntity();
-                    songEntity.setPath(song.getData());
+                    songEntity.setData(song.getData());
+                    songEntity.setAlbumName(song.getAlbumName());
+                    songEntity.setArtistId(song.getArtistId());
+                    songEntity.setArt(song.getArt());
+                    songEntity.setDuration(song.getDuration());
+                    songEntity.setArtist(song.getArtist());
+                    songEntity.setSongId(song.getId());
+                    songEntity.setTitle(song.getTitle());
+                    songEntity.setAlbumId(song.getAlbumId());
                     mSongDao.insert(songEntity);
-
                 }
-
                 cursorWrapper.moveToNext();
-
             }
         } finally {
             cursorWrapper.close();
         }
         SharedPreferences.Editor editor = activity.getSharedPreferences(ViewPagerActivity.SONG_LOAD_PREFS, MODE_PRIVATE).edit();
-        editor.putBoolean(ViewPagerActivity.IS_IN_DAO,true);
+        editor.putBoolean(ViewPagerActivity.IS_IN_DAO, true);
         editor.apply();
         return true;
 
@@ -258,7 +225,6 @@ public class SongLab {
             if (!containsNameAlbum(albumName))
                 mAlbumList.add(albumModel);
         }
-
     }
 
   /*  private void generateSongList(Long id, String artist, String track, String data, int duration, Bitmap bitmap, Long artistId, Long albumId) {
