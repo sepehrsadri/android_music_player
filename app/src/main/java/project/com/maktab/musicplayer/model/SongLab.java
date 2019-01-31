@@ -38,7 +38,7 @@ public class SongLab {
 
     public SongEntity getSong(Long id) {
         List<SongEntity> result =mSongDao.queryBuilder()
-                .where(SongEntityDao.Properties.SongId.eq(id))
+                .where(SongEntityDao.Properties.Id.eq(id))
                 .list();
         if(result.size()>0)
             return result.get(0);
@@ -129,6 +129,7 @@ public class SongLab {
             }
         } finally {
             cursorWrapper.close();
+            mSongList = mSongDao.loadAll();
         }
         SharedPreferences.Editor editor = activity.getSharedPreferences(ViewPagerActivity.SONG_LOAD_PREFS, MODE_PRIVATE).edit();
         editor.putBoolean(ViewPagerActivity.IS_IN_DAO, true);

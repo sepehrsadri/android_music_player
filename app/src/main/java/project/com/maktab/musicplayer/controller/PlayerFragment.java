@@ -91,7 +91,7 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Long id = getArguments().getLong(SONG_ID_ARG, 0);
-        mSong = SongLab.getInstance().getSong( id);
+        mSong = SongLab.getInstance().getSong(id);
         mHandler = new Handler();
 
         mMediaPlayer = new MediaPlayer();

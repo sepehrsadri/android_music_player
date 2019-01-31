@@ -92,7 +92,7 @@ public class SongsRecyclerFragment extends Fragment {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = PlayerActivity.newIntent(getActivity(), mSong.getId());
+                    Intent intent = PlayerActivity.newIntent(getActivity(), mSong.getSongId());
                     startActivity(intent);
                 }
             });
