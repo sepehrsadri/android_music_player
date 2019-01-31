@@ -92,7 +92,7 @@ public class SongLab {
    public boolean initSongListFromDao(Activity activity){
        List<SongEntity> songEntities = mSongDao.loadAll();
        String where = MediaStore.Audio.Media.DATA + " = ? ";
-       for(int i=0;i<songEntities.size();i++){
+       for(int i=0;i<50;i++){
 
            String[] args = new String[]{
                    songEntities.get(i).getPath()
