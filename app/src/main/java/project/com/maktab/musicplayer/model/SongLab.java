@@ -87,19 +87,12 @@ public class SongLab {
 
             while (!cursorWrapper.isAfterLast()) {
 
+
+                if(!containsSongName(cursorWrapper.getSong(activity).getTitle()))
                 mSongList.add(cursorWrapper.getSong(activity));
 
-
-//                Bitmap bitmap = generateBitmap(activity, albumId);
-
                 cursorWrapper.moveToNext();
-         /*       generateArtistList(artist, artistId, bitmap, albumId);
 
-                generateAlbumList(artist, album, albumId, bitmap);
-
-
-                generateSongList(id, artist, track, data, duration, bitmap, artistId, albumId);
-*/
             }
         } finally {
             cursorWrapper.close();
@@ -168,6 +161,12 @@ public class SongLab {
         }
     }
 
+    public boolean containsSongName(final String name) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return mSongList.stream().filter(o -> o.getTitle().equals(name)).findFirst().isPresent();
+        }
+        return false;
+    }
 
     public boolean containsNameAlbum(final String name) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
