@@ -20,7 +20,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class SongLab {
     private static SongLab mInstance;
-    private List<Song> mSongList;
+    private List<SongEntity> mSongList;
     private List<Album> mAlbumList;
     private List<Artist> mArtistList;
     private DaoSession mDaoSession;
@@ -36,35 +36,41 @@ public class SongLab {
         return mAlbumList;
     }
 
-    public Song getSong(Long id) {
-        for (Song song : mSongList) {
-            if (song.getId().equals(id))
-                return song;
-        }
+    public SongEntity getSong(Long id) {
+        List<SongEntity> result =mSongDao.queryBuilder()
+                .where(SongEntityDao.Properties.SongId.eq(id))
+                .list();
+        if(result.size()>0)
+            return result.get(0);
+
 
         return null;
     }
 
-    public List<Song> getSongListByArtist(Long artistId) {
-        List<Song> result = new ArrayList<>();
-        for (Song song : mSongList) {
-            if (song.getArtistId().equals(artistId))
-                result.add(song);
-        }
+    public List<SongEntity> getSongListByArtist(Long artistId) {
+        List<SongEntity> result = mSongDao.queryBuilder()
+                .where(SongEntityDao.Properties.ArtistId.eq(artistId))
+                .list();
+        if(result.size()<=0)
+            return null;
+
+
         return result;
     }
 
-    public List<Song> getSongListByAlbum(Long albumId) {
-        List<Song> result = new ArrayList<>();
-        for (Song song : mSongList) {
-            if (song.getAlbumId().equals(albumId))
-                result.add(song);
-        }
+    public List<SongEntity> getSongListByAlbum(Long albumId) {
+        List<SongEntity> result = mSongDao.queryBuilder()
+                .where(SongEntityDao.Properties.AlbumId.eq(albumId))
+                .list();
+        if(result.size()<=0)
+            return null;
+
+
         return result;
     }
 
 
-    public List<Song> getSongList() {
+    public List<SongEntity> getSongList() {
 
         return mSongList;
     }
@@ -90,6 +96,7 @@ public class SongLab {
         List<SongEntity> songEntities = mSongDao.loadAll();
 
 
+
         return true;
     }
 
@@ -108,7 +115,6 @@ public class SongLab {
 
                 Song song = cursorWrapper.getSong(activity);
                 if (!containsSongName(song.getTitle())) {
-                    mSongList.add(song);
                     SongEntity songEntity = new SongEntity();
                     songEntity.setData(song.getData());
                     songEntity.setAlbumName(song.getAlbumName());
@@ -119,6 +125,7 @@ public class SongLab {
                     songEntity.setSongId(song.getId());
                     songEntity.setTitle(song.getTitle());
                     songEntity.setAlbumId(song.getAlbumId());
+                    songEntity.setBitmap(song.getBitmap());
                     mSongDao.insert(songEntity);
                 }
                 cursorWrapper.moveToNext();
@@ -133,9 +140,8 @@ public class SongLab {
 
     }
 
-    private Bitmap generateBitmap(Activity activity, Long albumId) {
-      /*  Point point = new Point();
-        activity.getWindowManager().getDefaultDisplay().getSize(point);*/
+    public static Bitmap generateBitmap(Activity activity, Long albumId) {
+
         Uri sArtworkUri = Uri
                 .parse("content://media/external/audio/albumart");
         Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, albumId);
@@ -150,8 +156,7 @@ public class SongLab {
 
         } catch (FileNotFoundException exception) {
             exception.printStackTrace();
-                  /*  bitmap = BitmapFactory.decodeResource(context.getResources(),
-                            R.drawable.audio_file);*/
+
         } catch (IOException e) {
 
             e.printStackTrace();
@@ -159,11 +164,11 @@ public class SongLab {
         return bitmap;
     }
 
-    public List<Song> getSearchList(String text) {
-        List<Song> list = new ArrayList<>();
+    public List<SongEntity> getSearchList(String text) {
+        List<SongEntity> list = new ArrayList<>();
 
         text = text.toLowerCase();
-        for (Song item : mSongList) {
+        for (SongEntity item : mSongList) {
             if (item.getTitle().toLowerCase().contains(text)) {
                 list.add(item);
             }
@@ -180,7 +185,7 @@ public class SongLab {
     }
 
     private void generateArtistList() {
-        for (Song song : mSongList) {
+        for (SongEntity song : mSongList) {
             Artist artist = new Artist();
             String artistName = song.getArtist();
             artist.setName(artistName);
@@ -215,7 +220,7 @@ public class SongLab {
     }
 
     private void generateAlbumList() {
-        for (Song song : mSongList) {
+        for (SongEntity song : mSongList) {
             Album albumModel = new Album();
             String albumName = song.getAlbumName();
             albumModel.setArtist(song.getArtist());
@@ -226,19 +231,5 @@ public class SongLab {
                 mAlbumList.add(albumModel);
         }
     }
-
-  /*  private void generateSongList(Long id, String artist, String track, String data, int duration, Bitmap bitmap, Long artistId, Long albumId) {
-        Song song = new Song();
-        song.setArtist(artist);
-        song.setId(id);
-        song.setTitle(track);
-        song.setData(data);
-        song.setDuration(duration);
-        song.setBitmap(bitmap);
-        song.setAlbumId(albumId);
-        song.setArtistId(artistId);
-        mSongList.add(song);
-    }*/
-
 
 }

@@ -1,11 +1,13 @@
 package project.com.maktab.musicplayer.model;
 
 
+import android.graphics.Bitmap;
 import android.net.Uri;
 
 import org.greenrobot.greendao.annotation.Convert;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Transient;
 import org.greenrobot.greendao.converter.PropertyConverter;
 import org.greenrobot.greendao.annotation.Generated;
 
@@ -14,6 +16,16 @@ public class SongEntity {
 
     @Id(autoincrement = true)
     private Long id;
+    @Transient
+    private Bitmap bitmap;
+
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
+    }
 
     private String artist;
     private String title;
