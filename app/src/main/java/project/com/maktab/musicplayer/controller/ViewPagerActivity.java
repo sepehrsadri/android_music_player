@@ -2,7 +2,12 @@ package project.com.maktab.musicplayer.controller;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.PowerManager;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -15,6 +20,9 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 
 import project.com.maktab.musicplayer.R;
+import project.com.maktab.musicplayer.database.App;
+import project.com.maktab.musicplayer.model.SongLab;
+;
 
 public class ViewPagerActivity extends AppCompatActivity {
     private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 12;
@@ -23,6 +31,8 @@ public class ViewPagerActivity extends AppCompatActivity {
     private ViewPagerAdapter mViewPagerAdapter;
     private Toolbar mToolbar;
     private SearchView mSearchView;
+    public static final String SONG_LOAD_PREFS = "songLoadPrefs";
+    public static final String IS_IN_DAO = "isInDao";
 
     public static Intent newIntent(Context context) {
         Intent intent = new Intent(context, ViewPagerActivity.class);
@@ -58,6 +68,13 @@ public class ViewPagerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences prefs = getSharedPreferences(SONG_LOAD_PREFS, MODE_PRIVATE);
+        boolean loadStatus = prefs.getBoolean(IS_IN_DAO, false);
+        if (loadStatus)
+            SongLab.getInstance().initSongListFromDao(this);
+        else
+            SongLab.getInstance().initSongList(this);
+
         // Here, thisActivity is the current activity
   /*      if (ContextCompat.checkSelfPermission(ViewPagerActivity.this,
                 Manifest.permission.READ_EXTERNAL_STORAGE)

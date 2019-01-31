@@ -2,6 +2,7 @@ package project.com.maktab.musicplayer.model;
 
 import android.app.Activity;
 import android.content.ContentUris;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -12,15 +13,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+
+import project.com.maktab.musicplayer.controller.ViewPagerActivity;
 import project.com.maktab.musicplayer.database.App;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class SongLab {
     private static SongLab mInstance;
     private List<Song> mSongList;
     private List<Album> mAlbumList;
     private List<Artist> mArtistList;
-
-    private SongGreenDaoDao mSongDao;
+    private DaoSession mDaoSession;
+    private SongEntityDao mSongDao;
 
 
     final Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
@@ -61,9 +66,7 @@ public class SongLab {
 
 
     public List<Song> getSongList() {
-     /*   List<Song> finalList = new ArrayList<>(new HashSet<>(mSongList));
 
-        return finalList;*/
         return mSongList;
     }
 
@@ -71,9 +74,9 @@ public class SongLab {
         mSongList = new ArrayList<>();
         mAlbumList = new ArrayList<>();
         mArtistList = new ArrayList<>();
-
-        DaoSession daoSession = App.getAppInstance().getDaoSession();
-        mSongDao = daoSession.getSongGreenDaoDao();
+        mDaoSession = App.getAppInstance().getDaoSession();
+//        DaoSession daoSession = App.getAppInstance().getDaoSession();
+        mSongDao =mDaoSession.getSongEntityDao();
 
 
     }
@@ -85,10 +88,48 @@ public class SongLab {
     }
 
 
-   /* public boolean initSongList(){
-        mSongList = mSongDao.
 
-    }*/
+   public boolean initSongListFromDao(Activity activity){
+       List<SongEntity> songEntities = mSongDao.loadAll();
+       String where = MediaStore.Audio.Media.DATA + " = ? ";
+       for(int i=0;i<songEntities.size();i++){
+
+           String[] args = new String[]{
+                   songEntities.get(i).getPath()
+           };
+
+
+
+
+
+       SongCursorWrapper cursorWrapper = new SongCursorWrapper(activity.getContentResolver().query(uri,
+               null, where, args, null));
+       try {
+           if (cursorWrapper.getCount() <= 0) return true;
+
+           cursorWrapper.moveToFirst();
+
+           while (!cursorWrapper.isAfterLast()) {
+
+               Song song = cursorWrapper.getSong(activity);
+               if (!containsSongName(song.getTitle())) {
+                   mSongList.add(song);
+                   SongEntity songEntity = new SongEntity();
+                   songEntity.setPath(song.getData());
+                   mSongDao.insert(songEntity);
+
+               }
+
+               cursorWrapper.moveToNext();
+
+           }
+       } finally {
+           cursorWrapper.close();
+       }
+       }
+       return true;
+
+   }
 
 
     public boolean initSongList(Activity activity) {
@@ -118,6 +159,9 @@ public class SongLab {
         } finally {
             cursorWrapper.close();
         }
+        SharedPreferences.Editor editor = activity.getSharedPreferences(ViewPagerActivity.SONG_LOAD_PREFS, MODE_PRIVATE).edit();
+        editor.putBoolean(ViewPagerActivity.IS_IN_DAO,true);
+        editor.apply();
         return true;
 
     }
