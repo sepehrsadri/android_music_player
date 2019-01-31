@@ -6,8 +6,7 @@ public class Artist {
     private String name;
     private Long id;
     private Bitmap bitmap;
-    private int tracks;
-    private int albums;
+
     private Long albumId;
 
     public Long getAlbumId() {
@@ -18,21 +17,6 @@ public class Artist {
         this.albumId = albumId;
     }
 
-    public int getTracks() {
-        return tracks;
-    }
-
-    public void setTracks(int tracks) {
-        this.tracks = tracks;
-    }
-
-    public int getAlbums() {
-        return albums;
-    }
-
-    public void setAlbums(int albums) {
-        this.albums = albums;
-    }
 
     public String getName() {
         return name;

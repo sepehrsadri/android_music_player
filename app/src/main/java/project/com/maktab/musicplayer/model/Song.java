@@ -8,11 +8,21 @@ public class Song {
     private String title;
     private String data;
     private Long artistId;
+    private String albumName;
+
     private Long albumId;
     private int duration;
     private Uri art;
     private Bitmap mBitmap;
     private Long id;
+
+    public String getAlbumName() {
+        return albumName;
+    }
+
+    public void setAlbumName(String albumName) {
+        this.albumName = albumName;
+    }
 
     public Long getArtistId() {
         return artistId;
