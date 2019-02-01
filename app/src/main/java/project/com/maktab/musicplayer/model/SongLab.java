@@ -89,6 +89,15 @@ public class SongLab {
     public void updateSong(SongEntity song){
         mSongDao.update(song);
     }
+    public SongEntity getSongWithId(Long id){
+        List<SongEntity> result =mSongDao.queryBuilder()
+                .where(SongEntityDao.Properties.Id.eq(id))
+                .list();
+        if(result.size()>0)
+            return result.get(0);
+
+        return null;
+    }
 
     private SongLab() {
         mSongList = new ArrayList<>();

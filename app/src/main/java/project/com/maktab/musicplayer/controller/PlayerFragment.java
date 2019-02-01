@@ -16,6 +16,9 @@ import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
@@ -28,8 +31,8 @@ import java.io.IOException;
 import de.hdodenhof.circleimageview.CircleImageView;
 import project.com.maktab.musicplayer.R;
 import project.com.maktab.musicplayer.Utilities;
-import project.com.maktab.musicplayer.model.orm.SongEntity;
 import project.com.maktab.musicplayer.model.SongLab;
+import project.com.maktab.musicplayer.model.orm.SongEntity;
 
 
 /**
@@ -56,7 +59,6 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
     private AppCompatCheckBox mRepeateAllCheckBox;
     private TextView mSongBarNameTv;
     private TextView mArtistBarNameTv;
-
 
 
     public static PlayerFragment newInstance(Long songId) {
@@ -96,6 +98,7 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         Long id = getArguments().getLong(SONG_ID_ARG, 0);
         mSong = SongLab.getInstance().getSong(id);
         mHandler = new Handler();
@@ -112,6 +115,23 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
         // Required empty public constructor
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_add_to_playlist:
+
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.player_fragment_coordinator, menu);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -141,8 +161,6 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
 
         mSongBarNameTv.setText(mSong.getTitle());
         mArtistBarNameTv.setText(mSong.getArtist());
-
-
 
 
         RenderScript renderScript = RenderScript.create(getActivity());
@@ -278,7 +296,7 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
     }
 
     public void playSong(boolean loop) {
-        mWasPlaying =false;
+        mWasPlaying = false;
 
         try {
 

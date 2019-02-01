@@ -36,6 +36,9 @@ public class PlaylistLab {
 
         return null;
     }
+    public List<PlayList> getAllList(){
+        return mPlayListDao.loadAll();
+    }
 
     public static PlaylistLab getmInstance() {
         if (mInstance == null)
