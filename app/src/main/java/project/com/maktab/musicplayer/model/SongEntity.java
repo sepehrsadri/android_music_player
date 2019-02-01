@@ -39,13 +39,14 @@ public class SongEntity {
     private Uri art;
     private Long songId;
 
+    private Long playlistId;
 
     private boolean favourite;
 
-    @Generated(hash = 934772358)
+    @Generated(hash = 1263905472)
     public SongEntity(Long id, String artist, String title, String data,
             Long artistId, String albumName, Long albumId, int duration, Uri art,
-            Long songId, boolean favourite) {
+            Long songId, Long playlistId, boolean favourite) {
         this.id = id;
         this.artist = artist;
         this.title = title;
@@ -56,6 +57,7 @@ public class SongEntity {
         this.duration = duration;
         this.art = art;
         this.songId = songId;
+        this.playlistId = playlistId;
         this.favourite = favourite;
     }
 
@@ -149,6 +151,14 @@ public class SongEntity {
 
     public void setFavourite(boolean favourite) {
         this.favourite = favourite;
+    }
+
+    public Long getPlaylistId() {
+        return this.playlistId;
+    }
+
+    public void setPlaylistId(Long playlistId) {
+        this.playlistId = playlistId;
     }
 
     public static class UriConverter implements PropertyConverter<Uri, String> {
