@@ -1,4 +1,4 @@
-package project.com.maktab.musicplayer.model;
+package project.com.maktab.musicplayer.model.orm;
 
 
 import org.greenrobot.greendao.annotation.Entity;
@@ -8,6 +8,10 @@ import org.greenrobot.greendao.annotation.ToMany;
 import java.util.List;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.DaoException;
+
+import project.com.maktab.musicplayer.model.DaoSession;
+import project.com.maktab.musicplayer.model.PlayListDao;
+import project.com.maktab.musicplayer.model.SongEntityDao;
 
 @Entity
 public class PlayList {

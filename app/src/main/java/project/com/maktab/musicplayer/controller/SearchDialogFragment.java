@@ -20,8 +20,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import project.com.maktab.musicplayer.R;
-import project.com.maktab.musicplayer.model.Song;
-import project.com.maktab.musicplayer.model.SongEntity;
+import project.com.maktab.musicplayer.model.orm.SongEntity;
 import project.com.maktab.musicplayer.model.SongLab;
 
 

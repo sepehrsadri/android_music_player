@@ -27,7 +27,7 @@ import java.io.IOException;
 import de.hdodenhof.circleimageview.CircleImageView;
 import project.com.maktab.musicplayer.R;
 import project.com.maktab.musicplayer.Utilities;
-import project.com.maktab.musicplayer.model.SongEntity;
+import project.com.maktab.musicplayer.model.orm.SongEntity;
 import project.com.maktab.musicplayer.model.SongLab;
 
 

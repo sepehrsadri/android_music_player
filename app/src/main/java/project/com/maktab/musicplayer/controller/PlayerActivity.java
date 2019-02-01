@@ -16,8 +16,7 @@ import java.util.List;
 import java.util.Random;
 
 import project.com.maktab.musicplayer.R;
-import project.com.maktab.musicplayer.model.Song;
-import project.com.maktab.musicplayer.model.SongEntity;
+import project.com.maktab.musicplayer.model.orm.SongEntity;
 import project.com.maktab.musicplayer.model.SongLab;
 
 public class PlayerActivity extends AppCompatActivity implements PlayerFragment.CallBacks {

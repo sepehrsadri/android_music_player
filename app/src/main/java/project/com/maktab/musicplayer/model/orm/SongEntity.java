@@ -1,4 +1,4 @@
-package project.com.maktab.musicplayer.model;
+package project.com.maktab.musicplayer.model.orm;
 
 
 import android.graphics.Bitmap;

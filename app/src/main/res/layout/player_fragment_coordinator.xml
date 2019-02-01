@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<android.support.design.widget.AppBarLayout
+    android:layout_width="match_parent"
+    android:background="@drawable/recycler_view_gradinat"
+    android:layout_height="wrap_content">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/player_fragment_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:padding="4dp"
+            android:layout_margin="8dp"
+            android:background="@drawable/recycler_view_gradinat"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:textStyle="italic|bold"
+                android:textSize="25sp"
+                android:id="@+id/song_name_bar_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                tools:text="song Name" />
+
+            <TextView
+                android:textStyle="italic"
+                android:textSize="20sp"
+                android:id="@+id/song_artist_bar_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                tools:text="artist name " />
+
+
+        </LinearLayout>
+
+    </android.support.v7.widget.Toolbar>
+
+
+
+
+
+</android.support.design.widget.AppBarLayout>
+
+    <include
+        layout="@layout/fragment_player"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</android.support.design.widget.CoordinatorLayout>
