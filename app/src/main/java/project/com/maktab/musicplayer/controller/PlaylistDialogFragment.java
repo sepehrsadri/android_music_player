@@ -112,7 +112,7 @@ public class PlaylistDialogFragment extends DialogFragment {
             mPlayList = playList;
             mName.setText(playList.getName());
             mCover.setImageBitmap(null);
-            mNumberOfsongs.setText(mSong.getPlaylistId() + "Songs");
+            mNumberOfsongs.setText(PlaylistLab.getmInstance().getPlaylist(mSong.getPlaylistId()) + "Songs");
 
         }
     }
