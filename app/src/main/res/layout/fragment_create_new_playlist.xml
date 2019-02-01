@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="wrap_content"
+    tools:context=".controller.CreateNewPlaylistFragment">
+    <TextView
+        android:textColor="@android:color/white"
+        android:textStyle="italic"
+        android:textSize="30sp"
+        android:text="Enter your playlist Name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:id="@+id/create_playlist_name_et"
+        android:inputType="text"
+        android:layout_width="match_parent"
+        android:layout_height="40dp" />
+    <ImageButton
+        android:id="@+id/submit_playlist_name_i_btn"
+        android:layout_gravity="center"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
+        android:src="@drawable/ic_play_list_done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+</LinearLayout>

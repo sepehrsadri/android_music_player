@@ -76,11 +76,28 @@ public class PlaylistDialogFragment extends DialogFragment {
         mPlaylistRv = view.findViewById(R.id.play_list_choice_rv);
 
         mPlaylistRv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mAdapter = new PlaylistAdapter(PlaylistLab.getmInstance().getAllList());
-        mPlaylistRv.setAdapter(mAdapter);
+        updateUI();
+       /* mAdapter = new PlaylistAdapter(PlaylistLab.getmInstance().getAllList());
+        mPlaylistRv.setAdapter(mAdapter);*/
+mCreatePlaylistIb.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
 
+
+    }
+});
 
         return view;
+    }
+
+    private void updateUI() {
+        if (mAdapter == null) {
+            mAdapter = new PlaylistAdapter(PlaylistLab.getmInstance().getAllList());
+            mPlaylistRv.setAdapter(mAdapter);
+        } else {
+            mAdapter.setPlayLists(PlaylistLab.getmInstance().getAllList());
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     private class PlaylistViewHolder extends RecyclerView.ViewHolder {
