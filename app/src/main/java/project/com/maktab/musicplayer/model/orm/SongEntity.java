@@ -27,44 +27,6 @@ public class SongEntity {
         this.bitmap = bitmap;
     }
 
-    private String artist;
-    private String title;
-    private String data;
-    private Long artistId;
-    private String albumName;
-
-    private Long albumId;
-    private int duration;
-    @Convert(converter = UriConverter.class,columnType = String.class)
-    private Uri art;
-    private Long songId;
-
-    private Long playlistId;
-
-    private boolean favourite;
-
-    @Generated(hash = 1263905472)
-    public SongEntity(Long id, String artist, String title, String data,
-            Long artistId, String albumName, Long albumId, int duration, Uri art,
-            Long songId, Long playlistId, boolean favourite) {
-        this.id = id;
-        this.artist = artist;
-        this.title = title;
-        this.data = data;
-        this.artistId = artistId;
-        this.albumName = albumName;
-        this.albumId = albumId;
-        this.duration = duration;
-        this.art = art;
-        this.songId = songId;
-        this.playlistId = playlistId;
-        this.favourite = favourite;
-    }
-
-    @Generated(hash = 274420887)
-    public SongEntity() {
-    }
-
     public Long getId() {
         return this.id;
     }
@@ -145,6 +107,14 @@ public class SongEntity {
         this.songId = songId;
     }
 
+    public Long getPlaylistId() {
+        return this.playlistId;
+    }
+
+    public void setPlaylistId(Long playlistId) {
+        this.playlistId = playlistId;
+    }
+
     public boolean getFavourite() {
         return this.favourite;
     }
@@ -153,12 +123,42 @@ public class SongEntity {
         this.favourite = favourite;
     }
 
-    public Long getPlaylistId() {
-        return this.playlistId;
+    private String artist;
+    private String title;
+    private String data;
+    private Long artistId;
+    private String albumName;
+
+    private Long albumId;
+    private int duration;
+    @Convert(converter = UriConverter.class,columnType = String.class)
+    private Uri art;
+    private Long songId;
+
+    private Long playlistId;
+
+    private boolean favourite;
+
+    @Generated(hash = 1263905472)
+    public SongEntity(Long id, String artist, String title, String data,
+            Long artistId, String albumName, Long albumId, int duration, Uri art,
+            Long songId, Long playlistId, boolean favourite) {
+        this.id = id;
+        this.artist = artist;
+        this.title = title;
+        this.data = data;
+        this.artistId = artistId;
+        this.albumName = albumName;
+        this.albumId = albumId;
+        this.duration = duration;
+        this.art = art;
+        this.songId = songId;
+        this.playlistId = playlistId;
+        this.favourite = favourite;
     }
 
-    public void setPlaylistId(Long playlistId) {
-        this.playlistId = playlistId;
+    @Generated(hash = 274420887)
+    public SongEntity() {
     }
 
     public static class UriConverter implements PropertyConverter<Uri, String> {

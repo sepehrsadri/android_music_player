@@ -5,7 +5,8 @@ import android.database.sqlite.SQLiteDatabase;
 
 import org.greenrobot.greendao.database.Database;
 
-import project.com.maktab.musicplayer.model.DaoMaster;
+import project.com.maktab.musicplayer.model.orm.DaoMaster;
+
 
 public class MyDevOpenHelper extends DaoMaster.DevOpenHelper {
 

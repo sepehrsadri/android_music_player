@@ -15,7 +15,9 @@ import java.util.List;
 
 import project.com.maktab.musicplayer.controller.ViewPagerActivity;
 import project.com.maktab.musicplayer.database.App;
+import project.com.maktab.musicplayer.model.orm.DaoSession;
 import project.com.maktab.musicplayer.model.orm.SongEntity;
+import project.com.maktab.musicplayer.model.orm.SongEntityDao;
 
 import static android.content.Context.MODE_PRIVATE;
 

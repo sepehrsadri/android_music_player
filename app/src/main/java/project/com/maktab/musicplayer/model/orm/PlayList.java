@@ -9,9 +9,6 @@ import java.util.List;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.DaoException;
 
-import project.com.maktab.musicplayer.model.DaoSession;
-import project.com.maktab.musicplayer.model.PlayListDao;
-import project.com.maktab.musicplayer.model.SongEntityDao;
 
 @Entity
 public class PlayList {
@@ -139,7 +136,6 @@ public class PlayList {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getPlayListDao() : null;
     }
-
 
 
 

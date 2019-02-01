@@ -14,6 +14,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatImageButton;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,7 @@ import project.com.maktab.musicplayer.model.SongLab;
 public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.OnCompletionListener {
     private static final String SONG_ID_ARG = "song_id_arg";
 
+    private Toolbar mToolbar;
     private SongEntity mSong;
     private TextView mTvSongName, mTvSongArtist, mSeekBarStatusTv;
     private CircleImageView mSongCoverIv;
@@ -52,6 +54,9 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
     private AppCompatImageButton mNextSongIbtn, mPreviousSongIbtn, mShuffleSongIbtn, mRepeateSongIbtn;
     private CallBacks mCallBacks;
     private AppCompatCheckBox mRepeateAllCheckBox;
+    private TextView mSongBarNameTv;
+    private TextView mArtistBarNameTv;
+
 
 
     public static PlayerFragment newInstance(Long songId) {
@@ -78,6 +83,8 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
         public void previousSong();
 
         public void repeateList();
+
+        public void setToolbar(Toolbar toolbar);
     }
 
     @Override
@@ -110,7 +117,7 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_player, container, false);
+        View view = inflater.inflate(R.layout.player_fragment_coordinator, container, false);
         mTvSongArtist = view.findViewById(R.id.player_song_artist);
         mTvSongName = view.findViewById(R.id.player_song_name);
         mSongCoverIv = view.findViewById(R.id.player_song_cover);
@@ -124,6 +131,19 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
         mRepeateAllCheckBox = view.findViewById(R.id.repeate_all_check_box);
         mBackGroundIv = view.findViewById(R.id.cover_background_image);
         mLikeCheckBox = view.findViewById(R.id.like_song_check_box);
+        mToolbar = view.findViewById(R.id.player_fragment_bar);
+
+
+        mCallBacks.setToolbar(mToolbar);
+
+        mSongBarNameTv = mToolbar.findViewById(R.id.song_name_bar_tv);
+        mArtistBarNameTv = mToolbar.findViewById(R.id.song_artist_bar_tv);
+
+        mSongBarNameTv.setText(mSong.getTitle());
+        mArtistBarNameTv.setText(mSong.getArtist());
+
+
+
 
         RenderScript renderScript = RenderScript.create(getActivity());
         Utilities utilities = new Utilities(renderScript);

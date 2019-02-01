@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import project.com.maktab.musicplayer.database.App;
-import project.com.maktab.musicplayer.model.DaoSession;
-import project.com.maktab.musicplayer.model.PlayListDao;
 
 public class PlaylistLab {
     private static PlaylistLab mInstance;

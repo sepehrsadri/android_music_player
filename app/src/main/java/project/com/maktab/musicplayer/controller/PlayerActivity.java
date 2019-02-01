@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 
 import java.util.List;
 import java.util.Random;
@@ -97,6 +98,11 @@ public class PlayerActivity extends AppCompatActivity implements PlayerFragment.
     @Override
     public void repeateList() {
         mViewPager.setCurrentItem(0);
+    }
+
+    @Override
+    public void setToolbar(Toolbar toolbar) {
+        setSupportActionBar(toolbar);
     }
 
 
