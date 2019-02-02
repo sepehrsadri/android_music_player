@@ -2,6 +2,7 @@ package project.com.maktab.musicplayer.controller;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaPlayer;
@@ -120,7 +121,10 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
         switch (item.getItemId()) {
             case R.id.menu_add_to_playlist:
                 showDialogPlaylist();
-
+                return true;
+            case R.id.add_lyrics_to_song:
+                Intent intent = LyricsActivity.newIntent(getActivity(), mSong.getId());
+                startActivity(intent);
 
                 return true;
             default:
@@ -162,7 +166,7 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
 
 
 //        mCallBacks.setToolbar(mToolbar);
-        ((PlayerActivity)getActivity()).setSupportActionBar(mToolbar);
+        ((PlayerActivity) getActivity()).setSupportActionBar(mToolbar);
 
 
         mSongBarNameTv = mToolbar.findViewById(R.id.song_name_bar_tv);

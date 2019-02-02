@@ -26,7 +26,9 @@ public class LyricsActivity extends AppCompatActivity {
         mSongId = getIntent().getLongExtra(SONG_ID_EXTRA, 0);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-
+        fragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, LyricsFragment.newInstance(mSongId))
+                .commit();
 
 
     }
