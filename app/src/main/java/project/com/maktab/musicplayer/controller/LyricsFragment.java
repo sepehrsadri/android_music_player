@@ -40,7 +40,7 @@ public class LyricsFragment extends android.support.v4.app.Fragment implements R
     private Handler mHandler;
     private TextView mDisplayLyricsTextView;
     private boolean mWasPlaying;
-
+    private String[] mLyricsArray;
 
 
     public static LyricsFragment newInstance(Long songId) {
@@ -96,6 +96,19 @@ public class LyricsFragment extends android.support.v4.app.Fragment implements R
                 playSong(false);
             }
         });
+        mSaveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String multiLines = mLyricsEditText.getText().toString();
+                String delimiter = "\n";
+                mLyricsArray = multiLines.split(delimiter);
+                mLyricsEditText.setVisibility(View.GONE);
+                mDisplayLyricsTextView.setVisibility(View.VISIBLE);
+                mDisplayLyricsTextView.setText(mLyricsArray[0]);
+
+            }
+        });
+
 
 
 
@@ -152,6 +165,7 @@ public class LyricsFragment extends android.support.v4.app.Fragment implements R
 
         }
     }
+
     public void playSong(boolean loop) {
         mWasPlaying = false;
 
