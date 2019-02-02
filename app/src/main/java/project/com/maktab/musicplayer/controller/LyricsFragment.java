@@ -20,6 +20,8 @@ import java.io.IOException;
 
 import project.com.maktab.musicplayer.R;
 import project.com.maktab.musicplayer.model.SongLab;
+import project.com.maktab.musicplayer.model.orm.Lyrics;
+import project.com.maktab.musicplayer.model.orm.LyricsLab;
 import project.com.maktab.musicplayer.model.orm.SongEntity;
 
 /**
@@ -41,6 +43,7 @@ public class LyricsFragment extends android.support.v4.app.Fragment implements R
     private TextView mDisplayLyricsTextView;
     private boolean mWasPlaying;
     private String[] mLyricsArray;
+    private static int counter = 0;
 
 
     public static LyricsFragment newInstance(Long songId) {
@@ -57,7 +60,7 @@ public class LyricsFragment extends android.support.v4.app.Fragment implements R
         super.onCreate(savedInstanceState);
         mSongId = getArguments().getLong(SONG_ID_ARGS, 0);
         mSong = SongLab.getInstance().getSong(mSongId);
-
+        counter =0;
         mHandler = new Handler();
 
         mMediaPlayer = new MediaPlayer();
@@ -104,12 +107,25 @@ public class LyricsFragment extends android.support.v4.app.Fragment implements R
                 mLyricsArray = multiLines.split(delimiter);
                 mLyricsEditText.setVisibility(View.GONE);
                 mDisplayLyricsTextView.setVisibility(View.VISIBLE);
-                mDisplayLyricsTextView.setText(mLyricsArray[0]);
+                mDisplayLyricsTextView.setText(mLyricsArray[counter]);
 
             }
         });
+        mSynceBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Lyrics lyrics = new Lyrics();
+                lyrics.setDuration(mSeekBar.getProgress());
+                lyrics.setText(mLyricsArray[counter]);
+                lyrics.setSongId(mSongId);
+                LyricsLab.getmInstance().addLyric(lyrics);
 
 
+                if (counter < mLyricsArray.length)
+                    mDisplayLyricsTextView.setText(mLyricsArray[++counter]);
+
+            }
+        });
 
 
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
