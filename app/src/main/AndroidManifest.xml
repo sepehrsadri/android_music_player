@@ -14,19 +14,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".controller.LyricsActivity"></activity>
         <activity android:name=".controller.StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity android:name=".controller.PlayerActivity" />
         <activity android:name=".controller.ListSongs" />
-        <activity android:name=".controller.ViewPagerActivity">
-
-        </activity>
+        <activity android:name=".controller.ViewPagerActivity"></activity>
     </application>
 
 </manifest>

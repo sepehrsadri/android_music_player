@@ -6,4 +6,8 @@
         android:id="@+id/menu_add_to_playlist"
         android:title="@string/add_to_playlist"
         app:showAsAction="always|withText" />
+    <item
+        android:id="@+id/add_lyrics_to_song"
+        android:title="@string/add_lyrics"
+        app:showAsAction="ifRoom" />
 </menu>
