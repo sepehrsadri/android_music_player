@@ -8,11 +8,13 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 
 import project.com.maktab.musicplayer.R;
 import project.com.maktab.musicplayer.model.SongLab;
@@ -59,6 +61,15 @@ public class CreateNewPlaylistFragment extends DialogFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        ViewGroup.LayoutParams params = getDialog().getWindow().getAttributes();
+        params.width = LinearLayout.LayoutParams.MATCH_PARENT;
+        params.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        getDialog().getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
+    }
+
+    /* @Override
     public void onStart() {
         super.onStart();
         Dialog dialog = getDialog();
@@ -67,7 +78,7 @@ public class CreateNewPlaylistFragment extends DialogFragment {
             int height = ViewGroup.LayoutParams.MATCH_PARENT;
             dialog.getWindow().setLayout(width, height);
         }
-    }
+    }*/
 
     @Override
     public void onDismiss(DialogInterface dialog) {
@@ -91,7 +102,6 @@ public class CreateNewPlaylistFragment extends DialogFragment {
                 Long id = PlaylistLab.getmInstance().insert(playList);
                 mSong.setPlaylistId(id);
                 SongLab.getInstance().updateSong(mSong);
-
                 dismiss();
             }
         });

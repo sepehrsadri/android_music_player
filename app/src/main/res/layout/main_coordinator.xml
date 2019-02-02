@@ -58,12 +58,16 @@
         </android.support.v7.widget.Toolbar>
 
         <android.support.design.widget.TabLayout
-        app:tabMode="scrollable"
             android:id="@+id/main_tab_layout"
+            android:layout_gravity="center_horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:tabGravity="fill"
+            android:overScrollMode="never"
+
             android:background="@drawable/recycler_view_gradinat"
-            app:tabIndicatorColor="@android:color/white">
+            app:tabIndicatorColor="@android:color/white"
+            app:tabMode="scrollable">
 
         </android.support.design.widget.TabLayout>
 

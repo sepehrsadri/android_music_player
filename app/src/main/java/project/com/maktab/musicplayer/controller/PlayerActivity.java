@@ -31,6 +31,7 @@ public class PlayerActivity extends AppCompatActivity implements PlayerFragment.
     private List<SongEntity> mSongList;
     public static boolean mShuffle;
     public static boolean mRepeateAll;
+    private Long mSongId;
 
 
     public static Intent newIntent(Context context, Long songId) {
@@ -38,9 +39,13 @@ public class PlayerActivity extends AppCompatActivity implements PlayerFragment.
         intent.putExtra(ID_EXTRA, songId);
         return intent;
     }
+/*
+    private void showDialogPlaylist() {
+        PlaylistDialogFragment fragment = PlaylistDialogFragment.newInstance(mSongId);
+        fragment.show(getSupportFragmentManager(), "playlist");
+    }
 
-
-/*    @Override
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_add_to_playlist:
@@ -83,11 +88,11 @@ public class PlayerActivity extends AppCompatActivity implements PlayerFragment.
         mTabLayout = findViewById(R.id.player_tab_layout);
         mSongList = SongLab.getInstance().getSongList();
 
-        Long id = getIntent().getLongExtra(ID_EXTRA, 0);
+        mSongId = getIntent().getLongExtra(ID_EXTRA, 0);
 
         mAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mAdapter);
-        mViewPager.setCurrentItem(getSongIndex(id));
+        mViewPager.setCurrentItem(getSongIndex(mSongId));
 
 
         mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);

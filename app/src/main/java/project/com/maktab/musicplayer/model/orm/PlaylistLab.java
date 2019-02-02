@@ -28,12 +28,14 @@ public class PlaylistLab {
         return insert;
     }
 
-    public List<PlayList> getPlaylist(Long id) {
-        List<PlayList> result = mPlayListDao.queryBuilder()
-                .where(PlayListDao.Properties.Id.eq(id))
+    public List<SongEntity> getSongList(Long playList) {
+        List<PlayList> songList = mPlayListDao.queryBuilder()
+                .where(PlayListDao.Properties.Id.eq(playList))
                 .list();
-        if (result.size() > 0)
-            return result;
+
+        if (songList.size() > 0)
+            return songList.get(0).getSongs();
+
 
         return null;
     }

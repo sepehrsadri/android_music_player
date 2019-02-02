@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,7 +48,9 @@ public class PlaylistFragment extends android.support.v4.app.Fragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
+            if(mFavoriteNumTv!=null)
             mFavoriteNumTv.setText(SongLab.getInstance().getFavSongList().size() + "Tracks");
+            updateUI();
         }
 
     }
@@ -71,7 +73,7 @@ public class PlaylistFragment extends android.support.v4.app.Fragment {
         mFavoriteNumTv = view.findViewById(R.id.favorite_tracks_num_tv);
         mFavLayout = view.findViewById(R.id.fav_const_layout);
         mRecyclerView = view.findViewById(R.id.play_list_recycler_view);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         updateUI();
 
         mFavoriteNumTv.setText(SongLab.getInstance().getFavSongList().size() + "Tracks");
@@ -105,7 +107,8 @@ public class PlaylistFragment extends android.support.v4.app.Fragment {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Intent intent = ListSongs.newIntent(getActivity(), "playlist", mPlayList.getId());
+                    startActivity(intent);
 
                 }
             });
@@ -114,8 +117,11 @@ public class PlaylistFragment extends android.support.v4.app.Fragment {
         public void bind(PlayList playList) {
             mPlayList = playList;
             mName.setText(playList.getName());
-            mCover.setImageBitmap(null);
-            mNumberOfsongs.setText("Songs");
+            if (playList.getUri() == null)
+                mCover.setImageResource(R.drawable.icon_malhaar5);
+
+            String numOfSongs = String.valueOf(PlaylistLab.getmInstance().getSongList(playList.getId()).size()) + " ";
+            mNumberOfsongs.setText(numOfSongs + "Songs");
 
         }
     }

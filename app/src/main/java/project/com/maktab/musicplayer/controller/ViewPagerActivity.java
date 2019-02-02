@@ -13,6 +13,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.AttributeSet;
+import android.util.DisplayMetrics;
+import android.view.ViewGroup;
 
 import project.com.maktab.musicplayer.R;
 
@@ -53,7 +56,6 @@ public class ViewPagerActivity extends AppCompatActivity {
 
         mTabLayout.setupWithViewPager(mViewPager);
         mTabLayout.setTabMode(TabLayout.MODE_FIXED);
-
 
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -123,6 +125,36 @@ public class ViewPagerActivity extends AppCompatActivity {
                 default:
                     return super.getPageTitle(position);
             }
+        }
+    }
+    public class SongsTabLayout extends TabLayout {
+
+        public SongsTabLayout(Context context) {
+            super(context);
+        }
+
+        public SongsTabLayout(Context context, AttributeSet attrs) {
+            super(context, attrs);
+        }
+
+        public SongsTabLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+            super(context, attrs, defStyleAttr);
+        }
+
+        @Override
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+
+            ViewGroup tabLayout = (ViewGroup)getChildAt(0);
+            int childCount = tabLayout.getChildCount();
+
+            DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
+            int tabMinWidth = displayMetrics.widthPixels/childCount;
+
+            for(int i = 0; i < childCount; ++i){
+                tabLayout.getChildAt(i).setMinimumWidth(tabMinWidth);
+            }
+
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         }
     }
 

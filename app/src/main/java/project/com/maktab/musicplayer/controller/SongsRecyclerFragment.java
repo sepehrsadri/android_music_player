@@ -17,8 +17,9 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import project.com.maktab.musicplayer.R;
-import project.com.maktab.musicplayer.model.orm.SongEntity;
 import project.com.maktab.musicplayer.model.SongLab;
+import project.com.maktab.musicplayer.model.orm.PlaylistLab;
+import project.com.maktab.musicplayer.model.orm.SongEntity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -67,6 +68,8 @@ public class SongsRecyclerFragment extends Fragment {
             mAdapter = new RecyclerViewAdapter(SongLab.getInstance().getSongListByArtist(id));
         else if (listPicker.equalsIgnoreCase("fav"))
             mAdapter = new RecyclerViewAdapter((SongLab.getInstance().getFavSongList()));
+        else if (listPicker.equalsIgnoreCase("playlist"))
+            mAdapter = new RecyclerViewAdapter(PlaylistLab.getmInstance().getSongList(id));
 
         else
             mAdapter = new RecyclerViewAdapter(mSongList);

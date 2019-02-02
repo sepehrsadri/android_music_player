@@ -3,12 +3,11 @@ package project.com.maktab.musicplayer.controller;
 
 import android.app.Dialog;
 import android.app.Fragment;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +27,7 @@ import project.com.maktab.musicplayer.model.orm.SongEntity;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PlaylistDialogFragment extends DialogFragment  {
+public class PlaylistDialogFragment extends DialogFragment {
     private ImageButton mCreatePlaylistIb;
     private RecyclerView mPlaylistRv;
     private static final String SONG_ID_ARGS = "songIdArgs";
@@ -47,6 +46,12 @@ public class PlaylistDialogFragment extends DialogFragment  {
 
     public PlaylistDialogFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUI();
     }
 
     @Override
@@ -76,7 +81,7 @@ public class PlaylistDialogFragment extends DialogFragment  {
         mCreatePlaylistIb = view.findViewById(R.id.create_play_list_ib);
         mPlaylistRv = view.findViewById(R.id.play_list_choice_rv);
 
-        mPlaylistRv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mPlaylistRv.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 //        updateUI();
         List<PlayList> playLists = PlaylistLab.getmInstance().getAllList();
         mAdapter = new PlaylistAdapter(playLists);
@@ -87,6 +92,7 @@ public class PlaylistDialogFragment extends DialogFragment  {
 
                 CreateNewPlaylistFragment fragment = CreateNewPlaylistFragment.newInstance(mSongId);
                 fragment.show(getFragmentManager(), "create");
+                dismiss();
 
             }
         });
@@ -103,7 +109,6 @@ public class PlaylistDialogFragment extends DialogFragment  {
             mAdapter.notifyDataSetChanged();
         }
     }
-
 
 
     private class PlaylistViewHolder extends RecyclerView.ViewHolder {
@@ -134,8 +139,10 @@ public class PlaylistDialogFragment extends DialogFragment  {
         public void bind(PlayList playList) {
             mPlayList = playList;
             mName.setText(playList.getName());
-            mCover.setImageBitmap(null);
-            mNumberOfsongs.setText(PlaylistLab.getmInstance().getPlaylist(mSong.getPlaylistId()) + "Songs");
+            if (playList.getUri() == null)
+                mCover.setImageResource(R.drawable.icon_malhaar5);
+            String numOfSongs = String.valueOf(PlaylistLab.getmInstance().getSongList(playList.getId()).size()) + " ";
+            mNumberOfsongs.setText(numOfSongs + "Songs");
 
         }
     }

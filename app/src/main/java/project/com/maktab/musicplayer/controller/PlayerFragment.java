@@ -161,7 +161,9 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
         mToolbar = view.findViewById(R.id.player_fragment_bar);
 
 
-        mCallBacks.setToolbar(mToolbar);
+//        mCallBacks.setToolbar(mToolbar);
+        ((PlayerActivity)getActivity()).setSupportActionBar(mToolbar);
+
 
         mSongBarNameTv = mToolbar.findViewById(R.id.song_name_bar_tv);
         mArtistBarNameTv = mToolbar.findViewById(R.id.song_artist_bar_tv);
