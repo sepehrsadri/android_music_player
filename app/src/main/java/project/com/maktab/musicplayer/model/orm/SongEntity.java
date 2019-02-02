@@ -123,6 +123,10 @@ public class SongEntity {
         this.favourite = favourite;
     }
 
+    public void setPlaylistId(long playlistId) {
+        this.playlistId = playlistId;
+    }
+
     private String artist;
     private String title;
     private String data;
@@ -135,14 +139,14 @@ public class SongEntity {
     private Uri art;
     private Long songId;
 
-    private Long playlistId;
+    private long playlistId;
 
     private boolean favourite;
 
-    @Generated(hash = 1263905472)
+    @Generated(hash = 1531959408)
     public SongEntity(Long id, String artist, String title, String data,
             Long artistId, String albumName, Long albumId, int duration, Uri art,
-            Long songId, Long playlistId, boolean favourite) {
+            Long songId, long playlistId, boolean favourite) {
         this.id = id;
         this.artist = artist;
         this.title = title;

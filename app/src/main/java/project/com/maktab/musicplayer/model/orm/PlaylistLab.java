@@ -17,26 +17,28 @@ public class PlaylistLab {
         mPlayListDao = mDaoSession.getPlayListDao();
     }
 
-    public void insert(PlayList playList) {
-        List<PlayList> checkList = mPlayListDao.queryBuilder()
+    public Long insert(PlayList playList) {
+    /*    List<PlayList> checkList = mPlayListDao.queryBuilder()
                 .where(PlayListDao.Properties.Id.eq(playList.getId()))
                 .list();
-        if (checkList.size() <= 0)
-            mPlayListDao.insert(playList);
         else
             mPlayListDao.update(playList);
-
+        if (checkList.size() <= 0)*/
+        Long insert = mPlayListDao.insert(playList);
+        return insert;
     }
-    public List<PlayList> getPlaylist(Long id){
-        List<PlayList> result  = mPlayListDao.queryBuilder()
+
+    public List<PlayList> getPlaylist(Long id) {
+        List<PlayList> result = mPlayListDao.queryBuilder()
                 .where(PlayListDao.Properties.Id.eq(id))
                 .list();
-        if(result.size()>0)
+        if (result.size() > 0)
             return result;
 
         return null;
     }
-    public List<PlayList> getAllList(){
+
+    public List<PlayList> getAllList() {
         return mPlayListDao.loadAll();
     }
 

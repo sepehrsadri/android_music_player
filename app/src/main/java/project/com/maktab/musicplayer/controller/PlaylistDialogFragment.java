@@ -3,6 +3,7 @@ package project.com.maktab.musicplayer.controller;
 
 import android.app.Dialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -27,7 +28,7 @@ import project.com.maktab.musicplayer.model.orm.SongEntity;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PlaylistDialogFragment extends DialogFragment {
+public class PlaylistDialogFragment extends DialogFragment  {
     private ImageButton mCreatePlaylistIb;
     private RecyclerView mPlaylistRv;
     private static final String SONG_ID_ARGS = "songIdArgs";
@@ -76,16 +77,19 @@ public class PlaylistDialogFragment extends DialogFragment {
         mPlaylistRv = view.findViewById(R.id.play_list_choice_rv);
 
         mPlaylistRv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        updateUI();
-       /* mAdapter = new PlaylistAdapter(PlaylistLab.getmInstance().getAllList());
-        mPlaylistRv.setAdapter(mAdapter);*/
-mCreatePlaylistIb.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
+//        updateUI();
+        List<PlayList> playLists = PlaylistLab.getmInstance().getAllList();
+        mAdapter = new PlaylistAdapter(playLists);
+        mPlaylistRv.setAdapter(mAdapter);
+        mCreatePlaylistIb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                CreateNewPlaylistFragment fragment = CreateNewPlaylistFragment.newInstance(mSongId);
+                fragment.show(getFragmentManager(), "create");
 
-    }
-});
+            }
+        });
 
         return view;
     }
@@ -99,6 +103,8 @@ mCreatePlaylistIb.setOnClickListener(new View.OnClickListener() {
             mAdapter.notifyDataSetChanged();
         }
     }
+
+
 
     private class PlaylistViewHolder extends RecyclerView.ViewHolder {
         private ImageView mCover;
@@ -148,7 +154,7 @@ mCreatePlaylistIb.setOnClickListener(new View.OnClickListener() {
         @NonNull
         @Override
         public PlaylistViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-            View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_playlist_dialog, viewGroup, false);
+            View view = LayoutInflater.from(getActivity()).inflate(R.layout.playlist_list_item, viewGroup, false);
             PlaylistViewHolder viewHolder = new PlaylistViewHolder(view);
             return viewHolder;
         }

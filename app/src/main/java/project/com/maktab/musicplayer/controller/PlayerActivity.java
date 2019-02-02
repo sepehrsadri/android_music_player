@@ -12,6 +12,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import java.util.List;
 import java.util.Random;
@@ -35,6 +38,27 @@ public class PlayerActivity extends AppCompatActivity implements PlayerFragment.
         intent.putExtra(ID_EXTRA, songId);
         return intent;
     }
+
+
+/*    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_add_to_playlist:
+
+
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.player_fragment_coordinator,menu);
+        return true;
+    }*/
 
     public int getSongIndex(Long id) {
         int index = -1;

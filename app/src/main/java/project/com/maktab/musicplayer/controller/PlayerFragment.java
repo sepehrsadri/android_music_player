@@ -119,6 +119,7 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_add_to_playlist:
+                showDialogPlaylist();
 
 
                 return true;
@@ -132,6 +133,12 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.player_fragment_coordinator, menu);
     }
+
+    private void showDialogPlaylist() {
+        PlaylistDialogFragment fragment = PlaylistDialogFragment.newInstance(mSong.getId());
+        fragment.show(getFragmentManager(), "playlist");
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

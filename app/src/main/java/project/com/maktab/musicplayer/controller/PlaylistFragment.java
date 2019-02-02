@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import project.com.maktab.musicplayer.R;
@@ -120,7 +121,7 @@ public class PlaylistFragment extends android.support.v4.app.Fragment {
     }
 
     private class PlaylistAdapter extends RecyclerView.Adapter<PlaylistViewHolder> {
-        private List<PlayList> mPlayLists;
+        private List<PlayList> mPlayLists = new ArrayList<>();
 
         public void setPlayLists(List<PlayList> playLists) {
             mPlayLists = playLists;
@@ -133,7 +134,7 @@ public class PlaylistFragment extends android.support.v4.app.Fragment {
         @NonNull
         @Override
         public PlaylistViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-            View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_playlist_dialog, viewGroup, false);
+            View view = LayoutInflater.from(getActivity()).inflate(R.layout.playlist_list_item, viewGroup, false);
             PlaylistViewHolder viewHolder = new PlaylistViewHolder(view);
             return viewHolder;
         }
