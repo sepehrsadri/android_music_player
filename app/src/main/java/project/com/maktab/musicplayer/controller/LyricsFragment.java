@@ -111,6 +111,7 @@ public class LyricsFragment extends android.support.v4.app.Fragment implements R
 
                 Lyrics lyrics = new Lyrics();
                 lyrics.setText(multiLines);
+                lyrics.setSongId(mSongId);
                 lyrics.setDuration(-1);
                 LyricsLab.getmInstance().addLyric(lyrics);
 

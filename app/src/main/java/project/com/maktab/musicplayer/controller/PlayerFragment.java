@@ -9,12 +9,15 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.renderscript.RenderScript;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatImageButton;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,11 +31,13 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import project.com.maktab.musicplayer.R;
 import project.com.maktab.musicplayer.Utilities;
 import project.com.maktab.musicplayer.model.SongLab;
+import project.com.maktab.musicplayer.model.orm.LyricsLab;
 import project.com.maktab.musicplayer.model.orm.SongEntity;
 
 
@@ -44,7 +49,7 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
 
     private Toolbar mToolbar;
     private SongEntity mSong;
-    private TextView mTvSongName, mTvSongArtist, mSeekBarStatusTv;
+    private TextView mSeekBarStatusTv;
     private CircleImageView mSongCoverIv;
     private SeekBar mSeekBar;
     private Handler mHandler;
@@ -60,6 +65,12 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
     private AppCompatCheckBox mRepeateAllCheckBox;
     private TextView mSongBarNameTv;
     private TextView mArtistBarNameTv;
+    private RecyclerView mRecyclerView;
+    private TextView mLyricsTextView;
+    private LyricsAdapter mLyricsAdapter;
+    private List<String> mTextList;
+    private List<Integer> mDurationList;
+    public static boolean mLyricsStatus;
 
 
     public static PlayerFragment newInstance(Long songId) {
@@ -78,6 +89,19 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
             mCallBacks.repeateList();
 
         }
+    }
+
+    private void updateUI() {
+        List<String> list = LyricsLab.getmInstance().getLyricsText(mSong.getId());
+        if (mLyricsAdapter == null) {
+            mLyricsAdapter = new LyricsAdapter(list);
+            mRecyclerView.setAdapter(mLyricsAdapter);
+        } else {
+            mLyricsAdapter.setLyricsList(LyricsLab.getmInstance().getLyricsText(mSong.getId()));
+            mLyricsAdapter.notifyDataSetChanged();
+
+        }
+
     }
 
     public interface CallBacks {
@@ -100,10 +124,12 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        mLyricsStatus = true;
         Long id = getArguments().getLong(SONG_ID_ARG, 0);
         mSong = SongLab.getInstance().getSong(id);
         mHandler = new Handler();
-
+        mTextList = LyricsLab.getmInstance().getLyricsText(mSong.getId());
+        mDurationList = LyricsLab.getmInstance().getLyricsDuration(mSong.getId());
         mMediaPlayer = new MediaPlayer();
         try {
             mMediaPlayer.setDataSource(mSong.getData());
@@ -143,14 +169,13 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
         fragment.show(getFragmentManager(), "playlist");
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.player_fragment_coordinator, container, false);
-        mTvSongArtist = view.findViewById(R.id.player_song_artist);
-        mTvSongName = view.findViewById(R.id.player_song_name);
+   /*     mTvSongArtist = view.findViewById(R.id.player_song_artist);
+        mTvSongName = view.findViewById(R.id.player_song_name);*/
         mSongCoverIv = view.findViewById(R.id.player_song_cover);
         mSeekBar = view.findViewById(R.id.player_seek_bar);
         mActionButton = view.findViewById(R.id.floatingActionButton);
@@ -162,8 +187,24 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
         mRepeateAllCheckBox = view.findViewById(R.id.repeate_all_check_box);
         mBackGroundIv = view.findViewById(R.id.cover_background_image);
         mLikeCheckBox = view.findViewById(R.id.like_song_check_box);
+        mRecyclerView = view.findViewById(R.id.player_recyclerview_lyrics);
+        mLyricsTextView = view.findViewById(R.id.player_song_lyrics);
         mToolbar = view.findViewById(R.id.player_fragment_bar);
 
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        if (mTextList == null) {
+            mRecyclerView.setVisibility(View.GONE);
+            mLyricsTextView.setVisibility(View.GONE);
+        } else if (mLyricsStatus) {
+            mRecyclerView.setVisibility(View.GONE);
+            mLyricsTextView.setVisibility(View.VISIBLE);
+
+        } else if (!mLyricsStatus) {
+            mLyricsTextView.setVisibility(View.GONE);
+            mRecyclerView.setVisibility(View.VISIBLE);
+            updateUI();
+        }
 
 //        mCallBacks.setToolbar(mToolbar);
         ((PlayerActivity) getActivity()).setSupportActionBar(mToolbar);
@@ -209,8 +250,8 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
         setShuffleDrawble(PlayerActivity.mShuffle);
 
 
-        mTvSongName.setText(mSong.getTitle());
-        mTvSongArtist.setText(mSong.getArtist());
+        /*mTvSongName.setText(mSong.getTitle());
+        mTvSongArtist.setText(mSong.getArtist());*/
 
         mRepeateSongIbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -395,4 +436,52 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
 
         }
     }
+
+    private class LyricsViewHolder extends RecyclerView.ViewHolder {
+        private TextView mTextView;
+
+        public LyricsViewHolder(@NonNull View itemView) {
+            super(itemView);
+            mTextView = itemView.findViewById(R.id.lyrics_text_item_list);
+        }
+
+        public void bind(String text) {
+            mTextView.setText(text);
+        }
+
+    }
+
+    private class LyricsAdapter extends RecyclerView.Adapter<LyricsViewHolder> {
+        private List<String> mLyricsList;
+
+        public void setLyricsList(List<String> lyricsList) {
+            mLyricsList = lyricsList;
+        }
+
+        public LyricsAdapter(List<String> lyricsList) {
+            mLyricsList = lyricsList;
+        }
+
+        @NonNull
+        @Override
+        public LyricsViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+            View view = LayoutInflater.from(getActivity()).inflate(R.layout.lyrics_list_item, viewGroup, false);
+            LyricsViewHolder viewHolder = new LyricsViewHolder(view);
+            return viewHolder;
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull LyricsViewHolder lyricsViewHolder, int i) {
+            String item = mLyricsList.get(i);
+            lyricsViewHolder.bind(item);
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return mLyricsList.size();
+        }
+    }
+
+
 }
