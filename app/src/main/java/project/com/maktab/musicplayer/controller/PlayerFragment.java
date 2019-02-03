@@ -68,9 +68,10 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
     private RecyclerView mRecyclerView;
     private TextView mLyricsTextView;
     private LyricsAdapter mLyricsAdapter;
+    private AppCompatCheckBox mLyricsImageCheckBox;
     private List<String> mTextList;
     private List<Integer> mDurationList;
-    public boolean mLyricsStatus;
+    private boolean mShowLyrics;
 
 
     public static PlayerFragment newInstance(Long songId) {
@@ -190,28 +191,57 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
         mRecyclerView = view.findViewById(R.id.player_recyclerview_lyrics);
         mLyricsTextView = view.findViewById(R.id.player_song_lyrics);
         mToolbar = view.findViewById(R.id.player_fragment_bar);
+        mLyricsImageCheckBox = view.findViewById(R.id.show_lyrics_check_box);
+        mShowLyrics = false;
 
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setVisibility(View.GONE);
 
+        mLyricsTextView.setVisibility(View.GONE);
         boolean hasLyrics = LyricsLab.getmInstance().hasLyricsText(mSong.getId());
-        if (!hasLyrics) {
-            mRecyclerView.setVisibility(View.GONE);
-            mLyricsTextView.setVisibility(View.GONE);
-        } else {
-            boolean status = LyricsLab.getmInstance().lyricsStatusAndGenerate(mSong.getId());
+        boolean lyricsStatus = LyricsLab.getmInstance().lyricsStatusAndGenerate(mSong.getId());
+        if (hasLyrics) {
+            if (lyricsStatus)
+                updateUI();
+            else {
+                mTextList = LyricsLab.getmInstance().getSynceLyrics();
+                mDurationList = LyricsLab.getmInstance().getSynceDurationLyrics();
+            }
+
+        }
+
+        mSongCoverIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (hasLyrics && lyricsStatus) {
+                    mRecyclerView.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        mLyricsImageCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mShowLyrics = isChecked;
+                if(isChecked)
+                    mLyricsTextView.setVisibility(View.VISIBLE);
+
+            }
+        });
+
+        /*    boolean status = LyricsLab.getmInstance().lyricsStatusAndGenerate(mSong.getId());
             if (status) {
-                mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 mLyricsTextView.setVisibility(View.GONE);
                 mRecyclerView.setVisibility(View.VISIBLE);
                 updateUI();
             } else {
                 mRecyclerView.setVisibility(View.GONE);
                 mLyricsTextView.setVisibility(View.VISIBLE);
-            }
-
-        }
+            }*/
 
 
 //        mCallBacks.setToolbar(mToolbar);
+
+
         ((PlayerActivity) getActivity()).setSupportActionBar(mToolbar);
 
 
@@ -289,6 +319,13 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
                     mSeekBarStatusTv.setText("0:0" + x);
                 else
                     mSeekBarStatusTv.setText("0:" + x);
+
+                if (mShowLyrics) {
+                    for (int i = 0; i < mDurationList.size(); i++) {
+                        if (x == mDurationList.get(i))
+                            mLyricsTextView.setText(mTextList.get(i));
+                    }
+                }
 
                 double percent = progress / (double) seekBar.getMax();
                 int offset = seekBar.getThumbOffset();

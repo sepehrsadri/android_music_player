@@ -67,13 +67,18 @@ public class LyricsLab {
     }
 
     public void generateSyncedLyricsText(Long songId) {
+        mSynceLyrics = new ArrayList<>();
+        mSynceDurationLyrics = new ArrayList<>();
         List<Lyrics> query = mLyricsDao.queryBuilder()
                 .where(LyricsDao.Properties.SongId.eq(songId))
                 .orderAsc(LyricsDao.Properties.Duration)
                 .list();
         for (Lyrics lyrics : query) {
-            mSynceLyrics.add(lyrics.getText());
-            mSynceDurationLyrics.add(lyrics.getDuration());
+            if (lyrics.getDuration() != -1) {
+                mSynceLyrics.add(lyrics.getText());
+                mSynceDurationLyrics.add(lyrics.getDuration());
+
+            }
         }
 
 
@@ -91,15 +96,19 @@ public class LyricsLab {
      * @return true for Unsynce list and false for synce list
      */
     public boolean lyricsStatusAndGenerate(Long songId) {
+        mUnsynceLyrics = new ArrayList<>();
         List<Lyrics> lyricsList = mLyricsDao.queryBuilder()
                 .where(LyricsDao.Properties.SongId.eq(songId))
                 .list();
         for (Lyrics lyrics : lyricsList) {
             if (lyrics.getDuration() == -1) {
                 mUnsynceLyrics.add(lyrics.getText());
-                return true;
+                break;
+
             }
         }
+        if (lyricsList.size() <= 1)
+            return true;
         generateSyncedLyricsText(songId);
         return false;
 

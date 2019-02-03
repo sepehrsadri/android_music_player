@@ -59,15 +59,14 @@
             android:id="@+id/like_song_check_box"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginStart="8dp"
             android:layout_marginEnd="70dp"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="8dp"
             android:button="@drawable/like_check_box"
             android:gravity="center"
             app:layout_constraintBottom_toTopOf="@+id/player_seek_bar"
             app:layout_constraintEnd_toStartOf="@+id/repeate_all_check_box"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/show_lyrics_check_box" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/player_recyclerview_lyrics"
@@ -81,6 +80,7 @@
 
 
         </android.support.v7.widget.RecyclerView>
+
         <TextView
             android:id="@+id/player_song_lyrics"
             android:layout_width="0dp"
@@ -103,8 +103,21 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/player_song_cover" />
 
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/show_lyrics_check_box"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="99dp"
+            android:drawableRight="@drawable/ic_synce_song"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/player_seek_bar"
+            app:layout_constraintEnd_toStartOf="@+id/like_song_check_box"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"  />
 
-     <!--   <TextView
+        <!--   <TextView
             android:id="@+id/player_song_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -153,11 +166,13 @@
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="8dp"
             android:layout_weight="1"
             android:drawableRight="@drawable/ic_repeat_all"
             app:layout_constraintBottom_toTopOf="@+id/player_seek_bar"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/like_song_check_box" />
 
 
         <SeekBar
