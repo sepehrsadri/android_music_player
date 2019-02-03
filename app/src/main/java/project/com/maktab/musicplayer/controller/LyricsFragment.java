@@ -60,7 +60,7 @@ public class LyricsFragment extends android.support.v4.app.Fragment implements R
         super.onCreate(savedInstanceState);
         mSongId = getArguments().getLong(SONG_ID_ARGS, 0);
         mSong = SongLab.getInstance().getSong(mSongId);
-        counter =0;
+        counter = 0;
         mHandler = new Handler();
 
         mMediaPlayer = new MediaPlayer();
@@ -109,13 +109,20 @@ public class LyricsFragment extends android.support.v4.app.Fragment implements R
                 mDisplayLyricsTextView.setVisibility(View.VISIBLE);
                 mDisplayLyricsTextView.setText(mLyricsArray[counter]);
 
+                Lyrics lyrics = new Lyrics();
+                lyrics.setText(multiLines);
+                lyrics.setDuration(-1);
+                LyricsLab.getmInstance().addLyric(lyrics);
+
+
             }
         });
         mSynceBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Lyrics lyrics = new Lyrics();
-                lyrics.setDuration(mSeekBar.getProgress());
+                int duration = mSeekBar.getProgress();
+                lyrics.setDuration(roundSecond(duration));
                 lyrics.setText(mLyricsArray[counter]);
                 lyrics.setSongId(mSongId);
                 LyricsLab.getmInstance().addLyric(lyrics);
@@ -255,5 +262,16 @@ public class LyricsFragment extends android.support.v4.app.Fragment implements R
             mSeekBar.setProgress(currentPosition);
 
         }
+    }
+
+    private int roundSecond(int progress) {
+        int x = (int) Math.ceil(progress / 1000f);
+
+        if (x < 10)
+            return x;
+        else
+            return x;
+
+
     }
 }
