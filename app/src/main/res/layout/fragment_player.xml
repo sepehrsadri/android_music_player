@@ -227,6 +227,8 @@
                 android:layout_weight="1"
                 android:backgroundTint="@android:color/black"
                 android:clickable="true"
+                android:focusable="true"
+
                 android:src="@drawable/ic_play"
                 tools:layout_editor_absoluteX="186dp"
                 tools:layout_editor_absoluteY="667dp" />

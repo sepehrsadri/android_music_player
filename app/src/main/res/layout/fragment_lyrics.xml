@@ -20,6 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:textColor="@android:color/black"
         android:id="@+id/lyrics_seek_bar_status_tv"
         android:layout_width="0dp"
         android:layout_height="18dp"
@@ -36,30 +37,48 @@
         android:id="@+id/lyrics_play_float_btn"
         android:layout_width="50dp"
         android:layout_height="140dp"
+        android:backgroundTint="@android:color/black"
         android:layout_marginBottom="8dp"
         android:layout_weight="1"
         android:clickable="true"
+        android:focusable="true"
+
         android:src="@drawable/ic_play"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/save_lyrics_btn"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/synce_lyrics_btn" />
 
-    <EditText
-        android:id="@+id/lyrics_text_edit_text"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/lyrics_text_edit_text_layout"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+
+        android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toTopOf="@id/lyrics_play_float_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lyrics_seek_bar_status_tv" />
+        app:layout_constraintTop_toBottomOf="@+id/lyrics_seek_bar_status_tv">
+
+        <EditText
+            android:id="@+id/lyrics_text_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:hint="@string/lyrics_hint"
+            android:textColor="@android:color/white"
+
+            />
+
+
+    </android.support.design.widget.TextInputLayout>
+
 
     <Button
-
+        android:textColor="@android:color/black"
         android:id="@+id/save_lyrics_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -71,6 +90,7 @@
         app:layout_constraintStart_toEndOf="@+id/lyrics_play_float_btn" />
 
     <Button
+        android:textColor="@android:color/black"
         android:id="@+id/synce_lyrics_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -92,7 +112,7 @@
         app:layout_constraintBottom_toTopOf="@id/lyrics_play_float_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lyrics_seek_bar_status_tv"/>
+        app:layout_constraintTop_toBottomOf="@+id/lyrics_seek_bar_status_tv" />
 
 
 </android.support.constraint.ConstraintLayout>

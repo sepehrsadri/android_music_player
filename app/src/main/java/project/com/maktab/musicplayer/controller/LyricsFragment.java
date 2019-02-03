@@ -7,10 +7,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
@@ -44,6 +46,7 @@ public class LyricsFragment extends android.support.v4.app.Fragment implements R
     private boolean mWasPlaying;
     private String[] mLyricsArray;
     private static int counter = 0;
+    private TextInputLayout mInputLayout;
 
 
     public static LyricsFragment newInstance(Long songId) {
@@ -89,6 +92,7 @@ public class LyricsFragment extends android.support.v4.app.Fragment implements R
         mSaveBtn = view.findViewById(R.id.save_lyrics_btn);
         mSynceBtn = view.findViewById(R.id.synce_lyrics_btn);
         mDisplayLyricsTextView = view.findViewById(R.id.lyrics_display_text_view);
+        mInputLayout = view.findViewById(R.id.lyrics_text_edit_text_layout);
 
         mDisplayLyricsTextView.setVisibility(View.GONE);
         mLyricsEditText.setVisibility(View.VISIBLE);
@@ -102,10 +106,13 @@ public class LyricsFragment extends android.support.v4.app.Fragment implements R
         mSaveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!validateLyricsInput())
+                    return;
                 String multiLines = mLyricsEditText.getText().toString();
                 String delimiter = "\n";
                 mLyricsArray = multiLines.split(delimiter);
                 mLyricsEditText.setVisibility(View.GONE);
+                mInputLayout.setVisibility(View.GONE);
                 mDisplayLyricsTextView.setVisibility(View.VISIBLE);
                 mDisplayLyricsTextView.setText(mLyricsArray[counter]);
 
@@ -264,7 +271,22 @@ public class LyricsFragment extends android.support.v4.app.Fragment implements R
 
         }
     }
+    private boolean validateLyricsInput() {
+        if (mLyricsEditText.getText().toString().trim().isEmpty()) {
+            mInputLayout.setError(getString(R.string.err_msg_password));
+            requestFocus(mLyricsEditText);
+            return false;
+        } else {
+            mInputLayout.setErrorEnabled(false);
+        }
 
+        return true;
+    }
+    private void requestFocus(View view) {
+        if (view.requestFocus()) {
+            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
+    }
     private int roundSecond(int progress) {
         int x = (int) Math.ceil(progress / 1000f);
 
