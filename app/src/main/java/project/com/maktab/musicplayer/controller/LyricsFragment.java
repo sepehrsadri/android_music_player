@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -47,6 +48,8 @@ public class LyricsFragment extends android.support.v4.app.Fragment implements R
     private String[] mLyricsArray;
     private static int counter = 0;
     private TextInputLayout mInputLayout;
+    private TextView mBeforeTextView;
+    private TextView mAfterTextView;
 
 
     public static LyricsFragment newInstance(Long songId) {
@@ -93,9 +96,14 @@ public class LyricsFragment extends android.support.v4.app.Fragment implements R
         mSynceBtn = view.findViewById(R.id.synce_lyrics_btn);
         mDisplayLyricsTextView = view.findViewById(R.id.lyrics_display_text_view);
         mInputLayout = view.findViewById(R.id.lyrics_text_edit_text_layout);
+        mBeforeTextView = view.findViewById(R.id.show_lyrics_before);
+        mAfterTextView = view.findViewById(R.id.show_lyrics_after);
 
+        mAfterTextView.setVisibility(View.GONE);
+        mBeforeTextView.setVisibility(View.GONE);
         mDisplayLyricsTextView.setVisibility(View.GONE);
         mLyricsEditText.setVisibility(View.VISIBLE);
+
 
         mPlayBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,7 +114,7 @@ public class LyricsFragment extends android.support.v4.app.Fragment implements R
         mSaveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!validateLyricsInput())
+                if (!validateLyricsInput())
                     return;
                 String multiLines = mLyricsEditText.getText().toString();
                 String delimiter = "\n";
@@ -114,7 +122,10 @@ public class LyricsFragment extends android.support.v4.app.Fragment implements R
                 mLyricsEditText.setVisibility(View.GONE);
                 mInputLayout.setVisibility(View.GONE);
                 mDisplayLyricsTextView.setVisibility(View.VISIBLE);
+                mAfterTextView.setVisibility(View.VISIBLE);
+                mBeforeTextView.setVisibility(View.VISIBLE);
                 mDisplayLyricsTextView.setText(mLyricsArray[counter]);
+                mAfterTextView.setText(mLyricsArray[counter + 1]);
 
                 Lyrics lyrics = new Lyrics();
                 lyrics.setText(multiLines);
@@ -122,6 +133,7 @@ public class LyricsFragment extends android.support.v4.app.Fragment implements R
                 lyrics.setDuration(-1);
                 LyricsLab.getmInstance().addLyric(lyrics);
 
+                mSaveBtn.setEnabled(false);
 
             }
         });
@@ -136,8 +148,18 @@ public class LyricsFragment extends android.support.v4.app.Fragment implements R
                 LyricsLab.getmInstance().addLyric(lyrics);
 
 
-                if (counter < mLyricsArray.length)
-                    mDisplayLyricsTextView.setText(mLyricsArray[++counter]);
+                if (counter + 1 < mLyricsArray.length) {
+                    mBeforeTextView.setText(mLyricsArray[counter]);
+                    int arise = ++counter;
+                    mDisplayLyricsTextView.setText(mLyricsArray[arise]);
+                    if(arise+1<=mLyricsArray.length-1)
+                    mAfterTextView.setText(mLyricsArray[arise + 1]);
+                    else mAfterTextView.setText("");
+
+                } else{
+                    mSynceBtn.setEnabled(false);
+                    Toast.makeText(getActivity(), "no more text for sync", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
@@ -271,6 +293,7 @@ public class LyricsFragment extends android.support.v4.app.Fragment implements R
 
         }
     }
+
     private boolean validateLyricsInput() {
         if (mLyricsEditText.getText().toString().trim().isEmpty()) {
             mInputLayout.setError(getString(R.string.err_msg_password));
@@ -282,11 +305,13 @@ public class LyricsFragment extends android.support.v4.app.Fragment implements R
 
         return true;
     }
+
     private void requestFocus(View view) {
         if (view.requestFocus()) {
             getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }
+
     private int roundSecond(int progress) {
         int x = (int) Math.ceil(progress / 1000f);
 

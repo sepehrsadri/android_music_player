@@ -20,7 +20,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:textColor="@android:color/black"
         android:id="@+id/lyrics_seek_bar_status_tv"
         android:layout_width="0dp"
         android:layout_height="18dp"
@@ -28,6 +27,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:text="00:00"
+        android:textColor="@android:color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,9 +37,9 @@
         android:id="@+id/lyrics_play_float_btn"
         android:layout_width="50dp"
         android:layout_height="140dp"
-        android:backgroundTint="@android:color/black"
         android:layout_marginBottom="8dp"
         android:layout_weight="1"
+        android:backgroundTint="@android:color/black"
         android:clickable="true"
         android:focusable="true"
 
@@ -78,41 +78,79 @@
 
 
     <Button
-        android:textColor="@android:color/black"
         android:id="@+id/save_lyrics_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:text="save"
+        android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/lyrics_play_float_btn" />
 
     <Button
-        android:textColor="@android:color/black"
         android:id="@+id/synce_lyrics_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:text="synce"
+        android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/lyrics_play_float_btn"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/lyrics_display_text_view"
+        android:gravity="center"
+        android:textSize="20sp"
+
+        android:textStyle="italic"
+        android:id="@+id/show_lyrics_after"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@id/lyrics_play_float_btn"
+        android:layout_marginBottom="124dp"
+        app:layout_constraintBottom_toTopOf="@+id/lyrics_play_float_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lyrics_seek_bar_status_tv" />
+        app:layout_constraintTop_toBottomOf="@+id/lyrics_text_edit_text_layout"
+        tools:text="testing" />
+
+    <TextView
+        android:textStyle="italic"
+        android:textSize="20sp"
+        android:id="@+id/show_lyrics_before"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="124dp"
+        android:gravity="center"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/lyrics_text_edit_text_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lyrics_seek_bar"
+        tools:text="testinh" />
+
+
+    <TextView
+        android:textStyle="italic"
+        android:textSize="25sp"
+        android:textColor="@android:color/black"
+        android:background="@drawable/border_lyrics"
+        android:id="@+id/lyrics_display_text_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:gravity="center"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/show_lyrics_before"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/show_lyrics_after" />
 
 
 </android.support.constraint.ConstraintLayout>
