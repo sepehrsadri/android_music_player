@@ -72,6 +72,7 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
     private List<String> mTextList;
     private List<Integer> mDurationList;
     private boolean mShowLyrics;
+    private boolean mShowUnsynce =false;
 
 
     public static PlayerFragment newInstance(Long songId) {
@@ -201,9 +202,8 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
         boolean hasLyrics = LyricsLab.getmInstance().hasLyricsText(mSong.getId());
         boolean lyricsStatus = LyricsLab.getmInstance().lyricsStatusAndGenerate(mSong.getId());
         if (hasLyrics) {
-            if (lyricsStatus)
                 updateUI();
-            else {
+            if(!lyricsStatus) {
                 mTextList = LyricsLab.getmInstance().getSynceLyrics();
                 mDurationList = LyricsLab.getmInstance().getSynceDurationLyrics();
             }
@@ -213,8 +213,14 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
         mSongCoverIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (hasLyrics && lyricsStatus) {
+                mShowUnsynce = !mShowUnsynce;
+                if (mShowUnsynce&&hasLyrics) {
+                    mLyricsTextView.setVisibility(View.GONE);
                     mRecyclerView.setVisibility(View.VISIBLE);
+                }
+                else {
+                    mLyricsTextView.setVisibility(View.GONE);
+                    mRecyclerView.setVisibility(View.GONE);
                 }
             }
         });
@@ -224,6 +230,7 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
                 mShowLyrics = isChecked;
                 if(isChecked)
                     mLyricsTextView.setVisibility(View.VISIBLE);
+                else mLyricsTextView.setVisibility(View.GONE);
 
             }
         });
