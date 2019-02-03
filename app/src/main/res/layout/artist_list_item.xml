@@ -17,43 +17,58 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:textSize="15sp"
-        android:textColor="@android:color/white"
         android:id="@+id/artist_item_name"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
+        android:textColor="@android:color/white"
+        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/artist_item_cover"
         app:layout_constraintTop_toTopOf="parent" />
 
- <!--   <TextView
-        android:id="@+id/artist_item_songs"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toStartOf="@+id/artist_item_albums"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/artist_item_cover"
-        app:layout_constraintTop_toBottomOf="@+id/artist_item_name" />
-
     <TextView
-        android:id="@+id/artist_item_albums"
+        android:textColor="@android:color/white"
+        android:id="@+id/artist_song_number_item"
         android:layout_width="0dp"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/artist_item_songs"
-        app:layout_constraintTop_toBottomOf="@+id/artist_item_name" />-->
+        app:layout_constraintStart_toEndOf="@+id/artist_item_cover"
+        app:layout_constraintTop_toBottomOf="@+id/artist_item_name" />
+
+    <!--   <TextView
+           android:id="@+id/artist_item_songs"
+           android:layout_width="0dp"
+           android:layout_height="40dp"
+           android:layout_marginStart="8dp"
+           android:layout_marginTop="8dp"
+           android:text="TextView"
+           app:layout_constraintEnd_toStartOf="@+id/artist_item_albums"
+           app:layout_constraintHorizontal_bias="0.5"
+           app:layout_constraintStart_toEndOf="@+id/artist_item_cover"
+           app:layout_constraintTop_toBottomOf="@+id/artist_item_name" />
+
+       <TextView
+           android:id="@+id/artist_item_albums"
+           android:layout_width="0dp"
+           android:layout_height="40dp"
+           android:layout_marginStart="8dp"
+           android:layout_marginTop="8dp"
+           android:layout_marginEnd="8dp"
+           android:text="TextView"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintHorizontal_bias="0.5"
+           app:layout_constraintStart_toEndOf="@+id/artist_item_songs"
+           app:layout_constraintTop_toBottomOf="@+id/artist_item_name" />-->
 
 
 </android.support.constraint.ConstraintLayout>

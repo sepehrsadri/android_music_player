@@ -1,27 +1,33 @@
 package project.com.maktab.musicplayer.controller;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.media.session.MediaSession;
+import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.view.ViewGroup;
 
 import java.util.List;
 import java.util.Random;
 
 import project.com.maktab.musicplayer.R;
-import project.com.maktab.musicplayer.model.orm.SongEntity;
 import project.com.maktab.musicplayer.model.SongLab;
+import project.com.maktab.musicplayer.model.orm.SongEntity;
 
 public class PlayerActivity extends AppCompatActivity implements PlayerFragment.CallBacks {
     private static final String ID_EXTRA = "id_extra_song";
@@ -32,6 +38,7 @@ public class PlayerActivity extends AppCompatActivity implements PlayerFragment.
     public static boolean mShuffle;
     public static boolean mRepeateAll;
     private Long mSongId;
+
 
 
     public static Intent newIntent(Context context, Long songId) {
@@ -80,6 +87,7 @@ public class PlayerActivity extends AppCompatActivity implements PlayerFragment.
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,7 +97,6 @@ public class PlayerActivity extends AppCompatActivity implements PlayerFragment.
         mSongList = SongLab.getInstance().getSongList();
 
         mSongId = getIntent().getLongExtra(ID_EXTRA, 0);
-
         mAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mAdapter);
         mViewPager.setCurrentItem(getSongIndex(mSongId));
@@ -101,6 +108,9 @@ public class PlayerActivity extends AppCompatActivity implements PlayerFragment.
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, PlayerFragment.newInstance(id))
                 .commit();*/
+        mViewPager.setOffscreenPageLimit(1);
+
+
 
 
     }
@@ -147,6 +157,7 @@ public class PlayerActivity extends AppCompatActivity implements PlayerFragment.
             return PlayerFragment.newInstance(mSongList.get(i).getId());
         }
 
+
         @Override
         public int getCount() {
             return mSongList.size();
@@ -173,5 +184,8 @@ public class PlayerActivity extends AppCompatActivity implements PlayerFragment.
 
     }
 
-
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+    }
 }

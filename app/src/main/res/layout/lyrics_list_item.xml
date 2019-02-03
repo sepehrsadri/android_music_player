@@ -6,6 +6,8 @@
         android:id="@+id/lyrics_text_item_list"
         android:layout_width="match_parent"
         android:textSize="15sp"
+        android:textStyle="italic"
+        android:gravity="center"
         android:textColor="@android:color/white"
         android:layout_height="wrap_content" />
 

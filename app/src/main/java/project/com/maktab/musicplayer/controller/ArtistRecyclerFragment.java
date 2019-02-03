@@ -41,13 +41,14 @@ public class ArtistRecyclerFragment extends Fragment {
     }
 
     public static ArtistRecyclerFragment newInstance() {
-        
+
         Bundle args = new Bundle();
-        
+
         ArtistRecyclerFragment fragment = new ArtistRecyclerFragment();
         fragment.setArguments(args);
         return fragment;
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -70,28 +71,28 @@ public class ArtistRecyclerFragment extends Fragment {
         private TextView mArtistTv;
         private TextView mArtistSongsTv;
         private TextView mArtistAlbumsTv;
+        private TextView mArtistSongsNumber;
 
         public RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
             mImageView = itemView.findViewById(R.id.artist_item_cover);
             mArtistTv = itemView.findViewById(R.id.artist_item_name);
+            mArtistSongsNumber = itemView.findViewById(R.id.artist_song_number_item);
             /*mArtistSongsTv = itemView.findViewById(R.id.artist_item_songs);
             mArtistAlbumsTv = itemView.findViewById(R.id.artist_item_albums);*/
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = ListSongs.newIntent(getActivity(),"artist",mArtist.getId());
-                    startActivity(intent);
-                }
+            itemView.setOnClickListener(v -> {
+                Intent intent = ListSongs.newIntent(getActivity(), "artist", mArtist.getId());
+                startActivity(intent);
             });
 
         }
 
         public void bind(Artist artist) {
             mArtist = artist;
-            mImageView.setImageBitmap(SongLab.generateBitmap(getActivity(),artist.getAlbumId()));
+            mImageView.setImageBitmap(SongLab.generateBitmap(getActivity(), artist.getAlbumId()));
             mArtistTv.setText(artist.getName());
+            mArtistSongsNumber.setText(SongLab.getInstance().getArtistSongsNumber(artist.getId()) + " Songs ");
          /*   mArtistSongsTv.setText(artist.getTracks() + "");
             mArtistAlbumsTv.setText(artist.getAlbums() + "");
 */

@@ -87,12 +87,14 @@ public class SongsRecyclerFragment extends Fragment {
         private TextView mSongTv;
         private TextView mArtistTv;
         private SongEntity mSong;
+        private TextView mSongDuration;
 
         public RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
             mCoverIv = itemView.findViewById(R.id.cover_image);
             mSongTv = itemView.findViewById(R.id.songs_name_tv);
             mArtistTv = itemView.findViewById(R.id.artist_name_tv);
+            mSongDuration = itemView.findViewById(R.id.songs_duration_item);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -108,6 +110,7 @@ public class SongsRecyclerFragment extends Fragment {
             mCoverIv.setImageBitmap(SongLab.generateBitmap(getActivity(), song.getAlbumId()));
             mSongTv.setText(song.getTitle());
             mArtistTv.setText(song.getArtist());
+            mSongDuration.setText(SongLab.convertDuration(song.getDuration()));
         }
 
     }

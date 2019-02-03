@@ -25,8 +25,7 @@
         android:text="TextView"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toTopOf="@+id/artist_name_tv"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintEnd_toStartOf="@+id/songs_duration_item"
         app:layout_constraintStart_toEndOf="@+id/cover_image"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -42,9 +41,20 @@
         android:text="TextView"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintEnd_toStartOf="@+id/songs_duration_item"
         app:layout_constraintStart_toEndOf="@+id/cover_image"
         app:layout_constraintTop_toBottomOf="@+id/songs_name_tv" />
+
+    <TextView
+        android:id="@+id/songs_duration_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="31dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

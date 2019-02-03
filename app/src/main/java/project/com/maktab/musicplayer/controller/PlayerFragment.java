@@ -1,6 +1,7 @@
 package project.com.maktab.musicplayer.controller;
 
 
+import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,7 +14,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.LinearLayoutManager;
@@ -36,9 +41,12 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import project.com.maktab.musicplayer.R;
 import project.com.maktab.musicplayer.Utilities;
+import project.com.maktab.musicplayer.database.App;
 import project.com.maktab.musicplayer.model.SongLab;
 import project.com.maktab.musicplayer.model.orm.LyricsLab;
 import project.com.maktab.musicplayer.model.orm.SongEntity;
+
+import static project.com.maktab.musicplayer.database.App.MUSIC_CHANEL_ID;
 
 
 /**
@@ -46,6 +54,8 @@ import project.com.maktab.musicplayer.model.orm.SongEntity;
  */
 public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.OnCompletionListener {
     private static final String SONG_ID_ARG = "song_id_arg";
+    private static final int MUSIC_NOTIFICATION_ID = 22;
+    private NotificationManagerCompat mNotificationManager;
 
     private Toolbar mToolbar;
     private SongEntity mSong;
@@ -72,7 +82,9 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
     private List<String> mTextList;
     private List<Integer> mDurationList;
     private boolean mShowLyrics;
+    private SongEntity mNotificationSong;
     private boolean mShowUnsynce =false;
+    private boolean _hasLoadedOnce= false; // your boolean field
 
 
     public static PlayerFragment newInstance(Long songId) {
@@ -126,10 +138,10 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
         Long id = getArguments().getLong(SONG_ID_ARG, 0);
-        mSong = SongLab.getInstance().getSong(id);
         mHandler = new Handler();
+        mSong = SongLab.getInstance().getSong(id);
+        mNotificationSong = mSong;
 
 
         mMediaPlayer = new MediaPlayer();
@@ -143,6 +155,8 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
     public PlayerFragment() {
         // Required empty public constructor
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -162,8 +176,9 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
         inflater.inflate(R.menu.player_fragment_coordinator, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     private void showDialogPlaylist() {
@@ -176,6 +191,7 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.player_fragment_coordinator, container, false);
+        setHasOptionsMenu(true);
    /*     mTvSongArtist = view.findViewById(R.id.player_song_artist);
         mTvSongName = view.findViewById(R.id.player_song_name);*/
         mSongCoverIv = view.findViewById(R.id.player_song_cover);
@@ -195,6 +211,28 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
         mLyricsImageCheckBox = view.findViewById(R.id.show_lyrics_check_box);
         mShowLyrics = false;
 
+        PlayerActivity activity = (PlayerActivity) getActivity();
+        activity.setSupportActionBar(mToolbar);
+//        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mToolbar.inflateMenu(R.menu.player_fragment_coordinator);
+        mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.menu_add_to_playlist:
+                        showDialogPlaylist();
+                        return true;
+                    case R.id.add_lyrics_to_song:
+                        Intent intent = LyricsActivity.newIntent(getActivity(), mSong.getId());
+                        startActivity(intent);
+
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setVisibility(View.GONE);
 
@@ -248,8 +286,7 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
 
 //        mCallBacks.setToolbar(mToolbar);
 
-
-        ((PlayerActivity) getActivity()).setSupportActionBar(mToolbar);
+//        ((PlayerActivity) getActivity()).setSupportActionBar(mToolbar);
 
 
         mSongBarNameTv = mToolbar.findViewById(R.id.song_name_bar_tv);
@@ -459,9 +496,27 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
+
+        if (this.isVisible()) {
+            // we check that the fragment is becoming visible
+            if (isVisibleToUser && !_hasLoadedOnce) {
+                mNotificationManager = NotificationManagerCompat.from(getActivity());
+                Notification notification = new NotificationCompat.Builder(getActivity(), MUSIC_CHANEL_ID)
+                        .setSmallIcon(R.drawable.icon_malhaar5)
+                        .setLargeIcon(SongLab.generateBitmap(getActivity(),mNotificationSong.getAlbumId()))
+                        .setContentTitle(mNotificationSong.getTitle())
+                        .setContentText(mNotificationSong.getArtist())
+                        .setPriority(NotificationCompat.PRIORITY_MAX)
+                        .build();
+
+                mNotificationManager.notify(MUSIC_NOTIFICATION_ID,notification);
+                _hasLoadedOnce = true;
+            }
+        }
         if (!isVisibleToUser) {
             clearMediaPlayer();
         }
+
     }
 
 

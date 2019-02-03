@@ -39,22 +39,30 @@ public class SongLab {
         return mAlbumList;
     }
 
+    public int getArtistSongsNumber(Long artistId) {
+        List<SongEntity> result = mSongDao.queryBuilder()
+                .where(SongEntityDao.Properties.ArtistId.eq(artistId))
+                .list();
+
+        return result.size();
+    }
+
     public SongEntity getSong(Long id) {
-        List<SongEntity> result =mSongDao.queryBuilder()
+        List<SongEntity> result = mSongDao.queryBuilder()
                 .where(SongEntityDao.Properties.Id.eq(id))
                 .list();
-        if(result.size()>0)
+        if (result.size() > 0)
             return result.get(0);
 
 
         return null;
     }
 
-    public List<SongEntity> getFavSongList(){
+    public List<SongEntity> getFavSongList() {
         List<SongEntity> result =
                 mSongDao.queryBuilder()
-                .where(SongEntityDao.Properties.Favourite.eq(true))
-                .list();
+                        .where(SongEntityDao.Properties.Favourite.eq(true))
+                        .list();
 
         return result;
     }
@@ -63,7 +71,7 @@ public class SongLab {
         List<SongEntity> result = mSongDao.queryBuilder()
                 .where(SongEntityDao.Properties.ArtistId.eq(artistId))
                 .list();
-        if(result.size()<=0)
+        if (result.size() <= 0)
             return null;
 
 
@@ -74,7 +82,7 @@ public class SongLab {
         List<SongEntity> result = mSongDao.queryBuilder()
                 .where(SongEntityDao.Properties.AlbumId.eq(albumId))
                 .list();
-        if(result.size()<=0)
+        if (result.size() <= 0)
             return null;
 
 
@@ -86,14 +94,16 @@ public class SongLab {
 
         return mSongList;
     }
-    public void updateSong(SongEntity song){
+
+    public void updateSong(SongEntity song) {
         mSongDao.update(song);
     }
-    public SongEntity getSongWithId(Long id){
-        List<SongEntity> result =mSongDao.queryBuilder()
+
+    public SongEntity getSongWithId(Long id) {
+        List<SongEntity> result = mSongDao.queryBuilder()
                 .where(SongEntityDao.Properties.Id.eq(id))
                 .list();
-        if(result.size()>0)
+        if (result.size() > 0)
             return result.get(0);
 
         return null;
@@ -161,6 +171,38 @@ public class SongLab {
         editor.putBoolean(ViewPagerActivity.IS_IN_DAO, true);
         editor.apply();
         return true;
+
+    }
+
+    public static String convertDuration(long duration) {
+        String out = null;
+        long hours = 0;
+        try {
+            hours = (duration / 3600000);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return out;
+        }
+        long remaining_minutes = (duration - (hours * 3600000)) / 60000;
+        String minutes = String.valueOf(remaining_minutes);
+        if (minutes.equals(0)) {
+            minutes = "00";
+        }
+        long remaining_seconds = (duration - (hours * 3600000) - (remaining_minutes * 60000));
+        String seconds = String.valueOf(remaining_seconds);
+        if (seconds.length() < 2) {
+            seconds = "00";
+        } else {
+            seconds = seconds.substring(0, 2);
+        }
+
+        if (hours > 0) {
+            out = hours + ":" + minutes + ":" + seconds;
+        } else {
+            out = minutes + ":" + seconds;
+        }
+
+        return out;
 
     }
 
