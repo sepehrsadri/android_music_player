@@ -70,7 +70,7 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
     private LyricsAdapter mLyricsAdapter;
     private List<String> mTextList;
     private List<Integer> mDurationList;
-    public static boolean mLyricsStatus;
+    public boolean mLyricsStatus;
 
 
     public static PlayerFragment newInstance(Long songId) {
@@ -92,12 +92,13 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
     }
 
     private void updateUI() {
-        List<String> list = LyricsLab.getmInstance().getLyricsText(mSong.getId());
+        List<String> list
+                = LyricsLab.getmInstance().getUnsynceLyrics();
         if (mLyricsAdapter == null) {
             mLyricsAdapter = new LyricsAdapter(list);
             mRecyclerView.setAdapter(mLyricsAdapter);
         } else {
-            mLyricsAdapter.setLyricsList(LyricsLab.getmInstance().getLyricsText(mSong.getId()));
+            mLyricsAdapter.setLyricsList(list);
             mLyricsAdapter.notifyDataSetChanged();
 
         }
@@ -124,12 +125,11 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        mLyricsStatus = true;
         Long id = getArguments().getLong(SONG_ID_ARG, 0);
         mSong = SongLab.getInstance().getSong(id);
         mHandler = new Handler();
-        mTextList = LyricsLab.getmInstance().getLyricsText(mSong.getId());
-        mDurationList = LyricsLab.getmInstance().getLyricsDuration(mSong.getId());
+
+
         mMediaPlayer = new MediaPlayer();
         try {
             mMediaPlayer.setDataSource(mSong.getData());
@@ -191,20 +191,25 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
         mLyricsTextView = view.findViewById(R.id.player_song_lyrics);
         mToolbar = view.findViewById(R.id.player_fragment_bar);
 
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        if (mTextList == null) {
+        boolean hasLyrics = LyricsLab.getmInstance().hasLyricsText(mSong.getId());
+        if (!hasLyrics) {
             mRecyclerView.setVisibility(View.GONE);
             mLyricsTextView.setVisibility(View.GONE);
-        } else if (mLyricsStatus) {
-            mRecyclerView.setVisibility(View.GONE);
-            mLyricsTextView.setVisibility(View.VISIBLE);
+        } else {
+            boolean status = LyricsLab.getmInstance().lyricsStatusAndGenerate(mSong.getId());
+            if (status) {
+                mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                mLyricsTextView.setVisibility(View.GONE);
+                mRecyclerView.setVisibility(View.VISIBLE);
+                updateUI();
+            } else {
+                mRecyclerView.setVisibility(View.GONE);
+                mLyricsTextView.setVisibility(View.VISIBLE);
+            }
 
-        } else if (!mLyricsStatus) {
-            mLyricsTextView.setVisibility(View.GONE);
-            mRecyclerView.setVisibility(View.VISIBLE);
-            updateUI();
         }
+
 
 //        mCallBacks.setToolbar(mToolbar);
         ((PlayerActivity) getActivity()).setSupportActionBar(mToolbar);
