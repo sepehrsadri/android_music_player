@@ -12,4 +12,9 @@
         android:title="@string/add_lyrics"
         android:visible="true"
         app:showAsAction="never|withText" />
+    <item
+        android:id="@+id/share_song_menu_item"
+        android:title="Share"
+        android:visible="true"
+        app:showAsAction="never|withText" />
 </menu>

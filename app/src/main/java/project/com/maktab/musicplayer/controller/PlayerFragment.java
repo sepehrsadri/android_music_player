@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.renderscript.RenderScript;
@@ -167,7 +168,13 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
             case R.id.add_lyrics_to_song:
                 Intent intent = LyricsActivity.newIntent(getActivity(), mSong.getId());
                 startActivity(intent);
-
+                return true;
+            case R.id.share_song_menu_item:
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("audio/*");
+                Uri uri =  Uri.parse("file:///"+mSong.getData());
+                share.putExtra(Intent.EXTRA_STREAM,uri);
+                startActivity(Intent.createChooser(share, "Share Sound File"));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -227,6 +234,13 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
                         Intent intent = LyricsActivity.newIntent(getActivity(), mSong.getId());
                         startActivity(intent);
 
+                        return true;
+                    case R.id.share_song_menu_item:
+                        Intent share = new Intent(Intent.ACTION_SEND);
+                        share.setType("audio/*");
+                        Uri uri =  Uri.parse(mSong.getData());
+                        share.putExtra(Intent.EXTRA_STREAM,uri);
+                        startActivity(Intent.createChooser(share, "Share Sound File"));
                         return true;
                     default:
                         return false;
