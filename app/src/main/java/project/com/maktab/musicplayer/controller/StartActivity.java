@@ -2,6 +2,7 @@ package project.com.maktab.musicplayer.controller;
 
 import android.Manifest;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -18,12 +19,9 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import project.com.maktab.musicplayer.InitAsyncTask;
 import project.com.maktab.musicplayer.R;
@@ -34,38 +32,44 @@ public class StartActivity extends AppCompatActivity {
     private TextView mStartPlayerTextView;
 
 
-        @Override
-        public void onRequestPermissionsResult(int requestCode,
-                                               String permissions[], int[] grantResults) {
-            switch (requestCode) {
-                case MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
-                    // If request is cancelled, the result arrays are empty.
-                    if (grantResults.length > 0
-                            && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        new InitAsyncTask(StartActivity.this).execute();
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    new InitAsyncTask(StartActivity.this).execute();
 
-                        // permission was granted, yay! Do the
-                        // contacts-related task you need to do.
-                    } else {
-                        askReadExternalPermission();
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                } else {
+                    askReadExternalPermission();
 
-                        // permission denied, boo! Disable the
-                        // functionality that depends on this permission.
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
 
-                    }
-                    return;
                 }
-
-                // other 'case' lines to check for other
-                // permissions this app might request.
+                return;
             }
+
+            // other 'case' lines to check for other
+            // permissions this app might request.
         }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
         mStartPlayerTextView = findViewById(R.id.start_player_text_view);
-        startPlayer();
+        SharedPreferences preferences = getSharedPreferences(InitAsyncTask.SONG_LOAD_PREFS, MODE_PRIVATE);
+        boolean autoStart = preferences.getBoolean(ViewPagerActivity.AUTO_START, false);
+        if (autoStart)
+            askReadExternalPermission();
+        else
+            startPlayer();
 
         AlphaAnimation alphaAnimation = new AlphaAnimation(1, 0);
         alphaAnimation.setDuration(1000);

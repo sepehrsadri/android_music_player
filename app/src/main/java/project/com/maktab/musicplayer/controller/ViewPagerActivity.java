@@ -39,6 +39,7 @@ public class ViewPagerActivity extends AppCompatActivity {
     private SearchView mSearchView;
     public static final String SONG_LOAD_PREFS = "songLoadPrefs";
     public static final String IS_IN_DAO = "isInDao";
+    public static final String AUTO_START = "autoStart";
 
     public static Intent newIntent(Context context) {
         Intent intent = new Intent(context, ViewPagerActivity.class);
@@ -72,6 +73,7 @@ public class ViewPagerActivity extends AppCompatActivity {
     private void ScanMusicAndRestart() {
         SharedPreferences.Editor editor = getSharedPreferences(InitAsyncTask.SONG_LOAD_PREFS, MODE_PRIVATE).edit();
         editor.putBoolean(InitAsyncTask.IS_IN_DAO, false);
+        editor.putBoolean(AUTO_START,true);
         editor.commit();
         Intent mStartActivity = new Intent(ViewPagerActivity.this, StartActivity.class);
         int mPendingIntentId = 123456;
