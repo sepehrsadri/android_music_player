@@ -174,7 +174,7 @@ public class PlaylistDialogFragment extends DialogFragment {
         @NonNull
         @Override
         public PlaylistViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-            View view = LayoutInflater.from(getActivity()).inflate(R.layout.playlist_list_item, viewGroup, false);
+            View view = LayoutInflater.from(getActivity()).inflate(R.layout.playlist_list_item_dialog, viewGroup, false);
             PlaylistViewHolder viewHolder = new PlaylistViewHolder(view);
             return viewHolder;
         }

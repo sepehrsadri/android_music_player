@@ -1,10 +1,13 @@
 package project.com.maktab.musicplayer.controller;
 
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -30,6 +33,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.ScaleAnimation;
+import android.view.animation.TranslateAnimation;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -389,8 +396,44 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
 
                 if (mShowLyrics) {
                     for (int i = 0; i < mDurationList.size(); i++) {
-                        if (x == mDurationList.get(i))
+                        if (x == mDurationList.get(i)){
                             mLyricsTextView.setText(mTextList.get(i));
+
+                            if(x==mDurationList.get(mDurationList.size()-1)){
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mLyricsTextView.setText("");
+                                    }
+                                },5000);
+                            }
+                        /*
+                            if (mLyricsTextView.getVisibility() == View.GONE) {
+                                mLyricsTextView.animate()
+                                        .translationY(mLyricsTextView.getHeight()).alpha(1.0f)
+                                        .setListener(new AnimatorListenerAdapter() {
+                                            @Override
+                                            public void onAnimationStart(Animator animation) {
+                                                super.onAnimationStart(animation);
+                                                mLyricsTextView.setVisibility(View.VISIBLE);
+                                                mLyricsTextView.setAlpha(0.0f);
+
+                                            }
+                                        });
+                            } else {
+                                mLyricsTextView.animate()
+                                        .translationY(0).alpha(0.0f)
+                                        .setListener(new AnimatorListenerAdapter() {
+                                            @Override
+                                            public void onAnimationEnd(Animator animation) {
+                                                super.onAnimationEnd(animation);
+                                                mLyricsTextView.setVisibility(View.GONE);
+                                            }
+                                        });
+                            }
+*/
+
+                        }
                     }
                 }
 
@@ -408,6 +451,14 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
                     mActionButton.setImageDrawable(ContextCompat.getDrawable(getActivity(), android.R.drawable.ic_media_play));
                     mSeekBar.setProgress(0);
                 }
+            }
+
+            private void lyricsAnimation(int index) {
+                mLyricsTextView.animate()
+                        .translationY(mLyricsTextView.getHeight())
+                        .alpha(0.0f)
+                        .setDuration(300)
+                        .setListener(null);
             }
 
             @Override

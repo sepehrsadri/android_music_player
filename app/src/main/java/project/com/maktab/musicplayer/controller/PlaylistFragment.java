@@ -7,19 +7,19 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import project.com.maktab.musicplayer.PictureUtils;
 import project.com.maktab.musicplayer.R;
 import project.com.maktab.musicplayer.model.SongLab;
@@ -32,7 +32,7 @@ import project.com.maktab.musicplayer.model.orm.PlaylistLab;
 public class PlaylistFragment extends android.support.v4.app.Fragment {
     private RecyclerView mRecyclerView;
     private TextView mFavoriteNumTv;
-    private ConstraintLayout mFavLayout;
+    private LinearLayout mFavLayout;
     private PlaylistAdapter mAdapter;
 
     public static PlaylistFragment newInstance() {
@@ -53,7 +53,7 @@ public class PlaylistFragment extends android.support.v4.app.Fragment {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
             if(mFavoriteNumTv!=null)
-            mFavoriteNumTv.setText(SongLab.getInstance().getFavSongList().size() + "Tracks");
+                mFavoriteNumTv.setText(SongLab.getInstance().getFavSongList().size() + "  "  + " Tracks ");
             updateUI();
         }
 
@@ -77,10 +77,14 @@ public class PlaylistFragment extends android.support.v4.app.Fragment {
         mFavoriteNumTv = view.findViewById(R.id.favorite_tracks_num_tv);
         mFavLayout = view.findViewById(R.id.fav_const_layout);
         mRecyclerView = view.findViewById(R.id.play_list_recycler_view);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+
+
+        mRecyclerView.setLayoutManager(layoutManager);
         updateUI();
 
-        mFavoriteNumTv.setText(SongLab.getInstance().getFavSongList().size() + "Tracks");
+        mFavoriteNumTv.setText(SongLab.getInstance().getFavSongList().size() + "  "  + " Tracks ");
 
         mFavLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,7 +99,7 @@ public class PlaylistFragment extends android.support.v4.app.Fragment {
     }
 
     private class PlaylistViewHolder extends RecyclerView.ViewHolder {
-        private ImageView mCover;
+        private CircleImageView mCover;
         private TextView mName;
         private TextView mNumberOfsongs;
         private PlayList mPlayList;
@@ -154,7 +158,7 @@ public class PlaylistFragment extends android.support.v4.app.Fragment {
         @NonNull
         @Override
         public PlaylistViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-            View view = LayoutInflater.from(getActivity()).inflate(R.layout.playlist_list_item, viewGroup, false);
+            View view = LayoutInflater.from(getActivity()).inflate(R.layout.play_list_item_normal, viewGroup, false);
             PlaylistViewHolder viewHolder = new PlaylistViewHolder(view);
             return viewHolder;
         }

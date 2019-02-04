@@ -3,12 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_margin="8dp"
     android:layout_height="match_parent">
 
-    <android.support.constraint.ConstraintLayout
+
+
+    <LinearLayout
         android:id="@+id/fav_const_layout"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -19,66 +23,52 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-
+            android:src="@drawable/userforfavor"
             android:id="@+id/imageView2"
+            android:scaleType="centerCrop"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:src="@drawable/favorsong"
-            app:layout_constraintEnd_toEndOf="@id/fav_const_layout"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@id/fav_const_layout"
-            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+            android:layout_height="180dp"
+           />
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:text="Favorite Tracks"
-            android:textColor="@color/colorAccent"
-            android:textSize="25sp"
-            android:textStyle="italic"
-            app:layout_constraintStart_toStartOf="@id/fav_const_layout"
-            app:layout_constraintTop_toTopOf="@id/fav_const_layout" />
+
 
         <TextView
             android:id="@+id/favorite_tracks_num_tv"
             android:layout_width="wrap_content"
             android:layout_height="27dp"
-            android:layout_marginTop="92dp"
+            android:layout_margin="16dp"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
             android:text="tracks"
-            android:textColor="@color/colorAccent"
+            android:layout_gravity="center"
+            android:textColor="@android:color/white"
             android:textSize="20sp"
             android:textStyle="italic"
-            app:layout_constraintEnd_toEndOf="@id/fav_const_layout"
-            app:layout_constraintTop_toTopOf="@+id/imageView2" />
+      />
 
-
-    </android.support.constraint.ConstraintLayout>
-
-
-    <TextView
+    <ImageView
+        android:src="@drawable/playlist"
         android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:scaleType="centerCrop"
         android:layout_marginStart="8dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="42dp"
         android:text="PlayLists :"
-        android:textColor="@color/colorAccent"
+        android:textColor="@android:color/white"
         android:textSize="25sp"
         android:textStyle="italic"
-        app:layout_constraintBottom_toBottomOf="@+id/fav_const_layout"
-        app:layout_constraintStart_toStartOf="@+id/fav_const_layout" />
+         />
+
+    </LinearLayout>
+
+
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/play_list_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="359dp"
+            android:layout_height="0dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
