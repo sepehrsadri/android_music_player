@@ -23,6 +23,7 @@ import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -71,6 +72,7 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
     private MediaPlayer mMediaPlayer = new MediaPlayer();
     private FloatingActionButton mActionButton;
     private static boolean mShuffle = false;
+    public static final String TAG = "songPlayTag";
     private AppCompatImageButton mNextSongIbtn, mPreviousSongIbtn, mShuffleSongIbtn, mRepeateSongIbtn;
     private CallBacks mCallBacks;
     private AppCompatCheckBox mRepeateAllCheckBox;
@@ -86,6 +88,8 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
     private SongEntity mNotificationSong;
     private LottieAnimationView mAnimationView;
     private boolean mShowUnsynce = false;
+    boolean hasLyrics;
+    boolean lyricsStatus;
     private boolean _hasLoadedOnce = false; // your boolean field
 
 
@@ -194,6 +198,13 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG,"check it is coming or no");
+        controlLyrics();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -249,26 +260,7 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
             }
         });
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerView.setVisibility(View.GONE);
-        mLyricsTextView.setVisibility(View.GONE);
-        boolean hasLyrics = LyricsLab.getmInstance().hasLyricsText(mSong.getId());
-        boolean lyricsStatus = LyricsLab.getmInstance().lyricsStatusAndGenerate(mSong.getId());
-        if (hasLyrics) {
-            mAnimationView.playAnimation();
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mAnimationView.cancelAnimation();
-                    mAnimationView.setVisibility(View.GONE);
-                }
-            }, 5000);
-            updateUI();
-            if (!lyricsStatus) {
-                mTextList = LyricsLab.getmInstance().getSynceLyrics();
-                mDurationList = LyricsLab.getmInstance().getSynceDurationLyrics();
-            }
-
-        }
+        controlLyrics();
 
 
         mSongCoverIv.setOnClickListener(new View.OnClickListener() {
@@ -459,6 +451,29 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
         return view;
     }
 
+    private void controlLyrics() {
+        mRecyclerView.setVisibility(View.GONE);
+        mLyricsTextView.setVisibility(View.GONE);
+        hasLyrics = LyricsLab.getmInstance().hasLyricsText(mSong.getId());
+        lyricsStatus= LyricsLab.getmInstance().lyricsStatusAndGenerate(mSong.getId());
+        if (hasLyrics) {
+            mAnimationView.playAnimation();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mAnimationView.cancelAnimation();
+                    mAnimationView.setVisibility(View.GONE);
+                }
+            }, 5000);
+            updateUI();
+            if (!lyricsStatus) {
+                mTextList = LyricsLab.getmInstance().getSynceLyrics();
+                mDurationList = LyricsLab.getmInstance().getSynceDurationLyrics();
+            }
+
+        }
+    }
+
     private void setShuffleDrawble(boolean shuffle) {
         if (shuffle)
             mShuffleSongIbtn.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_no_shuffle));
@@ -500,7 +515,7 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
 
                 mMediaPlayer.start();
                 new Thread(this).start();
-
+                showNotification();
             }
 
             mWasPlaying = false;
@@ -531,16 +546,7 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
         if (this.isVisible()) {
             // we check that the fragment is becoming visible
             if (isVisibleToUser && !_hasLoadedOnce) {
-                mNotificationManager = NotificationManagerCompat.from(getActivity());
-                Notification notification = new NotificationCompat.Builder(getActivity(), MUSIC_CHANEL_ID)
-                        .setSmallIcon(R.drawable.icon_malhaar5)
-                        .setLargeIcon(SongLab.generateBitmap(getActivity(), mNotificationSong.getAlbumId()))
-                        .setContentTitle(mNotificationSong.getTitle())
-                        .setContentText(mNotificationSong.getArtist())
-                        .setPriority(NotificationCompat.PRIORITY_MAX)
-                        .build();
-
-                mNotificationManager.notify(MUSIC_NOTIFICATION_ID, notification);
+//                showNotification();
                 _hasLoadedOnce = true;
             }
         }
@@ -548,6 +554,19 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
             clearMediaPlayer();
         }
 
+    }
+
+    private void showNotification() {
+        mNotificationManager = NotificationManagerCompat.from(getActivity());
+        Notification notification = new NotificationCompat.Builder(getActivity(), MUSIC_CHANEL_ID)
+                .setSmallIcon(R.drawable.icon_malhaar5)
+                .setLargeIcon(SongLab.generateBitmap(getActivity(), mNotificationSong.getAlbumId()))
+                .setContentTitle(mNotificationSong.getTitle())
+                .setContentText(mNotificationSong.getArtist())
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .build();
+
+        mNotificationManager.notify(MUSIC_NOTIFICATION_ID, notification);
     }
 
 
