@@ -3,6 +3,8 @@ package project.com.maktab.musicplayer.controller;
 
 import android.app.Dialog;
 import android.app.Fragment;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,8 +18,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
+import project.com.maktab.musicplayer.PictureUtils;
 import project.com.maktab.musicplayer.R;
 import project.com.maktab.musicplayer.model.SongLab;
 import project.com.maktab.musicplayer.model.orm.PlayList;
@@ -139,8 +143,17 @@ public class PlaylistDialogFragment extends DialogFragment {
         public void bind(PlayList playList) {
             mPlayList = playList;
             mName.setText(playList.getName());
-            if (playList.getUri() == null)
+            if (playList.getImage() == null)
                 mCover.setImageResource(R.drawable.icon_malhaar5);
+            else{
+                Bitmap bitmap = null;
+                try {
+                    bitmap  = PictureUtils.decodeUri(getActivity(), Uri.parse(playList.getImage()));
+                    mCover.setImageBitmap(bitmap);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
             String numOfSongs = String.valueOf(PlaylistLab.getmInstance().getSongList(playList.getId()).size()) + " ";
             mNumberOfsongs.setText(numOfSongs + "Songs");
 

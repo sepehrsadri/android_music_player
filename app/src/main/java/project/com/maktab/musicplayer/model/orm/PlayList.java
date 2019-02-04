@@ -1,13 +1,17 @@
 package project.com.maktab.musicplayer.model.orm;
 
 
+import android.net.Uri;
+
+import org.greenrobot.greendao.DaoException;
+import org.greenrobot.greendao.annotation.Convert;
 import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.ToMany;
+import org.greenrobot.greendao.converter.PropertyConverter;
 
 import java.util.List;
-import org.greenrobot.greendao.annotation.Generated;
-import org.greenrobot.greendao.DaoException;
 
 
 @Entity
@@ -18,7 +22,8 @@ public class PlayList {
 
     private String name;
 
-    private String uri;
+
+    private String image;
 
     @ToMany(referencedJoinProperty = "playlistId")
     private List<SongEntity> songs;
@@ -31,11 +36,11 @@ public class PlayList {
     @Generated(hash = 472247056)
     private transient PlayListDao myDao;
 
-    @Generated(hash = 1523651620)
-    public PlayList(Long id, String name, String uri) {
+    @Generated(hash = 254385661)
+    public PlayList(Long id, String name, String image) {
         this.id = id;
         this.name = name;
-        this.uri = uri;
+        this.image = image;
     }
 
     @Generated(hash = 438209239)
@@ -58,12 +63,12 @@ public class PlayList {
         this.name = name;
     }
 
-    public String getUri() {
-        return this.uri;
+    public String getImage() {
+        return this.image;
     }
 
-    public void setUri(String uri) {
-        this.uri = uri;
+    public void setImage(String image) {
+        this.image = image;
     }
 
     /**

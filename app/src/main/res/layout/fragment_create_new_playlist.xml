@@ -1,29 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="vertical"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     tools:context=".controller.CreateNewPlaylistFragment">
+
     <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Create your playlist"
         android:textColor="@android:color/white"
+        android:textSize="25sp"
         android:textStyle="italic"
-        android:textSize="30sp"
-        android:text="Enter your playlist Name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/play_list_circle_image_cover"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginStart="155dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="136dp"
+        android:src="@drawable/ic_play_list_default"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <ImageButton
+        android:id="@+id/upload_play_list_cover_i_btn"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="17dp"
+        android:src="@drawable/ic_upload_play_list_cover"
+        app:layout_constraintBottom_toTopOf="@+id/create_play_list_name_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/play_list_circle_image_cover" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/create_play_list_name_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <EditText
-        android:id="@+id/create_playlist_name_et"
         android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/play_list_circle_image_cover"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/create_playlist_name_et"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:textStyle="italic"
+            tools:text="testing" />
+
+
+    </android.support.design.widget.TextInputLayout>
+   <!-- <EditText
+        android:id="@+id/create_playlist_name_et"
         android:layout_width="match_parent"
-        android:layout_height="40dp" />
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/play_list_circle_image_cover" />-->
+
     <ImageButton
         android:id="@+id/submit_playlist_name_i_btn"
-        android:layout_gravity="center"
         style="@style/Base.Widget.AppCompat.Button.Borderless"
-        android:src="@drawable/ic_play_list_done"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="146dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="146dp"
+        android:src="@drawable/ic_play_list_done"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/create_play_list_name_layout" />
 
 
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>
