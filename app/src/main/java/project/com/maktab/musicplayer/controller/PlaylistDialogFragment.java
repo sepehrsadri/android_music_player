@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.FileNotFoundException;
 import java.util.List;
@@ -136,6 +137,7 @@ public class PlaylistDialogFragment extends DialogFragment {
                     mSong.setPlaylistId(mPlayList.getId());
                     SongLab.getInstance().updateSong(mSong);
                     dismiss();
+                    Toast.makeText(getActivity(), "added to playlist " + mPlayList.getName() , Toast.LENGTH_SHORT).show();
                 }
             });
         }

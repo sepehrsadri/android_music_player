@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -59,7 +60,7 @@ public class ViewPagerActivity extends AppCompatActivity {
                                 ScanMusicAndRestart();
                             }
                         })
-                        .setNegativeButton(R.string.no_dialog,null)
+                        .setNegativeButton(R.string.no_dialog, null)
                         .create();
                 dialog.show();
                 return true;
@@ -73,7 +74,7 @@ public class ViewPagerActivity extends AppCompatActivity {
     private void ScanMusicAndRestart() {
         SharedPreferences.Editor editor = getSharedPreferences(InitAsyncTask.SONG_LOAD_PREFS, MODE_PRIVATE).edit();
         editor.putBoolean(InitAsyncTask.IS_IN_DAO, false);
-        editor.putBoolean(AUTO_START,true);
+        editor.putBoolean(AUTO_START, true);
         editor.commit();
         Intent mStartActivity = new Intent(ViewPagerActivity.this, StartActivity.class);
         int mPendingIntentId = 123456;
@@ -106,9 +107,12 @@ public class ViewPagerActivity extends AppCompatActivity {
         mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mViewPagerAdapter);
 //        SongLab.getInstance().initSongList(this);
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            mTabLayout.setTabMode(TabLayout.MODE_FIXED);
+        } else
+            mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 
         mTabLayout.setupWithViewPager(mViewPager);
-        mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

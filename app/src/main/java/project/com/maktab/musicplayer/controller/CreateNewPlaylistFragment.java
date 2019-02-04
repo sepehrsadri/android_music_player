@@ -133,6 +133,7 @@ public class CreateNewPlaylistFragment extends DialogFragment {
             mSong.setPlaylistId(id);
             SongLab.getInstance().updateSong(mSong);
             dismiss();
+            Toast.makeText(getActivity(), "added to playlist " + name, Toast.LENGTH_SHORT).show();
         });
 
 
