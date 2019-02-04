@@ -108,7 +108,7 @@ public class ViewPagerActivity extends AppCompatActivity {
 //        SongLab.getInstance().initSongList(this);
 
         mTabLayout.setupWithViewPager(mViewPager);
-        mTabLayout.setTabMode(TabLayout.MODE_FIXED);
+        mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

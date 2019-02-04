@@ -18,8 +18,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,6 +33,9 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.airbnb.lottie.LottieAnimationView;
 
 import java.io.IOException;
 import java.util.List;
@@ -42,7 +43,6 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import project.com.maktab.musicplayer.R;
 import project.com.maktab.musicplayer.Utilities;
-import project.com.maktab.musicplayer.database.App;
 import project.com.maktab.musicplayer.model.SongLab;
 import project.com.maktab.musicplayer.model.orm.LyricsLab;
 import project.com.maktab.musicplayer.model.orm.SongEntity;
@@ -84,8 +84,9 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
     private List<Integer> mDurationList;
     private boolean mShowLyrics;
     private SongEntity mNotificationSong;
-    private boolean mShowUnsynce =false;
-    private boolean _hasLoadedOnce= false; // your boolean field
+    private LottieAnimationView mAnimationView;
+    private boolean mShowUnsynce = false;
+    private boolean _hasLoadedOnce = false; // your boolean field
 
 
     public static PlayerFragment newInstance(Long songId) {
@@ -158,7 +159,6 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
     }
 
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -172,8 +172,8 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
             case R.id.share_song_menu_item:
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("audio/*");
-                Uri uri =  Uri.parse("file:///"+mSong.getData());
-                share.putExtra(Intent.EXTRA_STREAM,uri);
+                Uri uri = Uri.parse("file:///" + mSong.getData());
+                share.putExtra(Intent.EXTRA_STREAM, uri);
                 startActivity(Intent.createChooser(share, "Share Sound File"));
                 return true;
             default:
@@ -214,6 +214,7 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
         mLikeCheckBox = view.findViewById(R.id.like_song_check_box);
         mRecyclerView = view.findViewById(R.id.player_recyclerview_lyrics);
         mLyricsTextView = view.findViewById(R.id.player_song_lyrics);
+        mAnimationView = view.findViewById(R.id.has_lyrics_lottie);
         mToolbar = view.findViewById(R.id.player_fragment_bar);
         mLyricsImageCheckBox = view.findViewById(R.id.show_lyrics_check_box);
         mShowLyrics = false;
@@ -238,8 +239,8 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
                     case R.id.share_song_menu_item:
                         Intent share = new Intent(Intent.ACTION_SEND);
                         share.setType("audio/*");
-                        Uri uri =  Uri.parse(mSong.getData());
-                        share.putExtra(Intent.EXTRA_STREAM,uri);
+                        Uri uri = Uri.parse(mSong.getData());
+                        share.putExtra(Intent.EXTRA_STREAM, uri);
                         startActivity(Intent.createChooser(share, "Share Sound File"));
                         return true;
                     default:
@@ -249,28 +250,38 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
         });
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setVisibility(View.GONE);
-
         mLyricsTextView.setVisibility(View.GONE);
         boolean hasLyrics = LyricsLab.getmInstance().hasLyricsText(mSong.getId());
         boolean lyricsStatus = LyricsLab.getmInstance().lyricsStatusAndGenerate(mSong.getId());
         if (hasLyrics) {
-                updateUI();
-            if(!lyricsStatus) {
+            mAnimationView.playAnimation();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mAnimationView.cancelAnimation();
+                    mAnimationView.setVisibility(View.GONE);
+                }
+            }, 5000);
+            updateUI();
+            if (!lyricsStatus) {
                 mTextList = LyricsLab.getmInstance().getSynceLyrics();
                 mDurationList = LyricsLab.getmInstance().getSynceDurationLyrics();
             }
 
         }
 
+
         mSongCoverIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mShowUnsynce = !mShowUnsynce;
-                if (mShowUnsynce&&hasLyrics) {
+                if (!hasLyrics)
+                    Toast.makeText(getActivity(), "no lyrics for this song", Toast.LENGTH_SHORT).show();
+                if (mShowUnsynce && hasLyrics) {
                     mLyricsTextView.setVisibility(View.GONE);
                     mRecyclerView.setVisibility(View.VISIBLE);
-                }
-                else {
+                } else {
+
                     mLyricsTextView.setVisibility(View.GONE);
                     mRecyclerView.setVisibility(View.GONE);
                 }
@@ -279,10 +290,16 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
         mLyricsImageCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
                 mShowLyrics = isChecked;
-                if(isChecked)
+                if (isChecked) {
                     mLyricsTextView.setVisibility(View.VISIBLE);
-                else mLyricsTextView.setVisibility(View.GONE);
+                    if (!hasLyrics) {
+                        Toast.makeText(getActivity(), "no lyrics for this song", Toast.LENGTH_SHORT).show();
+                        mLyricsTextView.setVisibility(View.GONE);
+                    }
+
+                } else mLyricsTextView.setVisibility(View.GONE);
 
             }
         });
@@ -517,13 +534,13 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
                 mNotificationManager = NotificationManagerCompat.from(getActivity());
                 Notification notification = new NotificationCompat.Builder(getActivity(), MUSIC_CHANEL_ID)
                         .setSmallIcon(R.drawable.icon_malhaar5)
-                        .setLargeIcon(SongLab.generateBitmap(getActivity(),mNotificationSong.getAlbumId()))
+                        .setLargeIcon(SongLab.generateBitmap(getActivity(), mNotificationSong.getAlbumId()))
                         .setContentTitle(mNotificationSong.getTitle())
                         .setContentText(mNotificationSong.getArtist())
                         .setPriority(NotificationCompat.PRIORITY_MAX)
                         .build();
 
-                mNotificationManager.notify(MUSIC_NOTIFICATION_ID,notification);
+                mNotificationManager.notify(MUSIC_NOTIFICATION_ID, notification);
                 _hasLoadedOnce = true;
             }
         }
