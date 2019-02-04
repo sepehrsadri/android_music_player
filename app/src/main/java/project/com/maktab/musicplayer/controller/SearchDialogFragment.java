@@ -105,17 +105,19 @@ public class SearchDialogFragment extends DialogFragment {
         private TextView mSongTv;
         private TextView mArtistTv;
         private SongEntity mSong;
+        private TextView mSongDuration;
 
         public SearchRvHolder(@NonNull View itemView) {
             super(itemView);
             mCircleImageView = itemView.findViewById(R.id.cover_image);
             mSongTv = itemView.findViewById(R.id.songs_name_tv);
             mArtistTv = itemView.findViewById(R.id.artist_name_tv);
+            mSongDuration = itemView.findViewById(R.id.songs_duration_item);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = PlayerActivity.newIntent(getActivity(), mSong.getId());
+                    Intent intent = PlayerActivity.newIntent(getActivity(), mSong.getSongId());
                     dismiss();
                     startActivity(intent);
                 }
@@ -128,6 +130,7 @@ public class SearchDialogFragment extends DialogFragment {
             mCircleImageView.setImageBitmap(SongLab.generateBitmap(getActivity(),song.getAlbumId()));
             mSongTv.setText(song.getTitle());
             mArtistTv.setText(song.getArtist());
+            mSongDuration.setText(SongLab.convertDuration(song.getDuration()));
         }
 
     }

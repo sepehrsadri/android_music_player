@@ -33,6 +33,7 @@ public class StartActivity extends AppCompatActivity {
     private static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 5;
     private TextView mStartPlayerTextView;
 
+
         @Override
         public void onRequestPermissionsResult(int requestCode,
                                                String permissions[], int[] grantResults) {

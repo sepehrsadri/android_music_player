@@ -3,6 +3,7 @@ package project.com.maktab.musicplayer.controller;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -48,22 +50,36 @@ public class ViewPagerActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.scan_music_item_menu:
-                SharedPreferences.Editor editor = getSharedPreferences(InitAsyncTask.SONG_LOAD_PREFS,MODE_PRIVATE).edit();
-                editor.putBoolean(InitAsyncTask.IS_IN_DAO,false);
-                editor.commit();
-                Intent mStartActivity = new Intent(ViewPagerActivity.this, StartActivity.class);
-                int mPendingIntentId = 123456;
-                PendingIntent mPendingIntent = PendingIntent.getActivity(ViewPagerActivity.this, mPendingIntentId, mStartActivity,
-                        PendingIntent.FLAG_CANCEL_CURRENT);
-                AlarmManager mgr = (AlarmManager) ViewPagerActivity.this.getSystemService(Context.ALARM_SERVICE);
-                mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
-                System.exit(0);
+                AlertDialog dialog = new AlertDialog.Builder(ViewPagerActivity.this)
+                        .setTitle(R.string.scan_music)
+                        .setPositiveButton(R.string.yes_dialog, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ScanMusicAndRestart();
+                            }
+                        })
+                        .setNegativeButton(R.string.no_dialog,null)
+                        .create();
+                dialog.show();
                 return true;
 
             default:
                 return super.onOptionsItemSelected(item);
         }
 
+    }
+
+    private void ScanMusicAndRestart() {
+        SharedPreferences.Editor editor = getSharedPreferences(InitAsyncTask.SONG_LOAD_PREFS, MODE_PRIVATE).edit();
+        editor.putBoolean(InitAsyncTask.IS_IN_DAO, false);
+        editor.commit();
+        Intent mStartActivity = new Intent(ViewPagerActivity.this, StartActivity.class);
+        int mPendingIntentId = 123456;
+        PendingIntent mPendingIntent = PendingIntent.getActivity(ViewPagerActivity.this, mPendingIntentId, mStartActivity,
+                PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager mgr = (AlarmManager) ViewPagerActivity.this.getSystemService(Context.ALARM_SERVICE);
+        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+        System.exit(0);
     }
 
     @Override
