@@ -1,7 +1,10 @@
 package project.com.maktab.musicplayer.controller;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,8 +18,12 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.ViewGroup;
 
+import project.com.maktab.musicplayer.InitAsyncTask;
 import project.com.maktab.musicplayer.R;
 
 ;
@@ -37,6 +44,34 @@ public class ViewPagerActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.scan_music_item_menu:
+                SharedPreferences.Editor editor = getSharedPreferences(InitAsyncTask.SONG_LOAD_PREFS,MODE_PRIVATE).edit();
+                editor.putBoolean(InitAsyncTask.IS_IN_DAO,false);
+                editor.commit();
+                Intent mStartActivity = new Intent(ViewPagerActivity.this, StartActivity.class);
+                int mPendingIntentId = 123456;
+                PendingIntent mPendingIntent = PendingIntent.getActivity(ViewPagerActivity.this, mPendingIntentId, mStartActivity,
+                        PendingIntent.FLAG_CANCEL_CURRENT);
+                AlarmManager mgr = (AlarmManager) ViewPagerActivity.this.getSystemService(Context.ALARM_SERVICE);
+                mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+                System.exit(0);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_coordinator, menu);
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +162,7 @@ public class ViewPagerActivity extends AppCompatActivity {
             }
         }
     }
+
     public class SongsTabLayout extends TabLayout {
 
         public SongsTabLayout(Context context) {
@@ -144,13 +180,13 @@ public class ViewPagerActivity extends AppCompatActivity {
         @Override
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
-            ViewGroup tabLayout = (ViewGroup)getChildAt(0);
+            ViewGroup tabLayout = (ViewGroup) getChildAt(0);
             int childCount = tabLayout.getChildCount();
 
             DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
-            int tabMinWidth = displayMetrics.widthPixels/childCount;
+            int tabMinWidth = displayMetrics.widthPixels / childCount;
 
-            for(int i = 0; i < childCount; ++i){
+            for (int i = 0; i < childCount; ++i) {
                 tabLayout.getChildAt(i).setMinimumWidth(tabMinWidth);
             }
 

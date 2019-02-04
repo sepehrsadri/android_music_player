@@ -30,7 +30,7 @@ public class InitAsyncTask extends android.os.AsyncTask<Void, Void, Void> {
 
     protected Void doInBackground(Void... args) {
         // do background work here
-        Boolean status;
+        boolean status;
         SharedPreferences prefs = mStartActivity.getSharedPreferences(SONG_LOAD_PREFS, MODE_PRIVATE);
         boolean loadStatus = prefs.getBoolean(IS_IN_DAO, false);
         if (loadStatus)
@@ -39,7 +39,7 @@ public class InitAsyncTask extends android.os.AsyncTask<Void, Void, Void> {
             status = SongLab.getInstance().initSongList(mStartActivity);
 
 
-        if (status == true) {
+        if (status) {
             Intent intent = ViewPagerActivity.newIntent(mStartActivity);
             mStartActivity.startActivity(intent);
             mStartActivity.finish();
