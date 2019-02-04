@@ -135,7 +135,10 @@ public class SongLab {
 
 
     public boolean initSongList(Activity activity) {
-
+        SharedPreferences prefs = activity.getSharedPreferences(ViewPagerActivity.SONG_LOAD_PREFS, MODE_PRIVATE);
+        boolean isAuto = prefs.getBoolean(ViewPagerActivity.AUTO_START, false);
+        if (isAuto)
+            mSongDao.deleteAll();
         SongCursorWrapper cursorWrapper = new SongCursorWrapper(activity.getContentResolver().query(uri,
                 null, where, null, null));
 
@@ -159,7 +162,8 @@ public class SongLab {
                     songEntity.setTitle(song.getTitle());
                     songEntity.setAlbumId(song.getAlbumId());
                     songEntity.setBitmap(song.getBitmap());
-                    mSongDao.insert(songEntity);
+
+                        mSongDao.insert(songEntity);
                 }
                 cursorWrapper.moveToNext();
             }
@@ -167,8 +171,13 @@ public class SongLab {
             cursorWrapper.close();
             mSongList = mSongDao.loadAll();
         }
-        SharedPreferences.Editor editor = activity.getSharedPreferences(ViewPagerActivity.SONG_LOAD_PREFS, MODE_PRIVATE).edit();
+        initSongListFromDao();
+
+        SharedPreferences.Editor editor = prefs.edit();
+
         editor.putBoolean(ViewPagerActivity.IS_IN_DAO, true);
+        if (isAuto)
+            editor.putBoolean(ViewPagerActivity.AUTO_START, false);
         editor.apply();
         return true;
 

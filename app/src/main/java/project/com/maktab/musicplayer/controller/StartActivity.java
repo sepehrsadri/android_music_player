@@ -65,9 +65,13 @@ public class StartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_start);
         mStartPlayerTextView = findViewById(R.id.start_player_text_view);
         SharedPreferences preferences = getSharedPreferences(InitAsyncTask.SONG_LOAD_PREFS, MODE_PRIVATE);
+//        SharedPreferences.Editor editor= preferences.edit();
         boolean autoStart = preferences.getBoolean(ViewPagerActivity.AUTO_START, false);
-        if (autoStart)
+        if (autoStart){
+            /*editor.putBoolean(ViewPagerActivity.AUTO_START,false);
+            editor.apply();*/
             askReadExternalPermission();
+        }
         else
             startPlayer();
 
