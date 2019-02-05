@@ -7,12 +7,13 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.FileNotFoundException;
@@ -32,7 +33,7 @@ import project.com.maktab.musicplayer.model.orm.PlaylistLab;
 public class PlaylistFragment extends android.support.v4.app.Fragment {
     private RecyclerView mRecyclerView;
     private TextView mFavoriteNumTv;
-    private LinearLayout mFavLayout;
+    private CardView mFavCardView;
     private PlaylistAdapter mAdapter;
 
     public static PlaylistFragment newInstance() {
@@ -52,8 +53,8 @@ public class PlaylistFragment extends android.support.v4.app.Fragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
-            if(mFavoriteNumTv!=null)
-                mFavoriteNumTv.setText(SongLab.getInstance().getFavSongList().size() + "  "  + " Tracks ");
+            if (mFavoriteNumTv != null)
+                mFavoriteNumTv.setText(SongLab.getInstance().getFavSongList().size() + "  " + " Tracks ");
             updateUI();
         }
 
@@ -75,18 +76,18 @@ public class PlaylistFragment extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_playlist_recyclerview, container, false);
         mFavoriteNumTv = view.findViewById(R.id.favorite_tracks_num_tv);
-        mFavLayout = view.findViewById(R.id.fav_const_layout);
+        mFavCardView = view.findViewById(R.id.fav_const_card_view);
         mRecyclerView = view.findViewById(R.id.play_list_recycler_view);
-        LinearLayoutManager layoutManager
-                = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+       /* LinearLayoutManager layoutManager
+                = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);*/
 
 
-        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
         updateUI();
 
-        mFavoriteNumTv.setText(SongLab.getInstance().getFavSongList().size() + "  "  + " Tracks ");
+        mFavoriteNumTv.setText(SongLab.getInstance().getFavSongList().size() + "  " + " Tracks ");
 
-        mFavLayout.setOnClickListener(v -> {
+        mFavCardView.setOnClickListener(v -> {
             Intent intent = ListSongs.newIntent(getActivity(), "fav", 0l);
             startActivity(intent);
         });
@@ -124,10 +125,10 @@ public class PlaylistFragment extends android.support.v4.app.Fragment {
             mName.setText(playList.getName());
             if (playList.getImage() == null)
                 mCover.setImageResource(R.drawable.icon_malhaar5);
-            else{
+            else {
                 Bitmap bitmap = null;
                 try {
-                    bitmap  = PictureUtils.decodeUri(getActivity(), Uri.parse(playList.getImage()));
+                    bitmap = PictureUtils.decodeUri(getActivity(), Uri.parse(playList.getImage()));
                     mCover.setImageBitmap(bitmap);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
@@ -155,7 +156,7 @@ public class PlaylistFragment extends android.support.v4.app.Fragment {
         @NonNull
         @Override
         public PlaylistViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-            View view = LayoutInflater.from(getActivity()).inflate(R.layout.play_list_item_normal, viewGroup, false);
+            View view = LayoutInflater.from(getActivity()).inflate(R.layout.playlist_list_item_dialog, viewGroup, false);
             PlaylistViewHolder viewHolder = new PlaylistViewHolder(view);
             return viewHolder;
         }

@@ -6,11 +6,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -57,7 +59,7 @@ public class ArtistRecyclerFragment extends Fragment {
         View view = inflater.inflate(R.layout.recycler_view, container, false);
         mRv = view.findViewById(R.id.recycler_view);
 
-        mRv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRv.setLayoutManager(new GridLayoutManager(getActivity(),2));
 
         mAdapter = new RecyclerAdapter(mArtistList);
 
@@ -69,7 +71,7 @@ public class ArtistRecyclerFragment extends Fragment {
 
     private class RecyclerViewHolder extends RecyclerView.ViewHolder {
         private Artist mArtist;
-        private CircleImageView mImageView;
+        private ImageView mImageView;
         private TextView mArtistTv;
         private TextView mArtistSongsTv;
         private TextView mArtistAlbumsTv;
