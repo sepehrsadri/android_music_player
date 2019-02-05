@@ -86,12 +86,9 @@ public class PlaylistFragment extends android.support.v4.app.Fragment {
 
         mFavoriteNumTv.setText(SongLab.getInstance().getFavSongList().size() + "  "  + " Tracks ");
 
-        mFavLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = ListSongs.newIntent(getActivity(), "fav", 0l);
-                startActivity(intent);
-            }
+        mFavLayout.setOnClickListener(v -> {
+            Intent intent = ListSongs.newIntent(getActivity(), "fav", 0l);
+            startActivity(intent);
         });
 
 

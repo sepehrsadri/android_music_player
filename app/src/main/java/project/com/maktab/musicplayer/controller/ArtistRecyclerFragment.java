@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -90,7 +92,8 @@ public class ArtistRecyclerFragment extends Fragment {
 
         public void bind(Artist artist) {
             mArtist = artist;
-            mImageView.setImageBitmap(SongLab.generateBitmap(getActivity(), artist.getAlbumId()));
+            Picasso.get().load(SongLab.generateUri(mArtist.getAlbumId())).into(mImageView);
+//            mImageView.setImageBitmap(SongLab.generateBitmap(getActivity(), artist.getAlbumId()));
             mArtistTv.setText(artist.getName());
             mArtistSongsNumber.setText(SongLab.getInstance().getArtistSongsNumber(artist.getId()) + " Songs ");
          /*   mArtistSongsTv.setText(artist.getTracks() + "");

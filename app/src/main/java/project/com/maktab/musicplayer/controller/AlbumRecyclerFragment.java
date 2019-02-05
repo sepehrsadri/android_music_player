@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 import project.com.maktab.musicplayer.R;
@@ -87,7 +89,8 @@ public class AlbumRecyclerFragment extends Fragment {
 
         public void bind(Album album) {
             mAlbum = album;
-            mCoverIv.setImageBitmap(SongLab.generateBitmap(getActivity(),album.getId()));
+            Picasso.get().load(SongLab.generateUri(album.getId())).into(mCoverIv);
+//            mCoverIv.setImageBitmap(SongLab.generateBitmap(getActivity(),album.getId()));
             mArtistTv.setText(album.getArtist());
             mAlbumTv.setText(album.getTitle());
         }

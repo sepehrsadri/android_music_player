@@ -163,7 +163,7 @@ public class SongLab {
                     songEntity.setAlbumId(song.getAlbumId());
                     songEntity.setBitmap(song.getBitmap());
 
-                        mSongDao.insert(songEntity);
+                    mSongDao.insert(songEntity);
                 }
                 cursorWrapper.moveToNext();
             }
@@ -215,11 +215,17 @@ public class SongLab {
 
     }
 
-    public static Bitmap generateBitmap(Activity activity, Long albumId) {
+    public static Uri generateUri(Long albumId) {
 
         Uri sArtworkUri = Uri
                 .parse("content://media/external/audio/albumart");
         Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, albumId);
+
+        return albumArtUri;
+    }
+
+    public static Bitmap generateBitmap(Activity activity, Long albumId) {
+        Uri albumArtUri = generateUri(albumId);
 
         Bitmap bitmap = null;
         try {

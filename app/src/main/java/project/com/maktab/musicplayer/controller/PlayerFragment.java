@@ -44,6 +44,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.List;
@@ -498,7 +499,8 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
 
             }
         });
-        mSongCoverIv.setImageBitmap(SongLab.generateBitmap(getActivity(), mSong.getAlbumId()));
+        Picasso.get().load(SongLab.generateUri(mSong.getAlbumId())).into(mSongCoverIv);
+//        mSongCoverIv.setImageBitmap(SongLab.generateBitmap(getActivity(), mSong.getAlbumId()));
         return view;
     }
 
