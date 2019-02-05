@@ -245,7 +245,36 @@ public class SongLab {
         return bitmap;
     }
 
-    public List<SongEntity> getSearchList(String text) {
+    public List<Album> getSearchAlbumList(String text){
+        List<Album> result  = new ArrayList<>();
+        for(SongEntity song:mSongList){
+            if(song.getAlbumName().toLowerCase().contains(text)){
+                Album album = new Album();
+                album.setTitle(song.getAlbumName());
+                album.setArtist(song.getArtist());
+                album.setId(song.getAlbumId());
+                result.add(album);
+            }
+        }
+
+        return result;
+    }
+
+    public List<Artist> getArtistSearchList(String text){
+        List<Artist> result  = new ArrayList<>();
+        for(SongEntity song:mSongList){
+            if(song.getArtist().toLowerCase().contains(text)){
+                Artist artist = new Artist();
+                artist.setName(song.getArtist());
+                artist.setAlbumId(song.getAlbumId());
+                artist.setId(song.getArtistId());
+                result.add(artist);
+            }
+        }
+
+        return result;
+    }
+    public List<SongEntity> getSongSearchList(String text) {
         List<SongEntity> list = new ArrayList<>();
 
         text = text.toLowerCase();
