@@ -20,6 +20,10 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import project.com.maktab.musicplayer.R;
+import project.com.maktab.musicplayer.ViewHolderTypes;
+import project.com.maktab.musicplayer.adapter.RecyclerViewAdapter;
+import project.com.maktab.musicplayer.model.Artist;
+import project.com.maktab.musicplayer.model.Song;
 import project.com.maktab.musicplayer.model.SongLab;
 import project.com.maktab.musicplayer.model.orm.PlaylistLab;
 import project.com.maktab.musicplayer.model.orm.SongEntity;
@@ -64,18 +68,19 @@ public class SongsRecyclerFragment extends Fragment {
         View view = inflater.from(getActivity()).inflate(R.layout.recycler_view, container, false);
         mSongsRv = view.findViewById(R.id.recycler_view);
 
+
         mSongsRv.setLayoutManager(new LinearLayoutManager(getActivity()));
         if (listPicker.equalsIgnoreCase("album"))
-            mAdapter = new RecyclerViewAdapter(SongLab.getInstance().getSongListByAlbum(id));
+            mAdapter = new RecyclerViewAdapter<SongEntity>(getActivity(), SongLab.getInstance().getSongListByAlbum(id), ViewHolderTypes.SONG);
         else if (listPicker.equalsIgnoreCase("artist"))
-            mAdapter = new RecyclerViewAdapter(SongLab.getInstance().getSongListByArtist(id));
+            mAdapter = new RecyclerViewAdapter<SongEntity>(getActivity(), SongLab.getInstance().getSongListByArtist(id), ViewHolderTypes.SONG);
         else if (listPicker.equalsIgnoreCase("fav"))
-            mAdapter = new RecyclerViewAdapter((SongLab.getInstance().getFavSongList()));
+            mAdapter = new RecyclerViewAdapter<SongEntity>(getActivity(), SongLab.getInstance().getFavSongList(), ViewHolderTypes.SONG);
         else if (listPicker.equalsIgnoreCase("playlist"))
-            mAdapter = new RecyclerViewAdapter(PlaylistLab.getmInstance().getSongList(id));
+            mAdapter = new RecyclerViewAdapter<SongEntity>(getActivity(), PlaylistLab.getmInstance().getSongList(id), ViewHolderTypes.SONG);
 
         else
-            mAdapter = new RecyclerViewAdapter(mSongList);
+            mAdapter = new RecyclerViewAdapter<SongEntity>(getActivity(), mSongList, ViewHolderTypes.SONG);
 
         mSongsRv.setHasFixedSize(true);
 
@@ -85,72 +90,8 @@ public class SongsRecyclerFragment extends Fragment {
         return view;
     }
 
-    private class RecyclerViewHolder extends RecyclerView.ViewHolder {
-        private CircleImageView mCoverIv;
-        private TextView mSongTv;
-        private TextView mArtistTv;
-        private SongEntity mSong;
-        private TextView mSongDuration;
-
-        public RecyclerViewHolder(@NonNull View itemView) {
-            super(itemView);
-            mCoverIv = itemView.findViewById(R.id.cover_image);
-            mSongTv = itemView.findViewById(R.id.songs_name_tv);
-            mArtistTv = itemView.findViewById(R.id.artist_name_tv);
-            mSongDuration = itemView.findViewById(R.id.songs_duration_item);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = PlayerActivity.newIntent(getActivity(), mSong.getSongId());
-                    startActivity(intent);
-                }
-            });
-
-        }
-
-        public void bind(SongEntity song) {
-            mSong = song;
-            Picasso.get().load(SongLab.generateUri(mSong.getAlbumId())).into(mCoverIv);
-//            mCoverIv.setImageBitmap(SongLab.generateBitmap(getActivity(), song.getAlbumId()));
-            mSongTv.setText(song.getTitle());
-            mArtistTv.setText(song.getArtist());
-            mSongDuration.setText(SongLab.convertDuration(song.getDuration()));
-        }
-
-    }
 
 
-    private class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
-        private List<SongEntity> mSongList;
 
-        public RecyclerViewAdapter(List<SongEntity> songList) {
-            mSongList = songList;
-
-        }
-
-        public void setSongList(List<SongEntity> songList) {
-            mSongList = songList;
-        }
-
-        @NonNull
-        @Override
-        public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-            View view = LayoutInflater.from(getActivity()).inflate(R.layout.songs_list_item, viewGroup, false);
-            RecyclerViewHolder viewHolder = new RecyclerViewHolder(view);
-            return viewHolder;
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull RecyclerViewHolder recyclerViewHolder, int i) {
-            SongEntity song = mSongList.get(i);
-            recyclerViewHolder.bind(song);
-        }
-
-
-        @Override
-        public int getItemCount() {
-            return mSongList.size();
-        }
-    }
 
 }

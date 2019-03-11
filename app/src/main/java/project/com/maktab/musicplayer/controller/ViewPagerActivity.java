@@ -24,6 +24,8 @@ import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
 
 import project.com.maktab.musicplayer.InitAsyncTask;
@@ -103,7 +105,7 @@ public class ViewPagerActivity extends AppCompatActivity {
         mSearchView = findViewById(R.id.search_view_song);
 
         setSupportActionBar(mToolbar);
-
+        mViewPager.setOffscreenPageLimit(6);
         mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mViewPagerAdapter);
 //        SongLab.getInstance().initSongList(this);
@@ -113,6 +115,12 @@ public class ViewPagerActivity extends AppCompatActivity {
             mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 
         mTabLayout.setupWithViewPager(mViewPager);
+        /*mSearchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showSearchDialog();
+            }
+        });*/
 
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

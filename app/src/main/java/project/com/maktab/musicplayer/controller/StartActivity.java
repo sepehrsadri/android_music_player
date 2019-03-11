@@ -5,9 +5,9 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableString;
@@ -20,22 +20,45 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import project.com.maktab.musicplayer.InitAsyncTask;
 import project.com.maktab.musicplayer.R;
 
 public class StartActivity extends AppCompatActivity {
-    private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 12;
-    private static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 5;
     private TextView mStartPlayerTextView;
+
+    private static final int PERMISSION_REQUEST_CODE = 1;
+    String[] PERMISSIONS = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+    };
 
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
-        switch (requestCode) {
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                new InitAsyncTask(StartActivity.this).execute();
+
+                // permission was granted, yay! Do the
+                // contacts-related task you need to do.
+            } else {
+                showDialogOK("this application need this permission for read your songs files, please accept!", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ActivityCompat.requestPermissions(StartActivity.this, PERMISSIONS, PERMISSION_REQUEST_CODE);
+                    }
+                });
+                // permission denied, boo! Disable the
+                // functionality that depends on this permission.
+
+            }
+
+
+        }
+
+   /*     switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
@@ -51,11 +74,29 @@ public class StartActivity extends AppCompatActivity {
                     // functionality that depends on this permission.
 
                 }
-                return;
+
             }
 
             // other 'case' lines to check for other
             // permissions this app might request.
+        }*/
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fullScreencall();
+    }
+
+    public void fullScreencall() {
+        if (Build.VERSION.SDK_INT > 11 && Build.VERSION.SDK_INT < 19) { // lower api
+            View v = this.getWindow().getDecorView();
+            v.setSystemUiVisibility(View.GONE);
+        } else if (Build.VERSION.SDK_INT >= 19) {
+            //for new api versions.
+            View decorView = getWindow().getDecorView();
+            int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+            decorView.setSystemUiVisibility(uiOptions);
         }
     }
 
@@ -67,12 +108,12 @@ public class StartActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences(InitAsyncTask.SONG_LOAD_PREFS, MODE_PRIVATE);
 //        SharedPreferences.Editor editor= preferences.edit();
         boolean autoStart = preferences.getBoolean(ViewPagerActivity.AUTO_START, false);
-        if (autoStart){
+        if (autoStart) {
             /*editor.putBoolean(ViewPagerActivity.AUTO_START,false);
             editor.apply();*/
-            askReadExternalPermission();
-        }
-        else
+            checkPermission();
+
+        } else
             startPlayer();
 
         AlphaAnimation alphaAnimation = new AlphaAnimation(1, 0);
@@ -83,14 +124,21 @@ public class StartActivity extends AppCompatActivity {
 
     }
 
+    private void checkPermission() {
+        if (hasPermissions(PERMISSIONS)) {
+            new InitAsyncTask(StartActivity.this).execute();
+        } else
+            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_REQUEST_CODE);
+    }
+
     private void startPlayer() {
 
         SpannableString spannableCreate = new SpannableString("Start Player");
         ClickableSpan clickableSpanCreateAccount = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-                askReadExternalPermission();
-//                checkAndRequestPermissions();
+
+                checkPermission();
 
             }
 
@@ -106,38 +154,48 @@ public class StartActivity extends AppCompatActivity {
         mStartPlayerTextView.setHighlightColor(Color.TRANSPARENT);
     }
 
-    private void askReadExternalPermission() {
-        // Here, thisActivity is the current activity
-        if (ContextCompat.checkSelfPermission(StartActivity.this,
-                Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
+    /*    private void askReadExternalPermission() {
+            // Here, thisActivity is the current activity
+            if (ContextCompat.checkSelfPermission(StartActivity.this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
 
 
-            // Permission is not granted
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(StartActivity.this,
-                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                // Permission is not granted
+                // Should we show an explanation?
+                if (ActivityCompat.shouldShowRequestPermissionRationale(StartActivity.this,
+                        Manifest.permission.READ_EXTERNAL_STORAGE)) {
 
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
+                    // Show an explanation to the user *asynchronously* -- don't block
+                    // this thread waiting for the user's response! After the user
+                    // sees the explanation, try again to request the permission.
+                } else {
+                    // No explanation needed; request the permission
+                    ActivityCompat.requestPermissions(StartActivity.this,
+                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                            MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+
+                    // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                    // app-defined int constant. The callback method gets the
+                    // result of the request.
+                }
             } else {
-                // No explanation needed; request the permission
-                ActivityCompat.requestPermissions(StartActivity.this,
-                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                        MY_PERMISSIONS_REQUEST_READ_CONTACTS);
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
+                new InitAsyncTask(StartActivity.this).execute();
+                // Permission has already been granted
             }
-        } else {
-            new InitAsyncTask(StartActivity.this).execute();
-            // Permission has already been granted
+        }*/
+    private boolean hasPermissions(String... permissions) {
+        if (permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(StartActivity.this, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
         }
+        return true;
     }
 
-    private boolean checkAndRequestPermissions() {
+ /*   private boolean checkAndRequestPermissions() {
         int permissionWriteExternal = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE);
         int permissionReadExternal = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
@@ -155,7 +213,7 @@ public class StartActivity extends AppCompatActivity {
         }
         return true;
     }
-
+*/
    /* @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -212,7 +270,7 @@ public class StartActivity extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setMessage(message)
                 .setPositiveButton("OK", okListener)
-                .setNegativeButton("Cancel", okListener)
+                .setNegativeButton("Cancel", null)
                 .create()
                 .show();
     }

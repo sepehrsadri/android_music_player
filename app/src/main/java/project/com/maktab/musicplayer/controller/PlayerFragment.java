@@ -170,6 +170,11 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
         // Required empty public constructor
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        clearMediaPlayer();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

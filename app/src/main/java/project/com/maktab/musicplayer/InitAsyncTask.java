@@ -10,7 +10,7 @@ import project.com.maktab.musicplayer.model.SongLab;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class InitAsyncTask extends android.os.AsyncTask<Void, Void, Void> {
+public class InitAsyncTask extends android.os.AsyncTask<Void, Void, Boolean> {
     private ProgressDialog dialog;
     private Activity mStartActivity;
     public static final String SONG_LOAD_PREFS = "songLoadPrefs";
@@ -28,7 +28,8 @@ public class InitAsyncTask extends android.os.AsyncTask<Void, Void, Void> {
         dialog.show();
     }
 
-    protected Void doInBackground(Void... args) {
+    @Override
+    protected Boolean doInBackground(Void... args) {
         // do background work here
         boolean status;
         SharedPreferences prefs = mStartActivity.getSharedPreferences(SONG_LOAD_PREFS, MODE_PRIVATE);
@@ -39,20 +40,20 @@ public class InitAsyncTask extends android.os.AsyncTask<Void, Void, Void> {
             status = SongLab.getInstance().initSongList(mStartActivity);
 
 
-        if (status) {
+
+
+        return status;
+    }
+
+    @Override
+    protected void onPostExecute(Boolean aBoolean) {
+        super.onPostExecute(aBoolean);
+        if(dialog.isShowing())
+            dialog.cancel();
+        if(aBoolean){
             Intent intent = ViewPagerActivity.newIntent(mStartActivity);
             mStartActivity.startActivity(intent);
             mStartActivity.finish();
-        }
-
-
-        return null;
-    }
-
-    protected void onPostExecute(Void result) {
-        // do UI work here
-        if (dialog.isShowing()) {
-            dialog.dismiss();
         }
     }
 }

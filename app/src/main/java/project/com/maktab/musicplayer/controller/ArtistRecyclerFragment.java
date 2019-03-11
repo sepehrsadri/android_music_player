@@ -21,6 +21,8 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import project.com.maktab.musicplayer.R;
+import project.com.maktab.musicplayer.ViewHolderTypes;
+import project.com.maktab.musicplayer.adapter.RecyclerViewAdapter;
 import project.com.maktab.musicplayer.model.Artist;
 import project.com.maktab.musicplayer.model.SongLab;
 
@@ -30,7 +32,7 @@ import project.com.maktab.musicplayer.model.SongLab;
 public class ArtistRecyclerFragment extends Fragment {
     private List<Artist> mArtistList;
     private RecyclerView mRv;
-    private RecyclerAdapter mAdapter;
+    private RecyclerViewAdapter mAdapter;
 
 
     public ArtistRecyclerFragment() {
@@ -61,7 +63,7 @@ public class ArtistRecyclerFragment extends Fragment {
 
         mRv.setLayoutManager(new GridLayoutManager(getActivity(),2));
 
-        mAdapter = new RecyclerAdapter(mArtistList);
+        mAdapter =  new RecyclerViewAdapter<Artist>(getActivity(), mArtistList, ViewHolderTypes.ARTIST);
 
         mRv.setAdapter(mAdapter);
 
@@ -69,74 +71,9 @@ public class ArtistRecyclerFragment extends Fragment {
         return view;
     }
 
-    private class RecyclerViewHolder extends RecyclerView.ViewHolder {
-        private Artist mArtist;
-        private ImageView mImageView;
-        private TextView mArtistTv;
-        private TextView mArtistSongsTv;
-        private TextView mArtistAlbumsTv;
-        private TextView mArtistSongsNumber;
-
-        public RecyclerViewHolder(@NonNull View itemView) {
-            super(itemView);
-            mImageView = itemView.findViewById(R.id.artist_item_cover);
-            mArtistTv = itemView.findViewById(R.id.artist_item_name);
-            mArtistSongsNumber = itemView.findViewById(R.id.artist_song_number_item);
-            /*mArtistSongsTv = itemView.findViewById(R.id.artist_item_songs);
-            mArtistAlbumsTv = itemView.findViewById(R.id.artist_item_albums);*/
-
-            itemView.setOnClickListener(v -> {
-                Intent intent = ListSongs.newIntent(getActivity(), "artist", mArtist.getId());
-                startActivity(intent);
-            });
-
-        }
-
-        public void bind(Artist artist) {
-            mArtist = artist;
-            Picasso.get().load(SongLab.generateUri(mArtist.getAlbumId())).into(mImageView);
-//            mImageView.setImageBitmap(SongLab.generateBitmap(getActivity(), artist.getAlbumId()));
-            mArtistTv.setText(artist.getName());
-            mArtistSongsNumber.setText(SongLab.getInstance().getArtistSongsNumber(artist.getId()) + " Songs ");
-         /*   mArtistSongsTv.setText(artist.getTracks() + "");
-            mArtistAlbumsTv.setText(artist.getAlbums() + "");
-*/
-        }
-    }
-
-    private class RecyclerAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
-
-        private List<Artist> mArtistList;
-
-        public void setArtistList(List<Artist> artistList) {
-            mArtistList = artistList;
-        }
-
-        public RecyclerAdapter(List<Artist> artistList) {
-            mArtistList = artistList;
-        }
 
 
-        @NonNull
-        @Override
-        public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-            View view = LayoutInflater.from(getActivity()).inflate(R.layout.artist_list_item, viewGroup, false);
-            RecyclerViewHolder viewHolder = new RecyclerViewHolder(view);
-            return viewHolder;
-        }
 
-        @Override
-        public void onBindViewHolder(@NonNull RecyclerViewHolder recyclerViewHolder, int i) {
-            Artist artist = mArtistList.get(i);
-            recyclerViewHolder.bind(artist);
-
-        }
-
-        @Override
-        public int getItemCount() {
-            return mArtistList.size();
-        }
-    }
 
 
 }

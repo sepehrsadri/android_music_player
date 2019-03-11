@@ -17,11 +17,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-import com.truizlop.sectionedrecyclerview.SimpleSectionedAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters;
+import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
+import io.github.luizgrp.sectionedrecyclerviewadapter.StatelessSection;
 import project.com.maktab.musicplayer.R;
 import project.com.maktab.musicplayer.model.Album;
 import project.com.maktab.musicplayer.model.Artist;
@@ -33,9 +36,10 @@ import project.com.maktab.musicplayer.model.orm.SongEntity;
  * A simple {@link Fragment} subclass.
  */
 public class SearchDialogFragment extends DialogFragment {
+
     private RecyclerView mRecyclerView;
     private SearchView mSearchView;
-    private SectionSearchAdapter mAdapter;
+    private SearchRvAdapter mAdapter;
     private Toolbar mToolbar;
 
     public static SearchDialogFragment newInstance() {
@@ -75,9 +79,12 @@ public class SearchDialogFragment extends DialogFragment {
         ((ViewPagerActivity) getActivity()).setSupportActionBar(mToolbar);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        mAdapter = new SectionSearchAdapter(null, null, null);
+        mAdapter = new SearchRvAdapter(new ArrayList<>());
         mRecyclerView.setAdapter(mAdapter);
+
+        mSearchView.setFocusable(true);
+        mSearchView.setIconified(false);
+        mSearchView.requestFocusFromTouch();
 
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             List<SongEntity> list;
@@ -88,12 +95,11 @@ public class SearchDialogFragment extends DialogFragment {
             public boolean onQueryTextSubmit(String s) {
 //                list = SongLab.getInstance().getSearchedSongList(getActivity(), s);
                 list = SongLab.getInstance().getSongSearchList(s);
-                mAlbumList = SongLab.getInstance().getSearchAlbumList(s);
-                mArtistList = SongLab.getInstance().getArtistSearchList(s);
-                mAdapter.setSongList(list);
-                mAdapter.setAlbumList(mAlbumList);
-                mAdapter.setArtistList(mArtistList);
-                mAdapter.notifyDataSetChanged();
+
+           /*     sectionAdapter.notifySectionChangedToVisible(songSection);
+                sectionAdapter.notifySectionChangedToVisible(artistSection);*/
+           mAdapter.setSongList(list);
+           mAdapter.notifyDataSetChanged();
                 return true;
             }
 
@@ -101,12 +107,8 @@ public class SearchDialogFragment extends DialogFragment {
             public boolean onQueryTextChange(String s) {
 //                list = SongLab.getInstance().getSearchedSongList(getActivity(), s);
                 list = SongLab.getInstance().getSongSearchList(s);
-                mAlbumList = SongLab.getInstance().getSearchAlbumList(s);
-                mArtistList = SongLab.getInstance().getArtistSearchList(s);
-                mAdapter.setSongList(list);
-                mAdapter.setAlbumList(mAlbumList);
-                mAdapter.setArtistList(mArtistList);
-                mAdapter.notifyDataSetChanged();
+              mAdapter.setSongList(list);
+              mAdapter.notifyDataSetChanged();
                 return true;
             }
         });
@@ -120,8 +122,6 @@ public class SearchDialogFragment extends DialogFragment {
         private TextView mSongTv;
         private TextView mArtistTv;
         private SongEntity mSong;
-        private Album mAlbum;
-        private Artist mArtist;
         private TextView mSongDuration;
 
         public SearchRvHolder(@NonNull View itemView) {
@@ -142,26 +142,9 @@ public class SearchDialogFragment extends DialogFragment {
 
         }
 
-        public void bind(Album album) {
-            mAlbum = album;
-            Picasso.get().load(SongLab.generateUri(album.getId())).into(mCircleImageView);
-            mSongTv.setText(album.getTitle());
-            mArtistTv.setText(album.getArtist());
-            mSongDuration.setText("");
-        }
-
-        public void bind(Artist artist) {
-            mArtist = artist;
-            Picasso.get().load(SongLab.generateUri(artist.getAlbumId())).into(mCircleImageView);
-            mSongTv.setText(artist.getName());
-            mArtistTv.setText(SongLab.getInstance().getArtistSongsNumber(artist.getId()) + " Tracks ");
-            mSongDuration.setText("");
-        }
-
         public void bind(SongEntity song) {
             mSong = song;
             Picasso.get().load(SongLab.generateUri(song.getAlbumId())).into(mCircleImageView);
-//            mCircleImageView.setImageBitmap(SongLab.generateBitmap(getActivity(), song.getAlbumId()));
             mSongTv.setText(song.getTitle());
             mArtistTv.setText(song.getArtist());
             mSongDuration.setText(SongLab.convertDuration(song.getDuration()));
@@ -169,84 +152,8 @@ public class SearchDialogFragment extends DialogFragment {
 
     }
 
-    private class SectionSearchAdapter extends SimpleSectionedAdapter<SearchRvHolder> {
-        private List<Album> mAlbumList;
-        private List<SongEntity> mSongList;
-        private List<Artist> mArtistList;
 
-        public SectionSearchAdapter(List<Album> albumList, List<SongEntity> songList, List<Artist> artistList) {
-            mAlbumList = albumList;
-            mSongList = songList;
-            mArtistList = artistList;
-        }
-
-        public void setAlbumList(List<Album> albumList) {
-            mAlbumList = albumList;
-        }
-
-        public void setSongList(List<SongEntity> songList) {
-            mSongList = songList;
-        }
-
-        public void setArtistList(List<Artist> artistList) {
-            mArtistList = artistList;
-        }
-
-        @Override
-        protected String getSectionHeaderTitle(int section) {
-            if (section == 0)
-                return "Songs";
-            else if (section == 1)
-                return "Albums";
-            else
-                return "Artists";
-        }
-
-        @Override
-        protected int getSectionCount() {
-            return 3;
-        }
-
-        @Override
-        protected int getItemCountForSection(int section) {
-            if (section == 0) {
-                if (mSongList == null)
-                    return 0;
-                else
-                    return mSongList.size();
-            } else if (section == 1) {
-                if (mAlbumList == null)
-                    return 0;
-                else
-                    return mAlbumList.size();
-            } else {
-                if (mArtistList == null)
-                    return 0;
-                else
-                    return mArtistList.size();
-            }
-        }
-
-        @Override
-        protected SearchRvHolder onCreateItemViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(getActivity()).inflate(R.layout.songs_list_item, parent, false);
-            SearchRvHolder searchRvHolder = new SearchRvHolder(view);
-            return searchRvHolder;
-        }
-
-        @Override
-        protected void onBindItemViewHolder(SearchRvHolder holder, int section, int position) {
-            SongEntity songEntity = mSongList.get(position);
-            Album album = mAlbumList.get(position);
-            Artist artist = mArtistList.get(position);
-            holder.bind(album);
-            holder.bind(songEntity);
-            holder.bind(artist);
-
-        }
-    }
-
-   /* private class SearchRvAdapter extends RecyclerView.Adapter<SearchRvHolder> {
+    private class SearchRvAdapter extends RecyclerView.Adapter<SearchRvHolder> {
         private List<SongEntity> mSongList;
 
         public void setSongList(List<SongEntity> songList) {
@@ -281,7 +188,6 @@ public class SearchDialogFragment extends DialogFragment {
                 return mSongList.size();
         }
     }
-    */
 
 
 }
