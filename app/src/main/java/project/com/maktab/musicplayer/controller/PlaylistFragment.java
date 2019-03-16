@@ -16,6 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -127,12 +129,10 @@ public class PlaylistFragment extends android.support.v4.app.Fragment {
                 mCover.setImageResource(R.drawable.icon_malhaar5);
             else {
                 Bitmap bitmap = null;
-                try {
-                    bitmap = PictureUtils.decodeUri(getActivity(), Uri.parse(playList.getImage()));
-                    mCover.setImageBitmap(bitmap);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
+                    /*bitmap = PictureUtils.decodeUri(getActivity(), Uri.parse(playList.getImage()));
+                    mCover.setImageBitmap(bitmap);*/
+                    Picasso.get().load(playList.getImage()).into(mCover);
+
             }
 
 

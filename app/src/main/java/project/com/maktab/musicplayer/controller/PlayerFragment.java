@@ -171,6 +171,12 @@ public class PlayerFragment extends Fragment implements Runnable, MediaPlayer.On
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        clearMediaPlayer();
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         clearMediaPlayer();

@@ -19,6 +19,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
 import java.io.FileNotFoundException;
 import java.util.List;
 
@@ -149,12 +151,10 @@ public class PlaylistDialogFragment extends DialogFragment {
                 mCover.setImageResource(R.drawable.icon_malhaar5);
             else{
                 Bitmap bitmap = null;
-                try {
-                    bitmap  = PictureUtils.decodeUri(getActivity(), Uri.parse(playList.getImage()));
-                    mCover.setImageBitmap(bitmap);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
+                   /* bitmap  = PictureUtils.decodeUri(getActivity(), Uri.parse(playList.getImage()));
+                    mCover.setImageBitmap(bitmap);*/
+                    Picasso.get().load(playList.getImage()).into(mCover);
+
             }
             String numOfSongs = String.valueOf(PlaylistLab.getmInstance().getSongList(playList.getId()).size()) + " ";
             mNumberOfsongs.setText(numOfSongs + "Songs");
