@@ -10,11 +10,19 @@ public class PlaylistLab {
     private DaoSession mDaoSession;
     private PlayListDao mPlayListDao;
     private List<PlayList> mPlayLists;
+//    private JoinSongsWithPlaylistDao mJoinDao;
 
     private PlaylistLab() {
         mPlayLists = new ArrayList<>();
         mDaoSession = App.getAppInstance().getDaoSession();
         mPlayListDao = mDaoSession.getPlayListDao();
+//        mJoinDao = mDaoSession.getJoinSongsWithPlaylistDao();
+    }
+
+
+    public void update(PlayList playList){
+        mPlayListDao.update(playList);
+
     }
 
     public Long insert(PlayList playList) {

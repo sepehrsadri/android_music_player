@@ -27,6 +27,8 @@ import java.util.List;
 import project.com.maktab.musicplayer.PictureUtils;
 import project.com.maktab.musicplayer.R;
 import project.com.maktab.musicplayer.model.SongLab;
+import project.com.maktab.musicplayer.model.orm.JoinLab;
+import project.com.maktab.musicplayer.model.orm.JoinSongsWithPlaylist;
 import project.com.maktab.musicplayer.model.orm.PlayList;
 import project.com.maktab.musicplayer.model.orm.PlaylistLab;
 import project.com.maktab.musicplayer.model.orm.SongEntity;
@@ -138,7 +140,13 @@ public class PlaylistDialogFragment extends DialogFragment {
 
 //                    mSong.setPlaylistId(mPlayList.getId());
                     mPlayList.getSongsWithThisPlaylist().add(mSong);
-                    SongLab.getInstance().updateSong(mSong);
+                    JoinSongsWithPlaylist join = new JoinSongsWithPlaylist();
+                    join.setPlaylistId(mPlayList.getId());
+                    join.setSongId(mSongId);
+                    JoinLab.getmJoinInstance().insertJoins(join);
+
+//                    SongLab.getInstance().updateSong(mSong);
+                    PlaylistLab.getmInstance().update(mPlayList);
                     dismiss();
                     Toast.makeText(getActivity(), "added to playlist " + mPlayList.getName() , Toast.LENGTH_SHORT).show();
                 }

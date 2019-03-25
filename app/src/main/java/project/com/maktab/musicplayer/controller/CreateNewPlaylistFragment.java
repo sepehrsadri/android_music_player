@@ -28,6 +28,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import project.com.maktab.musicplayer.PictureUtils;
 import project.com.maktab.musicplayer.R;
 import project.com.maktab.musicplayer.model.SongLab;
+import project.com.maktab.musicplayer.model.orm.JoinLab;
+import project.com.maktab.musicplayer.model.orm.JoinSongsWithPlaylist;
 import project.com.maktab.musicplayer.model.orm.PlayList;
 import project.com.maktab.musicplayer.model.orm.PlaylistLab;
 import project.com.maktab.musicplayer.model.orm.SongEntity;
@@ -131,6 +133,12 @@ public class CreateNewPlaylistFragment extends DialogFragment {
             mPlayList.setName(name);
             Long id = PlaylistLab.getmInstance().insert(mPlayList);
             mPlayList.getSongsWithThisPlaylist().add(mSong);
+            PlaylistLab.getmInstance().update(mPlayList);
+            JoinSongsWithPlaylist join = new JoinSongsWithPlaylist();
+            join.setSongId(mSongId);
+            join.setPlaylistId(id);
+            JoinLab.getmJoinInstance().insertJoins(join);
+
 
 //            mSong.setPlaylistId(id);
 
