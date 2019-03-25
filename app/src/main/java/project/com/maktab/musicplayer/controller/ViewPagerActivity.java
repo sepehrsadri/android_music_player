@@ -121,7 +121,17 @@ public class ViewPagerActivity extends AppCompatActivity {
                 showSearchDialog();
             }
         });*/
+        mSearchView.setOnSearchClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showSearchDialog();
+                mSearchView.setFocusable(false);
+                mSearchView.setIconified(true);
+                mSearchView.requestFocusFromTouch();
+            }
+        });
 
+/*
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -134,7 +144,7 @@ public class ViewPagerActivity extends AppCompatActivity {
                 showSearchDialog();
                 return true;
             }
-        });
+        });*/
     }
 
     private void showSearchDialog() {

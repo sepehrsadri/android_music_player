@@ -22,20 +22,21 @@
 
     <TextView
         android:text="test"
-        android:gravity="left"
+        android:gravity="center"
         android:id="@+id/artist_item_name"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-
+        android:layout_height="wrap_content"
+        android:textStyle="italic|bold"
         android:textColor="@android:color/white"
         android:textSize="20sp"
  />
 
     <TextView
         android:textSize="15sp"
-        android:gravity="left"
+        android:gravity="center"
         android:textColor="@android:color/white"
         android:id="@+id/artist_song_number_item"
+        android:textStyle="italic"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 

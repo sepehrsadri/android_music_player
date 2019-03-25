@@ -129,6 +129,7 @@ public class CreateNewPlaylistFragment extends DialogFragment {
                 return;
 
 
+
             String name = mPlayListNameEt.getText().toString();
             mPlayList.setName(name);
             Long id = PlaylistLab.getmInstance().insert(mPlayList);

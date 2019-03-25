@@ -131,7 +131,9 @@ public class PlaylistFragment extends android.support.v4.app.Fragment {
                 Bitmap bitmap = null;
                     /*bitmap = PictureUtils.decodeUri(getActivity(), Uri.parse(playList.getImage()));
                     mCover.setImageBitmap(bitmap);*/
-                    Picasso.get().load(playList.getImage()).into(mCover);
+                    Picasso.get().load(playList.getImage())
+                            .placeholder(R.drawable.icon_malhaar5)
+                            .into(mCover);
 
             }
 

@@ -40,7 +40,9 @@ public class AlbumViewHolder extends BaseViewHolder {
     @Override
     public void bind(Object obj) {
         mAlbum = (Album) obj;
-        Picasso.get().load(SongLab.generateUri(mAlbum.getId())).into(mCoverIv);
+        Picasso.get().load(SongLab.generateUri(mAlbum.getId()))
+                .placeholder(R.drawable.icon_malhaar5)
+                .into(mCoverIv);
 //            mCoverIv.setImageBitmap(SongLab.generateBitmap(getActivity(),album.getId()));
         mArtistTv.setText(mAlbum.getArtist());
         mAlbumTv.setText(mAlbum.getTitle());
