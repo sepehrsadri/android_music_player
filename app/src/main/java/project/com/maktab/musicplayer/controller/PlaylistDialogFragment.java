@@ -136,7 +136,8 @@ public class PlaylistDialogFragment extends DialogFragment {
                 @Override
                 public void onClick(View v) {
 
-                    mSong.setPlaylistId(mPlayList.getId());
+//                    mSong.setPlaylistId(mPlayList.getId());
+                    mPlayList.getSongsWithThisPlaylist().add(mSong);
                     SongLab.getInstance().updateSong(mSong);
                     dismiss();
                     Toast.makeText(getActivity(), "added to playlist " + mPlayList.getName() , Toast.LENGTH_SHORT).show();

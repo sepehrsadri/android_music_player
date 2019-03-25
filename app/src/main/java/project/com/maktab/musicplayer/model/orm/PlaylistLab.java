@@ -34,7 +34,7 @@ public class PlaylistLab {
                 .list();
 
         if (songList.size() > 0)
-            return songList.get(0).getSongs();
+            return songList.get(0).getSongsWithThisPlaylist();
 
 
         return null;

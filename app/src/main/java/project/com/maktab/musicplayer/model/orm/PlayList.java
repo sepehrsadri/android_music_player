@@ -8,10 +8,13 @@ import org.greenrobot.greendao.annotation.Convert;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.JoinEntity;
 import org.greenrobot.greendao.annotation.ToMany;
 import org.greenrobot.greendao.converter.PropertyConverter;
 
 import java.util.List;
+
+import project.com.maktab.musicplayer.model.Song;
 
 
 @Entity
@@ -25,8 +28,9 @@ public class PlayList {
 
     private String image;
 
-    @ToMany(referencedJoinProperty = "playlistId")
-    private List<SongEntity> songs;
+    @ToMany
+    @JoinEntity(entity = JoinSongsWithPlaylist.class,sourceProperty = "playlistId",targetProperty = "songId")
+    private List<SongEntity> songsWithThisPlaylist;
 
     /** Used to resolve relations */
     @Generated(hash = 2040040024)
@@ -75,28 +79,28 @@ public class PlayList {
      * To-many relationship, resolved on first access (and after reset).
      * Changes to to-many relations are not persisted, make changes to the target entity.
      */
-    @Generated(hash = 694885901)
-    public List<SongEntity> getSongs() {
-        if (songs == null) {
+    @Generated(hash = 755591213)
+    public List<SongEntity> getSongsWithThisPlaylist() {
+        if (songsWithThisPlaylist == null) {
             final DaoSession daoSession = this.daoSession;
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
             }
             SongEntityDao targetDao = daoSession.getSongEntityDao();
-            List<SongEntity> songsNew = targetDao._queryPlayList_Songs(id);
+            List<SongEntity> songsWithThisPlaylistNew = targetDao._queryPlayList_SongsWithThisPlaylist(id);
             synchronized (this) {
-                if (songs == null) {
-                    songs = songsNew;
+                if (songsWithThisPlaylist == null) {
+                    songsWithThisPlaylist = songsWithThisPlaylistNew;
                 }
             }
         }
-        return songs;
+        return songsWithThisPlaylist;
     }
 
     /** Resets a to-many relationship, making the next get call to query for a fresh result. */
-    @Generated(hash = 432021166)
-    public synchronized void resetSongs() {
-        songs = null;
+    @Generated(hash = 552164143)
+    public synchronized void resetSongsWithThisPlaylist() {
+        songsWithThisPlaylist = null;
     }
 
     /**
@@ -141,6 +145,9 @@ public class PlayList {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getPlayListDao() : null;
     }
+
+
+
 
 
 

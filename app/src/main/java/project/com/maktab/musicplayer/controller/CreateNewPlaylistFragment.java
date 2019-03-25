@@ -130,7 +130,11 @@ public class CreateNewPlaylistFragment extends DialogFragment {
             String name = mPlayListNameEt.getText().toString();
             mPlayList.setName(name);
             Long id = PlaylistLab.getmInstance().insert(mPlayList);
-            mSong.setPlaylistId(id);
+            mPlayList.getSongsWithThisPlaylist().add(mSong);
+
+//            mSong.setPlaylistId(id);
+
+
             SongLab.getInstance().updateSong(mSong);
             dismiss();
             Toast.makeText(getActivity(), "added to playlist " + name, Toast.LENGTH_SHORT).show();
